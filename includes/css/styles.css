@@ -1,0 +1,98 @@
+:root {
+    --form-control-shadow-color: #FFD9B3;
+    --nav-link-color: #FE7272;
+    --nav-link-hover-color: #955095;
+    --nav-bg-color: #D4B2D4;
+    --input-not-valid-shadow-color: #DC3545;
+    --input-valid-shadow-color: #198754;
+}
+@font-face {
+    font-family: "QuickSand";
+    src: url("./includes/fonts/Quicksand-VariableFont_wght.ttf");
+}
+
+body {
+    font-family: "QuickSand";
+}
+
+li.nav-item {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+}
+
+nav.navbar {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: var(--nav-bg-color) !important;
+}
+
+a.nav-link {
+    color: black !important;
+}
+
+a.nav-link:hover {
+    color: var(--nav-link-hover-color) !important;
+}
+
+.form-control:focus, 
+.form-select:focus, 
+#example_previous a:focus, 
+#example_next a:focus,
+li.active a.page-link {
+    border-color: var(--form-control-shadow-color);
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px var(--form-control-shadow-color);
+}
+
+.form-control.is-valid, .form-control.is-valid:focus {
+    border: 1px solid var(--input-valid-shadow-color);
+    box-shadow: none;
+}
+
+.form-control.is-invalid, .form-control.is-invalid:focus {
+    border: 1px solid var(--input-not-valid-shadow-color);
+    box-shadow: none;
+}
+
+#example_previous a, #example_next a {
+    color: black !important;
+}
+
+#example_previous.disabled a, #example_next.disabled a {
+    color: grey !important;
+}
+
+a.page-link {
+    color: black !important;
+}
+
+li.active a.page-link {
+    color: white !important;
+}
+
+li.active > a{
+    background-color: var(--nav-link-color) !important;
+    border-color: var(--nav-link-color) !important;
+}
+
+a > i {
+    margin-right: 5px !important;
+}
+
+#main {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.content {
+    margin-top: 20px;
+}
+
+hr {
+    margin-bottom: 20px !important;
+}
+
+tr { height: 50px } 
+
+h1.title {
+    margin-bottom: 20px;
+}
