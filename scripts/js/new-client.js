@@ -19,7 +19,7 @@ function EnableCreateBtn () {
 
 $(document).ready(function() {
     $("#nif").on("keyup", function() {
-        $(this).val(this.value.match(/[0-9]*/));
+        // $(this).val(this.value.match(/[0-9]*/));
         var nifNumber = $(this).val();
         if (nifNumber.indexOf(' ') == -1 && nifNumber != "" && nifNumber.length == 8) {
             $("#nif-letter").html(GetNifLetter(parseInt(nifNumber)));
@@ -62,7 +62,6 @@ $(document).ready(function() {
     })
 
     $("#cp").on("keyup", function() {
-        $(this).val(this.value.match(/[0-9]*/));
         var cp = $(this).val();
         if (cp.indexOf(' ') == -1 && cp != "" && cp.length == 5) {
             $("#cp").addClass("is-valid");
@@ -75,6 +74,6 @@ $(document).ready(function() {
     })
 
     $("#cancelBtn").on("click", function() {
-        window.location.href = "?page=manage-clients";
+        window.location.href = "?page=clients";
     })
 })

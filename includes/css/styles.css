@@ -5,6 +5,17 @@
     --nav-bg-color: #D4B2D4;
     --input-not-valid-shadow-color: #DC3545;
     --input-valid-shadow-color: #198754;
+    --button-main-color: #ffcc99;
+    --button-hover-bg-color:  #ffd9b3;
+    --button-hover-text-color: rgb(37, 37, 37);
+    --button-text-color: black;
+    --button-2-main-color: #ff9999;
+    --button-2-hover-bg-color: #ffcccc;
+    --button-3-main-color: #6fdc87;
+    --button-3-hover-bg-color: #98e6a9;
+    --button-4-main-color: #c2d6d6;
+    --button-4-hover-bg-color: #e0ebeb;
+    --row-selected-color: #ffe6cc;
 }
 @font-face {
     font-family: "QuickSand";
@@ -36,8 +47,8 @@ a.nav-link:hover {
 
 .form-control:focus, 
 .form-select:focus, 
-#example_previous a:focus, 
-#example_next a:focus,
+#dTableClients_previous a:focus, 
+#dTableClients_next a:focus,
 li.active a.page-link {
     border-color: var(--form-control-shadow-color);
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px var(--form-control-shadow-color);
@@ -53,12 +64,17 @@ li.active a.page-link {
     box-shadow: none;
 }
 
-#example_previous a, #example_next a {
+#dTableClients_previous > a, #dTableClients_next > a {
     color: black !important;
 }
 
-#example_previous.disabled a, #example_next.disabled a {
+#dTableClients_previous.disabled > a, #dTableClients_next.disabled > a {
     color: grey !important;
+}
+
+.selected, .selected > .sorting_1 {
+    background-color: var(--row-selected-color) !important;
+    color: black !important;
 }
 
 a.page-link {
@@ -74,8 +90,12 @@ li.active > a{
     border-color: var(--nav-link-color) !important;
 }
 
-a > i {
+a > i, button > i{
     margin-right: 5px !important;
+}
+
+a > i.no-margin, button > i.no-margin{
+    margin-right: 0px !important;
 }
 
 #main {
@@ -95,4 +115,126 @@ tr { height: 50px }
 
 h1.title {
     margin-bottom: 20px;
+}
+
+.button-spacing{
+    padding: 10px !important;
+}
+
+/* Button styles*/
+.my-button {
+    color: var(--button-text-color);
+    background-color: var(--button-main-color) !important;
+    border: 1px solid var(--button-main-color) !important;
+}
+
+.my-button:not([disabled]):hover {
+    background-color: var(--button-hover-bg-color) !important;
+    border: 1px solid var(--button-hover-bg-color) !important;
+    color: var(--button-hover-text-color) !important;
+}
+
+.my-button:not([disabled]):active:focus {
+    background-color: var(--button-hover-bg-color) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.my-button:not([disabled]):active:hover {
+    background-color: var(--button-hover-bg-color) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.my-button-2 {
+    color: var(--button-text-color);
+    background-color: var(--button-2-main-color) !important;
+    border: 1px solid var(--button-2-main-color) !important;
+}
+
+.my-button-2:not([disabled]):hover {
+    background-color: var(--button-2-hover-bg-color) !important;
+    border: 1px solid var(--button-2-hover-bg-color) !important;
+    color: var(--button-hover-text-color) !important;
+}
+
+.my-button-2:not([disabled]):active:focus {
+    background-color: var(--button-2-hover-bg-color) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.my-button-2:not([disabled]):active:hover {
+    background-color: var(--button-2-hover-bg-color) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.my-button-3 {
+    color: var(--button-text-color);
+    background-color: var(--button-3-main-color) !important;
+    border: 1px solid var(--button-3-main-color) !important;
+}
+
+.my-button-3:not([disabled]):hover {
+    background-color: var(--button-3-hover-bg-color) !important;
+    border: 1px solid var(--button-3-hover-bg-color) !important;
+    color: var(--button-hover-text-color) !important;
+}
+
+.my-button-3:not([disabled]):active:focus {
+    background-color: var(--button-3-hover-bg-color) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.my-button-3:not([disabled]):active:hover {
+    background-color: var(--button-3-hover-bg-color) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.my-button-4 {
+    color: var(--button-text-color);
+    background-color: var(--button-4-main-color) !important;
+    border: 1px solid var(--button-4-main-color) !important;
+}
+
+.my-button-4:not([disabled]):hover {
+    background-color: var(--button-4-hover-bg-color) !important;
+    border: 1px solid var(--button-4-hover-bg-color) !important;
+    color: var(--button-hover-text-color) !important;
+}
+
+.my-button-4:not([disabled]):active:focus {
+    background-color: var(--button-4-hover-bg-color) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.my-button-4:not([disabled]):active:hover {
+    background-color: var(--button-4-hover-bg-color) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.btn:focus,.btn:active {
+outline: none !important;
+box-shadow: none !important;
+}
+
+.my-btn-group {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+table tbody {
+    text-align: right;
+}
+
+/*Hide steppers from inputs*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

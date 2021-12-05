@@ -6,25 +6,14 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="bi bi-people"></i>
-          Clientes
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="?page=manage-clients"><i class="bi bi-person-lines-fill"></i>Gestionar clientes</a></li>
-            <li><a class="dropdown-item" href="?page=new-client"><i class="bi bi-person-plus-fill"></i>Nuevo cliente</a></li>
-          </ul>
+        <li class="nav-item">
+          <a class="nav-link" href="?page=clients"><i class="bi bi-people"></i>Clientes</a>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="bi bi-receipt"></i>
-          Facturas
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="?page=manage-bills"><i class="bi bi-receipt-cutoff"></i>Gestionar facturas</a></li>
-            <li><a class="dropdown-item" href="?page=new-bill"><i class="bi bi-file-earmark-plus"></i>Nueva factura</a></li>
-          </ul>
+        <li class="nav-item">
+          <a class="nav-link" href="?page=bills"><i class="bi bi-receipt-cutoff"></i>Facturas</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="?page=budgets"><i class="bi bi-receipt"></i>Presupuestos</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#"><i class="bi bi-gear"></i>Configuración</a>

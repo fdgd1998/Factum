@@ -2,17 +2,17 @@
 <div class="content">
     <p>Datos personales</p>
     <div class="row">
-        <div class="col-12 col-sm-7 col-md-6 col-lg-3 col-xl-3">
+        <div class="col-12 col-sm-7 col-md-6 col-lg-4 col-xl-3">
             <div class="input-group mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-default">NIF (sin letra):</span>
-                <input id="nif" type="text" maxlength="8" pattern="([0-9]|[0-9]|[0-9]|[0-9]|[0-9]|[0-9]|[0-9]|[0-9])" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                <input id="nif" type="number" step="1" min="11111111" max="99999999" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                 <span class="input-group-text" id="nif-letter">--</span>
                 <div class="invalid-feedback">
                     Introduce un NIF correcto.
                 </div>
             </div>
         </div>
-        <div class="col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
             <div class="input-group mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-default">Nombre:</span>
                 <input id="nombre" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
@@ -39,7 +39,7 @@
         <div class="col-12 col-sm-6 col-md-3 col-lg-2 col-xl-2">
             <div class="input-group mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-default">CP:</span>
-                <input id="cp" type="text" maxlength="5"  pattern="([0-9]|[0-9]|[0-9]|[0-9]|[0-9])" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                <input id="cp" type="number" step="1" min="11111" max="99999" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                 <div class="invalid-feedback">
                     Introduce un CP correcto.
                 </div>
@@ -75,7 +75,7 @@
         </div>
     </div>
     <div class="mt-4">
-        <button id="cancelBtn" type="button" class="btn btn-danger">Cancelar</button>
-        <button id="createBtn" type="button" class="btn btn-success" disabled>Guardar</button>
+        <button id="cancelBtn" type="button" class="btn my-button-2">Cancelar</button>
+        <button id="createBtn" type="button" class="btn my-button-3" disabled>Guardar</button>
     </div>
 </div>

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="./includes/css/bootstrap-icons.css">
     <link rel="stylesheet" href="./includes/css/styles.css">
     <link rel="stylesheet" href="./includes/css/datatables.min.css">
+    <link rel="stylesheet" href="./includes/css/select.bootstrap5.min.css">
 </head>
 <body>
     <?php
@@ -21,14 +22,17 @@
                     case "new-client":
                         include "./pages/client-new.php";
                         break;
-                    case "manage-clients":
+                    case "clients":
                         include "./pages/clients-manage.php";
                         break;
                     case "new-bill":
                         include "./pages/bill-new.php";
                         break;
-                    case "manage-bills":
+                    case "bills":
                         include "./pages/bills-manage.php";
+                        break;
+                    case "budgets":
+                        include "./pages/budgets-manage.php";
                         break;
                 }
             }
@@ -37,14 +41,33 @@
     <script src="./includes/js/jquery-3.6.0.min.js"></script>
     <script src="./includes/js/bootstrap.min.js"></script>
     <script src="./includes/js/datatables.min.js"></script>
+    <script src="./includes/js/select.bootstrap5.min.js"></script>
+
     <?php if (isset($_GET["page"])): ?>
 
     <?php if ($_GET["page"] == "new-client"): ?>
     <script src="./scripts/js/new-client.js"></script>
     <?php endif; ?>
 
-    <?php if ($_GET["page"] == "manage-clients"): ?>
+    <?php if ($_GET["page"] == "clients"): ?>
     <script src="./scripts/js/manage-clients.js"></script>
+    <script src="./scripts/js/datatables-events.js"></script>
+    <?php endif; ?>
+
+    <?php if ($_GET["page"] == "bills"): ?>
+    <script src="./scripts/js/manage-bills.js"></script>
+    <script src="./scripts/js/datatables-events.js"></script>
+    <?php endif; ?>
+
+    <?php if ($_GET["page"] == "new-bill"): ?>
+    <script src="./scripts/js/datatables-events-bill-new.js"></script>
+    <script src="./classes/js/BillConcept.js"></script>
+    <script src="./scripts/js/new-bill.js"></script>
+    <?php endif; ?>
+
+    <?php if ($_GET["page"] == "budgets"): ?>
+    <script src="./scripts/js/manage-budgets.js"></script>
+    <script src="./scripts/js/datatables-events.js"></script>
     <?php endif; ?>
 
     <?php endif; ?>
