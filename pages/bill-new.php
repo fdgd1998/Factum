@@ -1,16 +1,18 @@
-<h1>Nueva factura</h1>
+<h1><?=$_GET["page"] == "new-bill" ? "Nueva factura":"Nuevo prespuesto"?></h1>
 <div class="content">
     <div class="row">
         <div class="col-12 col-md-5 col-lg-4">
-            <p>Datos de factura</p>
+            <p>Datos <?=$_GET["page"] == "new-bill" ? "de la factura":"del prespuesto"?></p>
+            <?php if ($_GET["page"] == "new-bill"):?>
             <div class="input-group mb-3">
-            <label class="input-group-text" for="forma-pago">Serie: </label>
+                <label class="input-group-text" for="forma-pago">Serie: </label>
                 <select class="form-select" id="forma-pago">
                     <option selected>Seleccionar...</option>
                     <option value="1">Serie 1</option>
                     <option value="2">Serie 2</option>
                 </select>
             </div>
+            <?php endif; ?>
             <div class="input-group mb-3">
                 <span class="input-group-text">Número:</span>
                 <input disabled id="numero" type="text" class="form-control">
@@ -19,8 +21,10 @@
                 <span class="input-group-text">Fecha:</span>
                 <input id="fecha" type="date" class="form-control">
             </div>
+            <?php if ($_GET["page"] == "new-bill"):?>
+
             <div class="input-group mb-3">
-            <span class="input-group-text">Factura con IVA:</span>
+                <span class="input-group-text">Factura con IVA:</span>
                 <input disabled id="tiene-iva" type="text" class="form-control" value="Sí">
             </div>
             <div class="input-group mb-3">
@@ -30,9 +34,18 @@
                     <option value="transferencia">Transferencia bancaria</option>
                 </select>
             </div>
+            <?php else: ?>
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="presupuesto-iva">Presupuesto con IVA: </label>
+                <select class="form-select" id="presupuesto-iva">
+                    <option selected value="si">Sí</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            <?php endif; ?> 
         </div>
         <div class="col-12 col-md-7 col-lg-8">
-            <p>Datos de cliente</p>
+            <p>Datos del cliente</p>
             <div class="row">
                 <div class="col-12 col-lg-4">
                     <div class="input-group mb-3">

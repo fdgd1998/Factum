@@ -15,8 +15,14 @@
         <li class="nav-item">
           <a class="nav-link" href="?page=budgets"><i class="bi bi-receipt"></i>Presupuestos</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-gear"></i>Configuración</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-gear"></i>Configuración
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#"><i class="bi bi-currency-euro"></i>Facturación</a></li>
+            <li><a class="dropdown-item" href="#"><i class="bi bi-building"></i>Datos de la empresa</a></li>
+          </ul>
         </li>
       </ul>
     </div>

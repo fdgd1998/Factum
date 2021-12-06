@@ -28,6 +28,9 @@
                     case "new-bill":
                         include "./pages/bill-new.php";
                         break;
+                    case "new-budget":
+                        include "./pages/bill-new.php";
+                        break;
                     case "bills":
                         include "./pages/bills-manage.php";
                         break;
@@ -59,7 +62,7 @@
     <script src="./scripts/js/datatables-events.js"></script>
     <?php endif; ?>
 
-    <?php if ($_GET["page"] == "new-bill"): ?>
+    <?php if ($_GET["page"] == "new-bill" || $_GET["page"] == "new-budget"): ?>
     <script src="./scripts/js/datatables-events-bill-new.js"></script>
     <script src="./classes/js/BillConcept.js"></script>
     <script src="./scripts/js/new-bill.js"></script>

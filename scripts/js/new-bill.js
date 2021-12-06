@@ -93,10 +93,15 @@ function UpdateConceptsIva() {
             concept.iva = 0;
             concept.total = concept.cantidad*concept.precio;
         })
+        $("#concepto-iva-edit").html("--");
+        $("#concepto-iva").html("--");
     }
     reloadConcepts();
-    UpdatePrice("new");
+    // UpdatePrice("new");
     updateTotalPrices();
+
+    $("#EditBtn").attr("disabled","disabled");
+    $("#DeleteBtn").attr("disabled","disabled");
 }
 
 function EnableNewConceptBtn() {
@@ -123,21 +128,24 @@ function UpdatePrice(action) {
         cantidad = parseInt($("#cantidad").val());
         if (tiene_iva == 1) iva_concepto = precioUnitario_concepto*0.21;
         total_concepto = (iva_concepto + precioUnitario_concepto)*cantidad;
-        if (tiene_iva == 1) $("#concepto-iva").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto));
+        if (tiene_iva == 1) $("#concepto-iva").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto*cantidad));
         $("#concepto-total").html(new Intl.NumberFormat("es-ES", options).format(total_concepto));
     } else if (action == "edit") {
         precioUnitario_concepto = parseFloat($("#precio-unitario-edit").val());
         cantidad = parseInt($("#cantidad-edit").val());
+
         if (tiene_iva == 1) iva_concepto = precioUnitario_concepto*0.21;
+        else iva_concepto = 0;
+        
         total_concepto = (iva_concepto + precioUnitario_concepto)*cantidad;
-        if (tiene_iva == 1) $("#concepto-iva-edit").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto));
+        if (tiene_iva == 1) $("#concepto-iva-edit").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto*cantidad));
         $("#concepto-total-edit").html(new Intl.NumberFormat("es-ES", options).format(total_concepto));
     }
 }
 $(document).ready(function() {
     $("#cantidad, #precio-unitario").on("change, keyup", function() {
         if ($(this).attr("id") == "cantidad") {
-            if (/^\d+(?:\,\d\d?)?$/.test($(this).val())) {
+            if (/^[0-9]*[^.]$/.test($(this).val())) {
                 $(this).addClass("is-valid");
                 $(this).removeClass("is-invalid");
             } else {
@@ -145,7 +153,8 @@ $(document).ready(function() {
                 $(this).removeClass("is-valid");
             }
         } else {
-            if (/[\d\.]/g.test($(this).val())) {
+            // if (/[\d\.]/g.test($(this).val())) {
+            if (/^([0-9]*)+\.?\d{1,2}$/.test($(this).val())) {
                 $(this).addClass("is-valid");
                 $(this).removeClass("is-invalid");
             } else {
@@ -165,7 +174,7 @@ $(document).ready(function() {
 
     $("#cantidad-edit, #precio-unitario-edit").on("change, keyup", function() {
         if ($(this).attr("id") == "cantidad-edit") {
-            if (/^\d+(?:\,\d\d?)?$/.test($(this).val())) {
+            if (/^[0-9]*[^.]$/.test($(this).val())) {
                 $(this).addClass("is-valid");
                 $(this).removeClass("is-invalid");
             } else {
@@ -173,7 +182,7 @@ $(document).ready(function() {
                 $(this).removeClass("is-valid");
             }
         } else {
-            if (/[\d\.]/g.test($(this).val())) {
+            if (/^([0-9]*)+\.?\d{1,2}$/.test($(this).val())) {
                 $(this).addClass("is-valid");
                 $(this).removeClass("is-invalid");
             } else {
@@ -213,6 +222,8 @@ $(document).ready(function() {
         reloadConcepts();
         updateTotalPrices();
         $("#editConceptModal").modal("hide");
+        $("#EditBtn").attr("disabled","disabled");
+        $("#DeleteBtn").attr("disabled","disabled");
         CleanModalAndData();
     })
 
@@ -235,6 +246,7 @@ $(document).ready(function() {
     $("#EditBtn").on("click", function(){
         var selectedRow = $("#dTable tbody").find("tr.selected");
         editingRowIdN = selectedRow.attr("id").substring(7);
+        console.log(editingRowIdN);
         var editingConcept = conceptsArr[editingRowIdN];
 
         cantidad = editingConcept.cantidad;
@@ -258,6 +270,22 @@ $(document).ready(function() {
                 UpdateConceptsIva();
                 break;
             case "No":
+                tiene_iva = 2;
+                console.log("tiene_iva: "+tiene_iva);
+                UpdateConceptsIva();
+                break;
+        }
+    })
+
+    $("#presupuesto-iva").on("change", function(){
+        console.log($(this).find(":selected").val());
+        switch ($(this).find(":selected").val()) {
+            case "si":
+                tiene_iva = 1;
+                console.log("tiene_iva: "+tiene_iva);
+                UpdateConceptsIva();
+                break;
+            case "no":
                 tiene_iva = 2;
                 console.log("tiene_iva: "+tiene_iva);
                 UpdateConceptsIva();
