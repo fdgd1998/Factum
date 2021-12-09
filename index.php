@@ -22,16 +22,28 @@
                     case "new-client":
                         include "./pages/client-new.php";
                         break;
+                    case "edit-client":
+                        include "./pages/client-new.php";
+                        break;
                     case "clients":
                         include "./pages/clients-manage.php";
                         break;
                     case "new-bill":
                         include "./pages/bill-new.php";
                         break;
+                    case "rectify-bill":
+                        include "./pages/bill-new.php";
+                        break;
+                    case "view-bill":
+                        include "./pages/bill-new.php";
+                        break;
                     case "new-budget":
                         include "./pages/bill-new.php";
                         break;
                     case "bills":
+                        include "./pages/bills-manage.php";
+                        break;
+                    case "rbills":
                         include "./pages/bills-manage.php";
                         break;
                     case "budgets":
@@ -48,29 +60,39 @@
 
     <?php if (isset($_GET["page"])): ?>
 
-    <?php if ($_GET["page"] == "new-client"): ?>
+    <?php if ($_GET["page"] == "new-client" || $_GET["page"] == "edit-client"): ?>
+    <script src="./scripts/js/form-values-validator.js"></script>
     <script src="./scripts/js/new-client.js"></script>
     <?php endif; ?>
 
     <?php if ($_GET["page"] == "clients"): ?>
     <script src="./scripts/js/manage-clients.js"></script>
-    <script src="./scripts/js/datatables-events.js"></script>
+    <script src="./scripts/js/datatables-events-clients.js"></script>
     <?php endif; ?>
 
     <?php if ($_GET["page"] == "bills"): ?>
     <script src="./scripts/js/manage-bills.js"></script>
-    <script src="./scripts/js/datatables-events.js"></script>
+    <script src="./scripts/js/datatables-events-bills.js"></script>
     <?php endif; ?>
 
-    <?php if ($_GET["page"] == "new-bill" || $_GET["page"] == "new-budget"): ?>
+    <?php if ($_GET["page"] == "rbills"): ?>
+    <script src="./scripts/js/manage-bills.js"></script>
+    <script src="./scripts/js/datatables-events-rbills.js"></script>
+    <?php endif; ?>
+
+    <?php if ($_GET["page"] == "new-bill" || $_GET["page"] == "new-bill" || $_GET["page"] == "new-budget" || $_GET["page"] == "rectify-bill"): ?>
     <script src="./scripts/js/datatables-events-bill-new.js"></script>
     <script src="./classes/js/BillConcept.js"></script>
-    <script src="./scripts/js/new-bill.js"></script>
+    <script src="./scripts/js/bill.js"></script>
+    <?php endif; ?>
+
+    <?php if ($_GET["page"] == "view-bill"): ?>
+    <script src="./scripts/js/bill.js"></script>
     <?php endif; ?>
 
     <?php if ($_GET["page"] == "budgets"): ?>
     <script src="./scripts/js/manage-budgets.js"></script>
-    <script src="./scripts/js/datatables-events.js"></script>
+    <script src="./scripts/js/datatables-events-budgets.js"></script>
     <?php endif; ?>
 
     <?php endif; ?>

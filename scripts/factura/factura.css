@@ -1,0 +1,83 @@
+@font-face {
+    font-family: 'Great Vibes';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src:  url('GreatVibes.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'QuickSand';
+    src:  url('QuickSand-Regular.woff2') format('woff2');
+}
+
+body {
+    position: relative;
+    width: 21cm;  
+    height: 29.7cm; 
+    margin: 0 auto; 
+    color: #001028;
+    background: #FFFFFF; 
+    font-size: 12px;
+    font-weight: normal;
+    font-family: "QuickSand";
+}
+
+h1.company{
+    font-family: "Great Vibes";
+    margin-top: 5px;
+    font-size: 40px;
+    font-weight: lighter;
+    margin-bottom: 20px;
+}
+
+.title {
+    margin-bottom: -50px !important;
+    font-weight: normal;
+}
+
+label {
+    padding-bottom: 10px !important;
+}
+
+.info-factura {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.rectangle {
+    border: 1px solid black;
+}
+
+table {
+    margin-top: 30px;
+}
+
+.money {
+    text-align: right;
+}
+
+#observaciones {
+    margin-top: 30px;
+}
+
+#conceptos tr:nth-child(even){background-color: #f2f2f2;}
+
+#conceptos td, #conceptos th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#conceptos {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#conceptos th {
+    font-weight: normal;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #FFE3B3;
+    color: black;
+  }

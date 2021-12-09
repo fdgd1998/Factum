@@ -19,7 +19,7 @@
 }
 @font-face {
     font-family: "QuickSand";
-    src: url("./includes/fonts/Quicksand-VariableFont_wght.ttf");
+    src: url("../fonts/Quicksand-VariableFont_wght.ttf");
 }
 
 body {
@@ -49,9 +49,18 @@ a.nav-link:hover {
 .form-select:focus, 
 #dTableClients_previous a:focus, 
 #dTableClients_next a:focus,
+#dTable_next a:focus,
+#dTable_previous a:focus,
 li.active a.page-link {
     border-color: var(--form-control-shadow-color);
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px var(--form-control-shadow-color);
+}
+
+#dTableClients_previous.disabled > a, 
+#dTableClients_next.disabled > a,
+#dTable_next.disabled > a,
+#dTable_previous.disabled > a {
+    color: grey !important;
 }
 
 .form-control.is-valid, .form-control.is-valid:focus {
@@ -62,14 +71,6 @@ li.active a.page-link {
 .form-control.is-invalid, .form-control.is-invalid:focus {
     border: 1px solid var(--input-not-valid-shadow-color);
     box-shadow: none;
-}
-
-#dTableClients_previous > a, #dTableClients_next > a {
-    color: black !important;
-}
-
-#dTableClients_previous.disabled > a, #dTableClients_next.disabled > a {
-    color: grey !important;
 }
 
 .selected, .selected > .sorting_1 {

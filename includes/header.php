@@ -9,20 +9,19 @@
         <li class="nav-item">
           <a class="nav-link" href="?page=clients"><i class="bi bi-people"></i>Clientes</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="?page=bills"><i class="bi bi-receipt-cutoff"></i>Facturas</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-receipt-cutoff"></i>Facturas
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="?page=bills"></i>Facturas ordinarias</a></li>
+            <li><a class="dropdown-item" href="?page=rbills"></i>Facturas rectificativas</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="?page=archived-bills"></i>Facturas archivadas</a></li>
+          </ul>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="?page=budgets"><i class="bi bi-receipt"></i>Presupuestos</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-gear"></i>Configuración
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#"><i class="bi bi-currency-euro"></i>Facturación</a></li>
-            <li><a class="dropdown-item" href="#"><i class="bi bi-building"></i>Datos de la empresa</a></li>
-          </ul>
         </li>
       </ul>
     </div>

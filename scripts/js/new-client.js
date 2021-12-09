@@ -1,7 +1,13 @@
-var letras = ["T", "R", "W", "A", "G", "M", "Y", "F", "P", "D", "X", "B", "N", "J", "Z", "S", "Q", "V", "H", "L", "C", "K", "E"];
-function GetNifLetter (nif) {
-    var rest = nif%23;
-    return letras[rest];
+function isIDValid (isValid, type) {
+    console.log();
+    if (isValid) {
+        $("#nif").addClass("is-valid");
+        $("#nif").removeClass("is-invalid");
+    } else {
+        $("#nif-feedback").html("Introduce un "+(type=="nif"?"NIF":"CIF")+" válido.");
+        $("#nif").addClass("is-invalid");
+        $("#nif").removeClass("is-valid");
+    }
 }
 
 function EnableCreateBtn () {
@@ -17,20 +23,33 @@ function EnableCreateBtn () {
     else $("#createBtn").attr("disabled", "disabled");
 }
 
+function EnableEditBtn () {
+    var totalInputs = 0;
+    var emailValid = 1;
+    if ($("#nombre").hasClass("is-valid")) totalInputs++;
+    if ($("#direccion").hasClass("is-valid")) totalInputs++;
+    if ($("#cp").hasClass("is-valid")) totalInputs++;
+    if ($("#localidad").hasClass("is-valid")) totalInputs++;
+    if ($("#email").hasClass("is-invalid")) emailValid = 0;
+    if (totalInputs == 4 && emailValid) $("#editBtn").removeAttr("disabled");
+    else $("#editBtn").attr("disabled", "disabled");
+}
+
+function validateID() {
+    if ($("#nif").siblings("select").find(":selected").val() == "nif") {
+        isIDValid(isValidNif($("#nif").val()), "nif");
+    } else {
+        isIDValid(isValidCif($("#nif").val()), "cif");
+    }
+    EnableCreateBtn();
+}
+
 $(document).ready(function() {
+    $("#id-select").on("change",function(){
+        validateID();
+    })
     $("#nif").on("keyup", function() {
-        // $(this).val(this.value.match(/[0-9]*/));
-        var nifNumber = $(this).val();
-        if (nifNumber.indexOf(' ') == -1 && nifNumber != "" && nifNumber.length == 8) {
-            $("#nif-letter").html(GetNifLetter(parseInt(nifNumber)));
-            $("#nif").addClass("is-valid");
-            $("#nif").removeClass("is-invalid");
-        } else {
-            $("#nif-letter").html("--");
-            $("#nif").addClass("is-invalid");
-            $("#nif").removeClass("is-valid");
-        }
-        EnableCreateBtn();
+        validateID();
     })
 
     $("#nombre, #direccion, #localidad").on("keyup", function() {
@@ -46,7 +65,7 @@ $(document).ready(function() {
     })
 
     $("#email").on("keyup", function() {
-        if (/^([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4})$/.test($.trim($(this).val()))) {
+        if (EsEmail($.trim($(this).val()))) {
             $(this).addClass("is-valid");
             $(this).removeClass("is-invalid");
         } else {
@@ -75,5 +94,67 @@ $(document).ready(function() {
 
     $("#cancelBtn").on("click", function() {
         window.location.href = "?page=clients";
+    })
+
+    $("#createBtn").on("click", function() {
+        var formData = new FormData();
+        formData.append("nif", $("#nif").val());
+        formData.append("nombre", $("#nombre").val());
+        formData.append("direccion", $("#direccion").val());
+        formData.append("cp", $("#cp").val());
+        formData.append("localidad", $("#localidad").val());
+        formData.append("telefono", $("#telefono").val() != ""?$("#telefono").val():"");
+        formData.append("email", $("#email").val() != ""?$("#email").val():"");
+        for (var pair of formData.entries()) {
+            console.log(pair[0]+ ', ' + pair[1]); 
+        }
+        $.ajax({
+            url: "scripts/php/insert_new_client.php", // this is the target
+            type: 'post', // method
+            dataType: 'text',
+            cache: false,
+            data: formData, // pass the input value to serve
+            processData: false,  // tell jQuery not to process the data
+            contentType: false,   // tell jQuery not to set contentType
+            success: function(response) { // if the http response code is 200
+                alert(response);
+                window.location.href = "?page=clients";
+            },
+            error: function(response) { // if the http response code is other than 200
+                alert(response);
+                // HideSpinner();
+            }
+        });
+    })
+
+    $("#editBtn").on("click", function() {
+        var formData = new FormData();
+        formData.append("nif", $("#nif").val());
+        formData.append("nombre", $("#nombre").val());
+        formData.append("direccion", $("#direccion").val());
+        formData.append("cp", $("#cp").val());
+        formData.append("localidad", $("#localidad").val());
+        formData.append("telefono", $("#telefono").val() != ""?$("#telefono").val():"");
+        formData.append("email", $("#email").val() != ""?$("#email").val():"");
+        for (var pair of formData.entries()) {
+            console.log(pair[0]+ ', ' + pair[1]); 
+        }
+        $.ajax({
+            url: "scripts/php/update_client.php", // this is the target
+            type: 'post', // method
+            dataType: 'text',
+            cache: false,
+            data: formData, // pass the input value to serve
+            processData: false,  // tell jQuery not to process the data
+            contentType: false,   // tell jQuery not to set contentType
+            success: function(response) { // if the http response code is 200
+                alert(response);
+                window.location.href = "?page=clients";
+            },
+            error: function(response) { // if the http response code is other than 200
+                alert(response);
+                // HideSpinner();
+            }
+        });
     })
 })

@@ -3,6 +3,16 @@ $(document).ready(function() {
         window.location.href = "?page=new-bill";
     });
 
+    $("#NewRecBtn").on("click", function() {
+        window.location.href = "?page=rectify-bill";
+    });
+
+    $("#ViewBtn").on("click", function() {
+        factura = dTable.row(".selected").data();
+        console.log(factura);
+        window.location.href = "?page=view-bill&id="+factura.id;
+    });
+
     $("#EditBtn").on("click", function() {
         window.location.href = "?page=edit-bill";
     });
