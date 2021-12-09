@@ -338,7 +338,7 @@ $(document).ready(function() {
         enableSaveBtn();
     })
 
-    function Save() {
+    function Save(save) {
         var formData = new FormData();
         if (action == "new-bill") {
             formData.append("numero", $("#numero").val());
@@ -368,7 +368,9 @@ $(document).ready(function() {
                 contentType: false,   // tell jQuery not to set contentType
                 success: function(response) { // if the http response code is 200
                     alert(response);
-                    window.location.href = "?page=bills";
+                    if (save == "saveOnly") {
+                        window.location.href = "?page=bills";
+                    }
                 },
                 error: function(response) { // if the http response code is other than 200
                     alert(response);
@@ -379,11 +381,11 @@ $(document).ready(function() {
     }
 
     $("#SaveBtn").on("click", function(){
-        Save();
+        Save("saveOnly");
     });
 
     $("#SavePrintBtn").on("click", function() {
-        Save();
+        Save("print");
         window.location.href = "scripts/factura/factura.php?numero="+$("#numero").val();
     });
 
