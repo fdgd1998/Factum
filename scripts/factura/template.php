@@ -59,7 +59,7 @@
                 <h1 class="company">ViGal Artesana</h1>
             </td>
             <td>
-                <label><?=$nombreEmpresa?> (NIF:<?=$nifEmpresa?>)</label><br>
+                <label><?=$nombreEmpresa?> (NIF: <?=$nifEmpresa?>)</label><br>
                 <label><?=$direccionEmpresa?></label><br>
                 <label><?=$telefonoEmpresa?></label><br>
                 <label><?=$emailEmpresa?> | <?=$webEmpresa?></label><br>
