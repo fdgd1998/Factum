@@ -5,4 +5,5 @@
     $telefonoEmpresa = "+34 600 00 00 00";
     $emailEmpresa = "test@example.es";
     $webEmpresa = "mysite.es";
+    $ibanEmpresa  = "ES00 0000 0000 0000 0000";
 ?>
