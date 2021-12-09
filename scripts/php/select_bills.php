@@ -16,10 +16,7 @@ error_reporting(E_ALL); ini_set('display_errors', TRUE); ini_set('display_startu
         echo "Se ha producido un error.";
         exit();
     } else {
-        $sql = "
-            select numero, fecha, clientes.nif, clientes.nombre, total
-            from facturas inner join clientes using(nif)
-        ";
+        $sql = "select numero, fecha, nif, nombre, total from facturas";
         
         if ($res = $conn->query($sql)) {
             $output["recordsTotal"] = $res->num_rows;
