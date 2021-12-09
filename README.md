@@ -23,6 +23,6 @@ This is a very simple billing application for ViGal Artesana, only to manage cus
 - Configuration page
 
 ### Planned features
-- Bill generation using Invoicr
+- Bill PDF generation.
 - Quaterly bills export.
 - Miscellaneous configuration.
