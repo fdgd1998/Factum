@@ -338,7 +338,7 @@ $(document).ready(function() {
         enableSaveBtn();
     })
 
-    $("#SaveBtn").on("click", function(){
+    function Save() {
         var formData = new FormData();
         if (action == "new-bill") {
             formData.append("numero", $("#numero").val());
@@ -376,5 +376,18 @@ $(document).ready(function() {
                 }
             });
         }   
+    }
+
+    $("#SaveBtn").on("click", function(){
+        Save();
+    });
+
+    $("#SavePrintBtn").on("click", function() {
+        Save();
+        window.location.href = "scripts/factura/factura.php?numero="+$("#numero").val();
+    });
+
+    $("#PrintBtn").on("click", function() {
+        window.location.href = "scripts/factura/factura.php?numero="+$("#numero").val();
     });
 })

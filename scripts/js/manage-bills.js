@@ -13,7 +13,8 @@ $(document).ready(function() {
         window.location.href = "?page=view-bill&id="+factura.id;
     });
 
-    $("#EditBtn").on("click", function() {
-        window.location.href = "?page=edit-bill";
+    $("#PrintBtn").on("click", function() {
+        numeroFactura = dTable.row(".selected").data().id;
+        window.location.href = "scripts/factura/factura.php?numero="+numeroFactura;
     });
 } );

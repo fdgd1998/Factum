@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL); ini_set('display_errors', TRUE); ini_set('display_startup_errors', TRUE);
     $action = $_GET["page"];
     $numerofactura = "";
     $viewBillData = [];
@@ -7,6 +8,7 @@
     
     echo "<script>var action = '".$action."'</script>";
 
+    require "scripts/php/money_format.php";
     require "scripts/php/connection.php";  
 
     if ($action == "new-bill") {
@@ -85,9 +87,9 @@
                 $viewBillData["formapago"] = $rows["formapago"];
                 $viewBillData["conceptos"] = json_decode($rows["conceptos"], true);
                 $viewBillData["observaciones"] = $rows["observaciones"];
-                $viewBillData["total"] = $rows["total"];
-                $viewBillData["iva"] = $rows["iva"];
-                $viewBillData["imponible"] = $rows["imponible"];
+                $viewBillData["total"] = money_format("%i", $rows["total"]);
+                $viewBillData["iva"] = money_format("%i", $rows["iva"]);
+                $viewBillData["imponible"] = money_format("%i", $rows["imponible"]);
                 $viewBillData["nombre"] = $rows["nombre"];
                 $viewBillData["direccion"] = $rows["direccion"];
                 $viewBillData["cp"] = $rows["cp"];
@@ -294,7 +296,7 @@
     <div class="my-button-group mt-4 mb-5 float-end">
         <button id="cancelBtn" class="btn my-button-2"><i class="bi bi-x-square"></i>Cancelar</button>
         <button disabled id="SaveBtn" class="btn my-button-3"><i class="bi bi-save"></i>Guardar</button>
-        <button disabled id="<?=$action=="view-bill"?"PrintBtn":"SavePrintBtn"?>" class="btn my-button-4"><i class="bi bi-printer"></i>Guardar e imprimir</button>
+        <button disabled id="SavePrintBtn" class="btn my-button-4"><i class="bi bi-printer"></i>Guardar e imprimir</button>
     </div>
     <?php endif; ?>
     <?php if ($action == "view-bill"): ?>

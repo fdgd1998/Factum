@@ -10,10 +10,9 @@
         'margin-bottom' => 20,
         'viewport-size' => '1920x1080'
     ));
-
-    $pdf->AddPage(__DIR__."\\template.html");
-
-    if (!$pdf->send()) {
+    $pdf->AddPage("http://localhost/scripts/factura/template.php?numero=".$_GET["numero"]);
+    
+    if (!$pdf->send(null, false, array('Content-Length' => false))) {
         echo $pdf->getError();
     }
     
