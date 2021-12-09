@@ -56,7 +56,7 @@ CREATE TABLE `controlfactura` (
 --
 
 INSERT INTO `controlfactura` (`nombreserie`, `anoultimafactura`, `numeroultimafactura`) VALUES
-('FIVA', 21, 9),
+('FIVA', 21, 0),
 ('PR', 21, 0),
 ('RFIVA', 21, 0);
 
