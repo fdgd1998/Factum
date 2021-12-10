@@ -1,11 +1,15 @@
 @font-face {
     font-family: 'GreatVibes';
-    src:  url('GreatVibes.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 400;
+    src: url("GreatVibes.ttf") format('truetype');
 }
 
 @font-face {
     font-family: 'QuickSand';
-    src:  url('QuickSand-Regular.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 400;
+    src:  url('QuickSand-Regular.ttf') format('ttf');
 }
 
 body {
