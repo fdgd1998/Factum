@@ -20,9 +20,9 @@
             $sql = "select * from controlfactura where nombreserie='FIVA'";
             
             if ($rows = $conn->query($sql)->fetch_assoc()) {
-                if ($rows["anoultimafactura"] > date("y")) 
-                    $numerofactura .= $rows["anoultimafactura"];
-                else $numerofactura .= date("y");
+                if ($rows["anoultimafactura"] < date("y")) 
+                    $numerofactura .= date("y");
+                else $numerofactura .= $rows["anoultimafactura"];
                 
                 $numerofactura .= $rows["nombreserie"];
                 $numerofactura .= str_pad($rows["numeroultimafactura"]+1, 5, "0", STR_PAD_LEFT);
@@ -68,9 +68,9 @@
             $sql = "select * from controlfactura where nombreserie='PR'";
             
             if ($rows = $conn->query($sql)->fetch_assoc()) {
-                if ($rows["anoultimafactura"] > date("y")) 
-                    $numerofactura .= $rows["anoultimafactura"];
-                else $numerofactura .= date("y");
+                if ($rows["anoultimafactura"] < date("y")) 
+                    $numerofactura .= date("y");
+                else $numerofactura .= $rows["anoultimafactura"];
                 
                 $numerofactura .= $rows["nombreserie"];
                 $numerofactura .= str_pad($rows["numeroultimafactura"]+1, 5, "0", STR_PAD_LEFT);
@@ -89,9 +89,9 @@
             $sql = "select * from controlfactura where nombreserie='RFIVA'";
             
             if ($rows = $conn->query($sql)->fetch_assoc()) {
-                if ($rows["anoultimafactura"] > date("y")) 
-                    $numerofactura .= $rows["anoultimafactura"];
-                else $numerofactura .= date("y");
+                if ($rows["anoultimafactura"] < date("y")) 
+                    $numerofactura .= date("y");
+                else $numerofactura .= $rows["anoultimafactura"];
                 
                 $numerofactura .= $rows["nombreserie"];
                 $numerofactura .= str_pad($rows["numeroultimafactura"]+1, 5, "0", STR_PAD_LEFT);
