@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-12-2021 a las 00:34:25
+-- Tiempo de generación: 11-12-2021 a las 02:07:35
 -- Versión del servidor: 10.4.22-MariaDB
 -- Versión de PHP: 8.0.13
 
@@ -63,23 +63,6 @@ INSERT INTO `controlfactura` (`nombreserie`, `anoultimafactura`, `numeroultimafa
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `empresa`
---
-
-CREATE TABLE `empresa` (
-  `nif` varchar(9) NOT NULL,
-  `nombrecomercial` varchar(10) DEFAULT NULL,
-  `nombrelegal` varchar(10) DEFAULT NULL,
-  `dirección` varchar(100) DEFAULT NULL,
-  `cp` int(5) DEFAULT NULL,
-  `localidad` varchar(50) DEFAULT NULL,
-  `telefono` varchar(20) DEFAULT NULL,
-  `email` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `facturas`
 --
 
@@ -109,10 +92,13 @@ CREATE TABLE `facturasrec` (
   `numero` varchar(15) NOT NULL,
   `facturaref` varchar(15) NOT NULL,
   `nif` varchar(9) NOT NULL,
+  `fecha` date NOT NULL,
   `formapago` varchar(20) NOT NULL,
   `conceptos` longtext NOT NULL,
   `observaciones` text NOT NULL,
   `total` float NOT NULL,
+  `iva` float NOT NULL,
+  `imponible` float NOT NULL,
   `nombre` varchar(100) NOT NULL,
   `direccion` varchar(100) NOT NULL,
   `cp` int(5) NOT NULL,
@@ -126,13 +112,16 @@ CREATE TABLE `facturasrec` (
 --
 
 CREATE TABLE `presupuestos` (
-  `numero` int(5) NOT NULL,
+  `numero` varchar(15) NOT NULL,
   `nif` varchar(9) DEFAULT NULL,
   `fecha` date DEFAULT NULL,
   `conceptos` longtext DEFAULT NULL,
   `observaciones` text DEFAULT NULL,
-  `tieneiva` int(1) DEFAULT NULL,
+  `formapago` varchar(20) NOT NULL,
+  `tieneiva` varchar(2) DEFAULT NULL,
   `total` float NOT NULL,
+  `imponible` float NOT NULL,
+  `iva` float NOT NULL,
   `nombre` varchar(100) NOT NULL,
   `direccion` varchar(100) NOT NULL,
   `cp` int(5) NOT NULL,
@@ -154,12 +143,6 @@ ALTER TABLE `clientes`
 --
 ALTER TABLE `controlfactura`
   ADD PRIMARY KEY (`nombreserie`);
-
---
--- Indices de la tabla `empresa`
---
-ALTER TABLE `empresa`
-  ADD PRIMARY KEY (`nif`);
 
 --
 -- Indices de la tabla `facturas`
@@ -191,14 +174,7 @@ ALTER TABLE `presupuestos`
 -- Filtros para la tabla `facturasrec`
 --
 ALTER TABLE `facturasrec`
-  ADD CONSTRAINT `facturasrec_ibfk_1` FOREIGN KEY (`facturaref`) REFERENCES `facturas` (`numero`) ON DELETE NO ACTION,
-  ADD CONSTRAINT `facturasrec_ibfk_2` FOREIGN KEY (`nif`) REFERENCES `clientes` (`nif`) ON DELETE NO ACTION;
-
---
--- Filtros para la tabla `presupuestos`
---
-ALTER TABLE `presupuestos`
-  ADD CONSTRAINT `presupuestos_ibfk_1` FOREIGN KEY (`nif`) REFERENCES `clientes` (`nif`) ON DELETE NO ACTION;
+  ADD CONSTRAINT `facturasrec_ibfk_1` FOREIGN KEY (`facturaref`) REFERENCES `facturas` (`numero`) ON DELETE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
