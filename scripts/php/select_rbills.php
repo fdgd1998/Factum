@@ -15,10 +15,7 @@
         echo "Se ha producido un error.";
         exit();
     } else {
-        $sql = "
-            select numero, fecha, clientes.nif, clientes.nombre, total
-            from facturasrec inner join clientes using(nif)
-        ";
+        $sql = "select numero, facturaref, fecha, nif, nombre, total from facturasrec";
         
         if ($res = $conn->query($sql)) {
             $output["recordsTotal"] = $res->num_rows;

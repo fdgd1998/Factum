@@ -1,3 +1,9 @@
+<?php
+    header("Cache-Control: no-store, no-cache, private, must-revalidate, max-age=0");
+    header("Pragma: no-cache");
+    header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // A date in the past
+    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -40,6 +46,9 @@
                     case "new-budget":
                         include "./pages/bill-new.php";
                         break;
+                    case "edit-budget":
+                        include "./pages/bill-new.php";
+                        break;
                     case "bills":
                         include "./pages/bills-manage.php";
                         break;
@@ -50,6 +59,9 @@
                         include "./pages/budgets-manage.php";
                         break;
                 }
+            } else {
+                include "./pages/clients-manage.php";
+                $_GET["page"] = "clients";
             }
         ?>
     </div>
@@ -80,7 +92,7 @@
     <script src="./scripts/js/datatables-events-rbills.js"></script>
     <?php endif; ?>
 
-    <?php if ($_GET["page"] == "new-bill" || $_GET["page"] == "new-bill" || $_GET["page"] == "new-budget" || $_GET["page"] == "rectify-bill"): ?>
+    <?php if ($_GET["page"] == "new-bill" || $_GET["page"] == "new-bill" || $_GET["page"] == "new-budget" || $_GET["page"] == "edit-budget" || $_GET["page"] == "rectify-bill"): ?>
     <script src="./scripts/js/datatables-events-bill-new.js"></script>
     <script src="./classes/js/BillConcept.js"></script>
     <script src="./scripts/js/bill.js"></script>
@@ -96,5 +108,25 @@
     <?php endif; ?>
 
     <?php endif; ?>
+    <script>
+window.addEventListener('popstate', function(event) {
+    // The popstate event is fired each time when the current history entry changes.
+
+    var r = confirm("You pressed a Back button! Are you sure?!");
+
+    if (r == true) {
+        // Call Back button programmatically as per user confirmation.
+        history.back();
+        // Uncomment below line to redirect to the previous page instead.
+        // window.location = document.referrer // Note: IE11 is not supporting this.
+    } else {
+        // Stay on the current page.
+        history.pushState(null, null, window.location.pathname);
+    }
+
+    history.pushState(null, null, window.location.pathname);
+
+}, false);
+    </script>
 </body>
 </html>

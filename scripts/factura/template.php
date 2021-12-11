@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
     include_once "datos_empresa.php";
     // require_once "../php/money_format.php";
     require_once "../php/connection.php";
@@ -16,20 +19,40 @@
         exit();
     } else {
         $sql = "select * from ";
-        if (str_contains($_GET["numero"], "FIVA")) $sql .= " facturas ";
-        if (str_contains($_GET["numero"], "RFIVA")) $sql .= " facturasred ";
-        if (str_contains($_GET["numero"], "PR")) $sql .= " presupuestos ";
+        if (str_contains($_GET["numero"], "RFIVA")) $sql .= " facturasrec ";
+        elseif (str_contains($_GET["numero"], "PR")) $sql .= " presupuestos ";
+        else $sql .= " facturas ";
         $sql .= " where numero='".$_GET["numero"]."'";
         
-        if ($res = $conn->query($sql)) {
-            $output["recordsTotal"] = $res->num_rows;
-            $output["recordsFiltered"] = $res->num_rows;
-            while ($rows = $res->fetch_assoc()) {
-                $datosCliente["nif"] = $rows["nif"];
-                $datosCliente["nombre"] = $rows["nombre"];
-                $datosCliente["direccion"] = $rows["direccion"];
-                $datosCliente["localidad"] = $rows["localidad"];
-                $datosCliente["cp"] = $rows["cp"];
+        if ($rows = $conn->query($sql)->fetch_assoc()) {
+            $datosCliente["nif"] = $rows["nif"];
+            $datosCliente["nombre"] = $rows["nombre"];
+            $datosCliente["direccion"] = $rows["direccion"];
+            $datosCliente["localidad"] = $rows["localidad"];
+            $datosCliente["cp"] = $rows["cp"];
+
+            if (str_contains($_GET["numero"], "RFIVA")) {
+                $datosFactura["numero"] = $rows["numero"];
+                $datosFactura["facturaref"] = $rows["facturaref"];
+                $datosFactura["formapago"] = $rows["formapago"];
+                $datosFactura["fecha"] = date("Y-m-d", strtotime($rows["fecha"]));
+                $datosFactura["conceptos"] = json_decode($rows["conceptos"], true);
+                $datosFactura["observaciones"] = $rows["observaciones"];
+                $datosFactura["imponible"] = $fmt->formatCurrency($rows["imponible"], "EUR");
+                $datosFactura["iva"] = $fmt->formatCurrency($rows["iva"], "EUR");
+                $datosFactura["total"] = $fmt->formatCurrency($rows["total"], "EUR");
+                
+            } elseif (str_contains($_GET["numero"], "PR")) {
+                $datosFactura["numero"] = $rows["numero"];
+                $datosFactura["tieneiva"] = $rows["tieneiva"];
+                $datosFactura["fecha"] = date("Y-m-d", strtotime($rows["fecha"]));
+                $datosFactura["conceptos"] = json_decode($rows["conceptos"], true);
+                $datosFactura["formapago"] = $rows["formapago"];
+                $datosFactura["observaciones"] = $rows["observaciones"];
+                $datosFactura["imponible"] = $fmt->formatCurrency($rows["imponible"], "EUR");
+                $datosFactura["iva"] = $fmt->formatCurrency($rows["iva"], "EUR");
+                $datosFactura["total"] = $fmt->formatCurrency($rows["total"], "EUR");
+            } else {
                 $datosFactura["numero"] = $rows["numero"];
                 $datosFactura["formapago"] = $rows["formapago"];
                 $datosFactura["fecha"] = date("Y-m-d", strtotime($rows["fecha"]));
@@ -66,27 +89,50 @@
             </td>
         </tr>
     </table>
+    <?php if (str_contains($_GET["numero"], "RFIVA")):?>
+    <h1 class="title">Factura rectificativa</h1>
+    <?php elseif (str_contains($_GET["numero"], "PR")): ?>
+    <h1 class="title">Presupuesto</h1>
+    <?php else: ?>
     <h1 class="title">Factura</h1>
+    <?php endif; ?>
     <table width="100.9%" style="margin-left: -5px !important">
         <tr>
             <td width="60%">   
                 <table width="100%">
                     <tr>
-                        <td width="25%">
+                        <td width="35%">
                             <label>Número:</label><br>
+                            <?php if (isset($datosFactura["facturaref"])): ?>
+                            <label>Rectifica a: </label><br>
+                            <?php endif; ?>
                             <label>Fecha:</label><br>
+                            <?php if (isset($datosFactura["tieneiva"])): ?>
+                            <label>Presupuesto con IVA:</label><br>
+                            <?php endif; ?>
+                            <?php if (isset($datosFactura["formapago"])): ?>
                             <label>Forma de pago:</label><br>
                             <?php if ($datosFactura["formapago"] == "banco"): ?>
                             <label>IBAN: </label><br>
                             <?php endif; ?>
+                            <?php endif; ?>
                         </td>
                         <td>
                             <label><?=$datosFactura["numero"]?></label><br>
+                            <?php if (isset($datosFactura["facturaref"])): ?>
+                            <label><?=$datosFactura["facturaref"]?></label><br>
+                            <?php endif; ?>
                             <label>08/12/2021</label><br>
+                            <?php if (isset($datosFactura["tieneiva"])): ?>
+                            <label><?=$datosFactura["tieneiva"]=="si"?"Sí":"No"?></label><br>
+                            <?php endif; ?>
+                            <?php if (isset($datosFactura["formapago"])): ?>
                             <label><?=$datosFactura["formapago"] == "efectivo"?"Efectivo":"Transferencia bancaria"?></label><br>
                             <?php if ($datosFactura["formapago"] == "banco"): ?>
                             <label><?=$ibanEmpresa?></label><br>
                             <?php endif; ?>
+                            <?php endif; ?>
+                            
                         </td>
                     </tr>
                 </table>
@@ -107,7 +153,9 @@
                 <th width="10%" style="text-align: left;">Cantidad</th>
                 <th width="50%" style="text-align: left;">Descripción</th>
                 <th width="15%" style="text-align: right;">Precio unitario</th>
+                <?php if ((isset($datosFactura["tieneiva"]) && $datosFactura["tieneiva"] == "si") || str_contains($_GET["numero"], "FIVA")): ?>
                 <th width="13%" style="text-align: right;">IVA unitario</th>
+                <?php endif; ?>
                 <th width="15%" style="text-align: right;">Total</th>
             </tr>
         </thead>
@@ -118,7 +166,9 @@
                 <td><?=$concepto["cantidad"]?></td>
                 <td><?=$concepto["descripcion"]?></td>
                 <td class="money"><?=$fmt->formatCurrency($concepto["precio"], "EUR")?></td>
+                <?php if ((isset($datosFactura["tieneiva"]) && $datosFactura["tieneiva"] == "si") || str_contains($_GET["numero"], "FIVA")): ?>
                 <td class="money"><?=$fmt->formatCurrency($concepto["iva"], "EUR")?></td>
+                <?php endif; ?>
                 <td class="money"><?=$fmt->formatCurrency($concepto["total"], "EUR")?></td>
             </tr>
             <?php endforeach; ?>
@@ -127,14 +177,18 @@
     <table width="100%">
         <tr>
             <td style="text-align: right;">
+                <?php if ((isset($datosFactura["tieneiva"]) && $datosFactura["tieneiva"] == "si") || str_contains($_GET["numero"], "FIVA")): ?>
                 <label>Base imponible: </label><br>
                 <label>IVA (21%): </label><br>
+                <?php endif; ?>
                 <br>
                 <label style="font-size: 15px">Total a pagar: </label>
             </td>
             <td width="15%" style="text-align: right">
+                <?php if ((isset($datosFactura["tieneiva"]) && $datosFactura["tieneiva"] == "si") || str_contains($_GET["numero"], "FIVA")): ?>
                 <label><?=$datosFactura["imponible"]?></label><br>
                 <label><?=$datosFactura["iva"]?></label><br>
+                <?php endif; ?>
                 <br>
                 <label style="font-size: 15px"><?=$datosFactura["total"]?></label>
             </td>

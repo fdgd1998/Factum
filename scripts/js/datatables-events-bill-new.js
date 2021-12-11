@@ -11,8 +11,8 @@ $(document).ready(function() {
         language: {
             "decimal":        "",
             "emptyTable":     "No existen datos",
-            "info":           "Mostrando _START_ a _END_ de _TOTAL_ entradas totales",
-            "infoEmpty":      "Mostrando 0 de 0 de 0 entradas",
+            "info":           "Mostrando _START_ a _END_  (_TOTAL_ entradas totales)",
+            "infoEmpty":      "Mostrando 0 de 0 (0 entradas totales)",
             "infoFiltered":   "(filtrando desde _MAX_ entradas totales)",
             "infoPostFix":    "",
             "thousands":      ",",
@@ -43,8 +43,8 @@ $(document).ready(function() {
         language: {
             "decimal":        "",
             "emptyTable":     "No existen datos",
-            "info":           "Mostrando _START_ a _END_ de _TOTAL_ entradas totales",
-            "infoEmpty":      "Mostrando 0 de 0 de 0 entradas",
+            "info":           "Mostrando _START_ a _END_ (_TOTAL_ entradas totales)",
+            "infoEmpty":      "Mostrando 0 de 0 (0 entradas totales)",
             "infoFiltered":   "(filtrando desde _MAX_ entradas totales)",
             "infoPostFix":    "",
             "thousands":      ",",
@@ -106,8 +106,8 @@ $(document).ready(function() {
         language: {
             "decimal":        "",
             "emptyTable":     "No existen datos",
-            "info":           "Mostrando _START_ a _END_ de _TOTAL_ entradas totales",
-            "infoEmpty":      "Mostrando 0 de 0 de 0 entradas",
+            "info":           "Mostrando _START_ a _END_ (_TOTAL_ entradas totales)",
+            "infoEmpty":      "Mostrando 0 de 0 (0 entradas)",
             "infoFiltered":   "(filtrando desde _MAX_ entradas totales)",
             "infoPostFix":    "",
             "thousands":      ",",

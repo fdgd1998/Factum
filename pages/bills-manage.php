@@ -10,6 +10,9 @@
     <thead>
         <tr>
             <th width="10%">Número</th>
+            <?php if ($_GET["page"] == "rbills"):?>
+            <th>Referencia</th>
+            <?php endif; ?>
             <th width="10%">Fecha</th>
             <th width="15%">NIF cliente</th>
             <th width="45%">Nombre cliente</th>

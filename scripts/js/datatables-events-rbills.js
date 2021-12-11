@@ -6,8 +6,11 @@ const currencyOptions = {
 }
 
 const dateOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
+
+var dTable;
+
 $(document).ready(function() {
-    $('#dTable').DataTable({
+    dTable = $('#dTable').DataTable({
         language: {
             "decimal":        "",
             "emptyTable":     "No existen datos",
@@ -47,13 +50,13 @@ $(document).ready(function() {
 
         columnDefs: [
             {
-                targets: 4,
+                targets: 5,
                 render: function(data, type, full, meta){
                 return new Intl.NumberFormat("es-ES", currencyOptions).format(data);
                 }
             },
             {
-                targets: 1,
+                targets: 2,
                 render: function(data, type, full, meta){
                 return new Date(data).toLocaleDateString('es-ES', dateOptions);
                 }

@@ -1,5 +1,16 @@
+const currencyOptions = {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+}
+
+const dateOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
+
+var dTable;
+
 $(document).ready(function() {
-    $('#dTable').DataTable({
+    dTable = $('#dTable').DataTable({
         language: {
             "decimal":        "",
             "emptyTable":     "No existen datos",
@@ -30,11 +41,25 @@ $(document).ready(function() {
  
         columns: [
             { "data": "id" },
-            { "data": "nif" },
-            { "data": "fecha" },                       
-            { "data": "name" },
+            { "data": "fecha" }, 
+            { "data": "nif" },     
+            { "data": "nombre" },
             { "data": "total" }
-            ],
+        ],
+        columnDefs: [
+            {
+                targets: 4,
+                render: function(data, type, full, meta){
+                return new Intl.NumberFormat("es-ES", currencyOptions).format(data);
+                }
+            },
+            {
+                targets: 1,
+                render: function(data, type, full, meta){
+                return new Date(data).toLocaleDateString('es-ES', dateOptions);
+                }
+            },
+        ],
         searching: true,
         lengthChange: true,
         pageLength: 10,

@@ -5,8 +5,10 @@ var options = {
     maximumFractionDigits: 2,
 }
 
-var editingRowIdN = 0;
+var regexpPPositive = /^([0-9]*)+\.?\d{1,2}$/;
+var regexpPNegative = /^(\-?[0-9]*)+\.?\d{1,2}$/;
 
+var editingRowIdN = 0;
 var tiene_iva = 1;
 
 var total_global = 0;
@@ -160,6 +162,16 @@ function enableSaveBtn() {
 }
 
 $(document).ready(function() {
+    if (action == "edit-budget") {
+        $("#dTable tbody tr").each(function(){
+            cantidad = $(this).find(".cantidad").html();
+            descripcion = $(this).find(".descripcion").html();
+            precio = $(this).find(".precio").html();
+            iva = $(this).find(".iva").html();
+            total = $(this).find(".total").html();
+            conceptsArr.push(new BillConcept(cantidad, descripcion, parseFloat(precio), parseFloat(iva), parseFloat(total)));
+        });
+    }
     $("#cantidad, #precio-unitario").on("change, keyup", function() {
         if ($(this).attr("id") == "cantidad") {
             if (/^[0-9]*[^.]$/.test($(this).val())) {
@@ -170,8 +182,7 @@ $(document).ready(function() {
                 $(this).removeClass("is-valid");
             }
         } else {
-            // if (/[\d\.]/g.test($(this).val())) {
-            if (/^([0-9]*)+\.?\d{1,2}$/.test($(this).val())) {
+            if ((action=="rectify-bill"?regexpPNegative:regexpPPositive).test($(this).val())) {
                 $(this).addClass("is-valid");
                 $(this).removeClass("is-invalid");
             } else {
@@ -322,8 +333,30 @@ $(document).ready(function() {
     })
 
     $("#selectBillBtn").on("click", function() {
-        bill = dTableBills.row(".selected").data();
+        var bill = dTableBills.row(".selected").data();
+        var cliente;
+        $.ajax({
+            url: "scripts/php/select_one_bill.php", // this is the target
+            type: 'post', // method
+            async: false,
+            dataType: 'json',
+            data: {numero: bill.id}, // pass the input value to serve
+            success: function(response) { // if the http response code is 200
+                alert(response);
+                cliente = response;
+            },
+            error: function(response) { // if the http response code is other than 200
+                alert(response);
+                // HideSpinner();
+            }
+        });
+        
         $("#bill-reference").val(bill.id);
+        $("#nif").val(cliente.nif);
+        $("#nombre").val(cliente.nombre);
+        $("#direccion").val(cliente.direccion);
+        $("#cp").val(cliente.cp);
+        $("#localidad").val(cliente.ciudad);
         $("#billSearchModal").find("tbody tr.selected").removeClass("selected");
         $("#selectBillBtn").attr("disabled","disabled");
         $("#billSearchModal").modal("hide");
@@ -340,21 +373,21 @@ $(document).ready(function() {
 
     function Save(save) {
         var formData = new FormData();
+        formData.append("numero", $("#numero").val());
+        formData.append("nif", $("#nif").val());
+        formData.append("fecha", new Date($("#fecha").val()).toISOString().slice(0,19).replace('T',' '));
+        formData.append("conceptos", JSON.stringify(conceptsArr));
+        formData.append("observaciones", $("#observaciones").val());
+        formData.append("total", total_global);
+        formData.append("iva", iva_global);
+        formData.append("imponible", imponible_global);
+        formData.append("year", new Date().getFullYear().toString().substr(-2));
+        formData.append("nombre", $("#nombre").val());
+        formData.append("direccion", $("#direccion").val());
+        formData.append("cp", $("#cp").val());
+        formData.append("localidad", $("#localidad").val());
+        formData.append("formapago", $("#forma-pago").find(":selected").val());
         if (action == "new-bill") {
-            formData.append("numero", $("#numero").val());
-            formData.append("nif", $("#nif").val());
-            formData.append("fecha", new Date($("#fecha").val()).toISOString().slice(0,19).replace('T',' '));
-            formData.append("formapago", $("#forma-pago").find(":selected").val());
-            formData.append("conceptos", JSON.stringify(conceptsArr));
-            formData.append("observaciones", $("#observaciones").val());
-            formData.append("total", total_global);
-            formData.append("iva", iva_global);
-            formData.append("imponible", imponible_global);
-            formData.append("year", new Date().getFullYear().toString().substr(-2));
-            formData.append("nombre", $("#nombre").val());
-            formData.append("direccion", $("#direccion").val());
-            formData.append("cp", $("#cp").val());
-            formData.append("localidad", $("#localidad").val());
             for (var pair of formData.entries()) {
                 console.log(pair[0]+ ', ' + pair[1]); 
             }
@@ -377,10 +410,92 @@ $(document).ready(function() {
                     // HideSpinner();
                 }
             });
-        }   
+        }
+        
+        if (action == "rectify-bill") {
+            formData.append("numeroref", $("#bill-reference").val());
+            for (var pair of formData.entries()) {
+                console.log(pair[0]+ ', ' + pair[1]); 
+            }
+            $.ajax({
+                url: "scripts/php/insert_new_rbill.php", // this is the target
+                type: 'post', // method
+                dataType: 'text',
+                cache: false,
+                data: formData, // pass the input value to serve
+                processData: false,  // tell jQuery not to process the data
+                contentType: false,   // tell jQuery not to set contentType
+                success: function(response) { // if the http response code is 200
+                    console.log(response);
+                    alert(response);
+                    if (save == "saveOnly") {
+                        window.location.href = "?page=rbills";
+                    }
+                },
+                error: function(response) { // if the http response code is other than 200
+                    alert(response);
+                    // HideSpinner();
+                }
+            });
+        }
+
+        if (action == "new-budget") {
+            formData.append("tieneiva", $("#presupuesto-iva option:selected").val());
+            for (var pair of formData.entries()) {
+                console.log(pair[0]+ ', ' + pair[1]); 
+            }
+            $.ajax({
+                url: "scripts/php/insert_new_budget.php", // this is the target
+                type: 'post', // method
+                dataType: 'text',
+                cache: false,
+                data: formData, // pass the input value to serve
+                processData: false,  // tell jQuery not to process the data
+                contentType: false,   // tell jQuery not to set contentType
+                success: function(response) { // if the http response code is 200
+                    console.log(response);
+                    alert(response);
+                    if (save == "saveOnly") {
+                        window.location.href = "?page=budgets";
+                    }
+                },
+                error: function(response) { // if the http response code is other than 200
+                    alert(response);
+                    // HideSpinner();
+                }
+            });
+        }
+
+        if (action == "edit-budget") {
+            formData.append("tieneiva", $("#presupuesto-iva option:selected").val());
+            for (var pair of formData.entries()) {
+                console.log(pair[0]+ ', ' + pair[1]); 
+            }
+            $.ajax({
+                url: "scripts/php/update_budget.php", // this is the target
+                type: 'post', // method
+                dataType: 'text',
+                cache: false,
+                data: formData, // pass the input value to serve
+                processData: false,  // tell jQuery not to process the data
+                contentType: false,   // tell jQuery not to set contentType
+                success: function(response) { // if the http response code is 200
+                    console.log(response);
+                    alert(response);
+                    if (save == "saveOnly") {
+                        window.location.href = "?page=budgets";
+                    }
+                },
+                error: function(response) { // if the http response code is other than 200
+                    alert(response);
+                    // HideSpinner();
+                }
+            });
+        }
     }
 
     $("#SaveBtn").on("click", function(){
+        console.log("Saving...");
         Save("saveOnly");
     });
 
