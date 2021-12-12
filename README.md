@@ -17,12 +17,10 @@ This is a very simple billing application for ViGal Artesana, only to manage cus
 - Frameworks: jQuery, DataTables, Bootstrap 5.
 - Web development techniques: AJAX.
 
-### Features in the works
+### Features
 - Customer creation and management
-- Billling management (creation, edition and deletion)
-- Configuration page
+- Billling management (creation, edition and deletion) as well as PDF export.
 
 ### Planned features
-- Bill PDF generation.
 - Quaterly bills export.
-- Miscellaneous configuration.
+- Maybe a simple control panel for some basic configuration.
