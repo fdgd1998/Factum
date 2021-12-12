@@ -4,27 +4,26 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
     include_once "datos_empresa.php";
     // require_once "../php/money_format.php";
-    require_once "../php/connection.php";
+    // require_once "../php/connection.php";
+    require_once "../../classes/php/Database.php";
 
+    $conn = new DatabaseConnection();
     $fmt = new NumberFormatter('es_ES.UTF8', NumberFormatter::CURRENCY);
 
-    $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASSWD, $DB_NAME);
-    $conn->set_charset("utf8");
+    // $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASSWD, $DB_NAME);
+    // $conn->set_charset("utf8");
 
     $datosCliente = [];
     $datosFactura = [];
 
-    if ($conn->connect_error) {
-        echo "Se ha producido un error.";
-        exit();
-    } else {
+    if ($conn->Connect()) {
         $sql = "select * from ";
         if (str_contains($_GET["numero"], "RFIVA")) $sql .= " facturasrec ";
         elseif (str_contains($_GET["numero"], "PR")) $sql .= " presupuestos ";
         else $sql .= " facturas ";
         $sql .= " where numero='".$_GET["numero"]."'";
         
-        if ($rows = $conn->query($sql)->fetch_assoc()) {
+        if ($rows = $conn->Select($sql)[0]) {
             $datosCliente["nif"] = $rows["nif"];
             $datosCliente["nombre"] = $rows["nombre"];
             $datosCliente["direccion"] = $rows["direccion"];
@@ -64,7 +63,7 @@ error_reporting(E_ALL);
             }
         }
     }
-    $conn->close();
+    $conn->Close();
 ?>
 <!DOCTYPE html>
 <html lang="es">

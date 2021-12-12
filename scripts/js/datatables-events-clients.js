@@ -4,7 +4,7 @@ $(document).ready(function() {
         language: {
             "decimal":        "",
             "emptyTable":     "No existen datos",
-            "info":           "Mostrando _START_ a _END_ de _TOTAL_ entradas totales",
+            "info":           "Mostrando _START_ a _END_ (_TOTAL_ entradas totales)",
             "infoEmpty":      "Mostrando 0 de 0 de 0 entradas",
             "infoFiltered":   "(filtrando desde _MAX_ entradas totales)",
             "infoPostFix":    "",
@@ -23,9 +23,9 @@ $(document).ready(function() {
         },
         processing:true,     
         ajax:{
-            url: './scripts/php/select_clients_all.php',
+            url: './scripts/php/get_data_for_table.php',
             type: 'POST',
-            data: {action:'listEvent'},
+            data: {sql: "select nif, nombre, cp, localidad, telefono, email from clientes"},
             dataType: 'json'
             },
  
@@ -33,7 +33,7 @@ $(document).ready(function() {
             { "data": "nif" },
             { "data": "nombre" },
             { "data": "cp" },                       
-            { "data": "ciudad" },
+            { "data": "localidad" },
             { "data": "telefono" },
             { "data": "email" }
             ],
@@ -47,30 +47,6 @@ $(document).ready(function() {
         autoWidth: false,
         select: {
             style: 'single'
-        }
-    });
-    
-    $('#dTable tbody').on('click', 'tr', function () {
-        if ($(this).children("td").hasClass("dataTables_empty")) {
-            $(this).removeClass("selected");
-        } else {
-            $("#EditBtn").removeAttr("disabled");
-            $("#DeleteBtn").removeAttr("disabled");
-            $("#PrintBtn").removeAttr("disabled");
-            if ($(this).hasClass('selected')) {
-                $(this).removeClass('selected');
-                
-            }
-            else {
-                $("#dTable tr.selected").removeClass('selected');
-                $(this).addClass('selected');
-            }
-
-            if ($("#dTable tr.selected").length == 0) {
-                $("#EditBtn").attr("disabled", "disabled");
-                $("#DeleteBtn").attr("disabled", "disabled");
-                $("#PrintBtn").attr("disabled", "disabled");
-            }
         }
     });
 })

@@ -1,11 +1,3 @@
-const currencyOptions = {
-    style: 'currency',
-    currency: 'EUR',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-}
-
-const dateOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
 
 var dTable;
 
@@ -14,7 +6,7 @@ $(document).ready(function() {
         language: {
             "decimal":        "",
             "emptyTable":     "No existen datos",
-            "info":           "Mostrando _START_ a _END_ de _TOTAL_ entradas totales",
+            "info":           "Mostrando _START_ a _END_ (_TOTAL_ entradas totales)",
             "infoEmpty":      "Mostrando 0 de 0 de 0 entradas",
             "infoFiltered":   "(filtrando desde _MAX_ entradas totales)",
             "infoPostFix":    "",
@@ -33,14 +25,14 @@ $(document).ready(function() {
         },
         processing:true,     
         ajax:{
-            url: './scripts/php/select_budgets.php',
+            url: './scripts/php/get_data_for_table.php',
             type: 'POST',
-            data: {action:'listEvent'},
+            data: {sql: "select numero, fecha, nif, nombre, total from presupuestos"},
             dataType: 'json'
             },
  
         columns: [
-            { "data": "id" },
+            { "data": "numero" },
             { "data": "fecha" }, 
             { "data": "nif" },     
             { "data": "nombre" },
@@ -50,13 +42,13 @@ $(document).ready(function() {
             {
                 targets: 4,
                 render: function(data, type, full, meta){
-                return new Intl.NumberFormat("es-ES", currencyOptions).format(data);
+                    return FormatCurrency(data);
                 }
             },
             {
                 targets: 1,
                 render: function(data, type, full, meta){
-                return new Date(data).toLocaleDateString('es-ES', dateOptions);
+                    return FormatDate(data);
                 }
             },
         ],

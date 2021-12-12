@@ -9,7 +9,7 @@
 <table id="dTable" class="table table-striped table-bordered" style="width:100%">
     <thead>
         <tr>
-            <th width="10%">ID</th>
+            <th width="10%">Número</th>
             <th width="10%">Fecha</th>
             <th width="15%">NIF cliente</th>
             <th width="55%">Nombre cliente</th>

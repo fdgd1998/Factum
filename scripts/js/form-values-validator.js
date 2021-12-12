@@ -9,17 +9,6 @@ function EsEmail(w_email) {
 	return emailReg.test(w_email);
 }
 
-function EsTelefonoFijo(tel) {
-				var test = /^[89]\d{8}$/;
-				var telReg = new RegExp(test);
-				return telReg.test(tel);
-			}
-function EsTelefonoMovil(tel) {
-				var test = /^[6]\d{8}$/;
-				var telReg = new RegExp(test);
-				return telReg.test(tel);
-			}
-
 
 function isValidCif(abc){
 	par = 0;

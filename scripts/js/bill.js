@@ -320,7 +320,7 @@ $(document).ready(function() {
         $("#nombre").val(cliente.nombre);
         $("#direccion").val(cliente.direccion);
         $("#cp").val(cliente.cp);
-        $("#localidad").val(cliente.ciudad);
+        $("#localidad").val(cliente.localidad);
         $("#clientSearchModal").find("tbody tr.selected").removeClass("selected");
         $("#selectClientBtn").attr("disabled","disabled");
         $("#clientSearchModal").modal("hide");
@@ -333,30 +333,28 @@ $(document).ready(function() {
     })
 
     $("#selectBillBtn").on("click", function() {
-        var bill = dTableBills.row(".selected").data();
+        var numeroFactura = dTableBills.row(".selected").data().numero;
         var cliente;
         $.ajax({
-            url: "scripts/php/select_one_bill.php", // this is the target
+            url: "scripts/php/select_from_db.php", // this is the target
             type: 'post', // method
             async: false,
             dataType: 'json',
-            data: {numero: bill.id}, // pass the input value to serve
+            data: {sql: "select nif, nombre, direccion, cp, localidad from facturas where numero='"+numeroFactura+"'"}, // pass the input value to serve
             success: function(response) { // if the http response code is 200
-                alert(response);
-                cliente = response;
+                cliente = response[0];
             },
             error: function(response) { // if the http response code is other than 200
                 alert(response);
-                // HideSpinner();
             }
         });
         
-        $("#bill-reference").val(bill.id);
-        $("#nif").val(cliente.nif);
-        $("#nombre").val(cliente.nombre);
-        $("#direccion").val(cliente.direccion);
-        $("#cp").val(cliente.cp);
-        $("#localidad").val(cliente.ciudad);
+        $("#bill-reference").val(numeroFactura);
+        $("#nif").val(cliente["nif"]);
+        $("#nombre").val(cliente["nombre"]);
+        $("#direccion").val(cliente["direccion"]);
+        $("#cp").val(cliente["cp"]);
+        $("#localidad").val(cliente["localidad"]);
         $("#billSearchModal").find("tbody tr.selected").removeClass("selected");
         $("#selectBillBtn").attr("disabled","disabled");
         $("#billSearchModal").modal("hide");
@@ -364,7 +362,14 @@ $(document).ready(function() {
     });
 
     $("#cancelBtn").on("click", function(){
-        window.location.href = "?page=bills";
+        console.log("FIVA: "+$("#numero").val().includes("FIVA"));
+        console.log("RFIVA: "+$("#numero").val().includes("RFIVA"));
+        if (action == "new-budget" || action == "edit-budget")
+            window.location.href = "?page=budgets";
+        else if (action == "view-bill" && $("#numero").val().includes("RFIVA"))
+            window.location.href = "?page=rbills";
+        else if (action == "view-bill" && $("#numero").val().includes("FIVA"))
+            window.location.href = "?page=bills";
     })
 
     $("#fecha").on("change", function(){
@@ -372,123 +377,233 @@ $(document).ready(function() {
     })
 
     function Save(save) {
-        var formData = new FormData();
-        formData.append("numero", $("#numero").val());
-        formData.append("nif", $("#nif").val());
-        formData.append("fecha", new Date($("#fecha").val()).toISOString().slice(0,19).replace('T',' '));
-        formData.append("conceptos", JSON.stringify(conceptsArr));
-        formData.append("observaciones", $("#observaciones").val());
-        formData.append("total", total_global);
-        formData.append("iva", iva_global);
-        formData.append("imponible", imponible_global);
-        formData.append("year", new Date().getFullYear().toString().substr(-2));
-        formData.append("nombre", $("#nombre").val());
-        formData.append("direccion", $("#direccion").val());
-        formData.append("cp", $("#cp").val());
-        formData.append("localidad", $("#localidad").val());
-        formData.append("formapago", $("#forma-pago").find(":selected").val());
         if (action == "new-bill") {
-            for (var pair of formData.entries()) {
-                console.log(pair[0]+ ', ' + pair[1]); 
+            var columns = [
+                "numero", 
+                "nif", 
+                "fecha", 
+                "formapago", 
+                "conceptos", 
+                "observaciones", 
+                "total", 
+                "iva",
+                "imponible",
+                "nombre",
+                "direccion",
+                "cp",
+                "localidad"
+            ];
+            var values = [
+                $("#numero").val(),
+                $("#nif").val(),
+                new Date($("#fecha").val()).toISOString().slice(0,19).replace('T',' '),
+                $("#forma-pago").find(":selected").val(),
+                JSON.stringify(conceptsArr),
+                $("#observaciones").val(),
+                total_global,
+                iva_global,
+                imponible_global,
+                $("#nombre").val(),
+                $("#direccion").val(),
+                $("#cp").val(),
+                $("#localidad").val()
+            ]
+            sql1 = "insert into facturas (";
+            for (i = 0; i < columns.length-1; i++) {
+                sql1 += columns[i]+",";
             }
+            sql1 += columns[columns.length-1]+") values (";
+            for (i = 0; i < values.length-1; i++) {
+                sql1 += "'"+values[i]+"',";
+            }
+            sql1 += "'"+values[values.length-1]+"')";
+
+            sql2 = "update controlfactura set anoultimafactura = ";
+            sql2 += new Date().getFullYear().toString().substr(-2);
+            sql2 += " , numeroultimafactura = ";
+            sql2 += $("#numero").val().substr(6);
+            sql2 += " where nombreserie = 'FIVA'";
+
             $.ajax({
-                url: "scripts/php/insert_new_bill.php", // this is the target
-                type: 'post', // method
+                url: "scripts/php/transaction_db.php", 
+                type: 'post', 
                 dataType: 'text',
-                cache: false,
-                data: formData, // pass the input value to serve
-                processData: false,  // tell jQuery not to process the data
-                contentType: false,   // tell jQuery not to set contentType
-                success: function(response) { // if the http response code is 200
+                data: {sql: JSON.stringify([sql1, sql2])}, 
+
+                success: function(response) { 
                     alert(response);
                     if (save == "saveOnly") {
                         window.location.href = "?page=bills";
                     }
                 },
-                error: function(response) { // if the http response code is other than 200
+                error: function(response) { 
                     alert(response);
-                    // HideSpinner();
                 }
             });
         }
         
         if (action == "rectify-bill") {
-            formData.append("numeroref", $("#bill-reference").val());
-            for (var pair of formData.entries()) {
-                console.log(pair[0]+ ', ' + pair[1]); 
+            var columns = [
+                "numero", 
+                "facturaref",
+                "nif", 
+                "fecha", 
+                "formapago", 
+                "conceptos", 
+                "observaciones",
+                "total", 
+                "iva",
+                "imponible",
+                "nombre",
+                "direccion",
+                "cp",
+                "localidad"
+            ];
+            var values = [
+                $("#numero").val(),
+                $("#bill-reference").val(),
+                $("#nif").val(),
+                new Date($("#fecha").val()).toISOString().slice(0,19).replace('T',' '),
+                $("#forma-pago").find(":selected").val(),
+                JSON.stringify(conceptsArr),
+                $("#observaciones").val(),
+                total_global,
+                iva_global,
+                imponible_global,
+                $("#nombre").val(),
+                $("#direccion").val(),
+                $("#cp").val(),
+                $("#localidad").val()
+            ];
+
+            sql1 = "insert into facturasrec (";
+            for (i = 0; i < columns.length-1; i++) {
+                sql1 += columns[i]+",";
             }
+            sql1 += columns[columns.length-1]+") values (";
+            for (i = 0; i < values.length-1; i++) {
+                sql1 += "'"+values[i]+"',";
+            }
+            sql1 += "'"+values[values.length-1]+"')";
+
+            sql2 = "update controlfactura set anoultimafactura = ";
+            sql2 += new Date().getFullYear().toString().substr(-2);
+            sql2 += " , numeroultimafactura = ";
+            sql2 += $("#numero").val().substr(7);
+            sql2 += " where nombreserie = 'RFIVA'";
+
             $.ajax({
-                url: "scripts/php/insert_new_rbill.php", // this is the target
-                type: 'post', // method
+                url: "scripts/php/transaction_db.php", 
+                type: 'post',
                 dataType: 'text',
-                cache: false,
-                data: formData, // pass the input value to serve
-                processData: false,  // tell jQuery not to process the data
-                contentType: false,   // tell jQuery not to set contentType
-                success: function(response) { // if the http response code is 200
+                data: {sql: JSON.stringify([sql1, sql2])}, 
+                success: function(response) {
                     console.log(response);
                     alert(response);
                     if (save == "saveOnly") {
                         window.location.href = "?page=rbills";
                     }
                 },
-                error: function(response) { // if the http response code is other than 200
+                error: function(response) { 
                     alert(response);
-                    // HideSpinner();
                 }
             });
         }
 
         if (action == "new-budget") {
-            formData.append("tieneiva", $("#presupuesto-iva option:selected").val());
-            for (var pair of formData.entries()) {
-                console.log(pair[0]+ ', ' + pair[1]); 
+            var columns = [
+                "numero", 
+                "nif", 
+                "fecha",  
+                "conceptos", 
+                "observaciones",
+                "formapago",
+                "tieneiva", 
+                "total", 
+                "iva",
+                "imponible",
+                "nombre",
+                "direccion",
+                "cp",
+                "localidad"
+            ];
+            var values = [
+                $("#numero").val(),
+                $("#nif").val(),
+                new Date($("#fecha").val()).toISOString().slice(0,19).replace('T',' '),
+                JSON.stringify(conceptsArr),
+                $("#observaciones").val(),
+                $("#forma-pago option:selected").val(),
+                $("#presupuesto-iva option:selected").val(),
+                total_global,
+                iva_global,
+                imponible_global,
+                $("#nombre").val(),
+                $("#direccion").val(),
+                $("#cp").val(),
+                $("#localidad").val()
+            ];
+
+            sql1 = "insert into presupuestos (";
+            for (i = 0; i < columns.length-1; i++) {
+                sql1 += columns[i]+",";
             }
+            sql1 += columns[columns.length-1]+") values (";
+            for (i = 0; i < values.length-1; i++) {
+                sql1 += "'"+values[i]+"',";
+            }
+            sql1 += "'"+values[values.length-1]+"')";
+
+            sql2 = "update controlfactura set anoultimafactura = ";
+            sql2 += new Date().getFullYear().toString().substr(-2);
+            sql2 += " , numeroultimafactura = ";
+            sql2 += $("#numero").val().substr(4);
+            sql2 += " where nombreserie = 'PR'";
+
             $.ajax({
-                url: "scripts/php/insert_new_budget.php", // this is the target
-                type: 'post', // method
+                url: "scripts/php/transaction_db.php", 
+                type: 'post', 
                 dataType: 'text',
-                cache: false,
-                data: formData, // pass the input value to serve
-                processData: false,  // tell jQuery not to process the data
-                contentType: false,   // tell jQuery not to set contentType
-                success: function(response) { // if the http response code is 200
+                data: {sql: JSON.stringify([sql1, sql2])}, 
+                success: function(response) {
                     console.log(response);
                     alert(response);
                     if (save == "saveOnly") {
                         window.location.href = "?page=budgets";
                     }
                 },
-                error: function(response) { // if the http response code is other than 200
+                error: function(response) { 
                     alert(response);
-                    // HideSpinner();
                 }
             });
         }
 
         if (action == "edit-budget") {
-            formData.append("tieneiva", $("#presupuesto-iva option:selected").val());
-            for (var pair of formData.entries()) {
-                console.log(pair[0]+ ', ' + pair[1]); 
-            }
+            var data = [
+                ["fecha", new Date($("#fecha").val()).toISOString().slice(0,19).replace('T',' ')], 
+                ["conceptos", JSON.stringify(conceptsArr)], 
+                ["observaciones", $("#observaciones").val()],
+                ["formapago", $("#forma-pago option:selected").val()],
+                ["tieneiva", $("#presupuesto-iva option:selected").val()],
+                ["total", total_global], 
+                ["iva", iva_global],
+                ["imponible", imponible_global]
+            ];
+
             $.ajax({
-                url: "scripts/php/update_budget.php", // this is the target
-                type: 'post', // method
+                url: "scripts/php/update_db.php",
+                type: 'post',
                 dataType: 'text',
-                cache: false,
-                data: formData, // pass the input value to serve
-                processData: false,  // tell jQuery not to process the data
-                contentType: false,   // tell jQuery not to set contentType
-                success: function(response) { // if the http response code is 200
+                data: {table: "presupuestos", data: JSON.stringify(data), where: JSON.stringify(["numero", $("#numero").val()])},
+                success: function(response) { 
                     console.log(response);
                     alert(response);
                     if (save == "saveOnly") {
                         window.location.href = "?page=budgets";
                     }
                 },
-                error: function(response) { // if the http response code is other than 200
+                error: function(response) {
                     alert(response);
-                    // HideSpinner();
                 }
             });
         }

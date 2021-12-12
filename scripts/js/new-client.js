@@ -41,15 +41,45 @@ function validateID() {
     } else {
         isIDValid(isValidCif($("#nif").val()), "cif");
     }
-    EnableCreateBtn();
+}
+
+function userExists() {
+    $.ajax({
+        url: "scripts/php/select_from_db.php", // this is the target
+        type: 'post', // method
+        dataType: 'text',
+        data: {sql: "select nif from clientes where nif='"+$("#nif").val()+"'"}, // pass the input value to serve
+        success: function(response) { // if the http response code is 200
+            console.log(JSON.parse(response).length);
+            if (JSON.parse(response).length > 0) {
+                $("#nif-feedback").html("Ya existe un usuario con este número de identificación.");
+                $("#nif").removeClass("is-valid");
+                $("#nif").addClass("is-invalid");
+            } else {
+                $("#nif").removeClass("is-invalid");
+                $("#nif").addClass("is-valid");
+            }
+        },
+        error: function(response) { // if the http response code is other than 200
+            alert(response);
+        }
+    });
 }
 
 $(document).ready(function() {
     $("#id-select").on("change",function(){
         validateID();
+        if ($("#nif").val().length == 9) {
+            userExists();
+            EnableCreateBtn();
+        }
     })
     $("#nif").on("keyup", function() {
         validateID();
+        if ($(this).val().length == 9) {
+            userExists();
+            EnableCreateBtn();
+        }
     })
 
     $("#nombre, #direccion, #localidad").on("keyup", function() {
@@ -97,19 +127,33 @@ $(document).ready(function() {
     })
 
     $("#createBtn").on("click", function() {
+        var columns = ["nif", "nombre", "direccion", "cp", "localidad", "telefono", "email"];
+        var values = [
+            $("#nif").val(),
+            $("#nombre").val(),
+            $("#direccion").val(),
+            $("#cp").val(),
+            $("#localidad").val(),
+            $("#telefono").val() != ""?$("#telefono").val():"",
+            $("#email").val() != ""?$("#email").val():""
+        ];
         var formData = new FormData();
-        formData.append("nif", $("#nif").val());
-        formData.append("nombre", $("#nombre").val());
-        formData.append("direccion", $("#direccion").val());
-        formData.append("cp", $("#cp").val());
-        formData.append("localidad", $("#localidad").val());
-        formData.append("telefono", $("#telefono").val() != ""?$("#telefono").val():"");
-        formData.append("email", $("#email").val() != ""?$("#email").val():"");
+        formData.append("table", "clientes");
+        formData.append("columns", JSON.stringify(columns));
+        formData.append("values", JSON.stringify(values));
+
+        // formData.append("nif", $("#nif").val());
+        // formData.append("nombre", $("#nombre").val());
+        // formData.append("direccion", $("#direccion").val());
+        // formData.append("cp", $("#cp").val());
+        // formData.append("localidad", $("#localidad").val());
+        // formData.append("telefono", $("#telefono").val() != ""?$("#telefono").val():"");
+        // formData.append("email", $("#email").val() != ""?$("#email").val():"");
         for (var pair of formData.entries()) {
             console.log(pair[0]+ ', ' + pair[1]); 
         }
         $.ajax({
-            url: "scripts/php/insert_new_client.php", // this is the target
+            url: "scripts/php/insert_into_db.php", // this is the target
             type: 'post', // method
             dataType: 'text',
             cache: false,
@@ -129,18 +173,29 @@ $(document).ready(function() {
 
     $("#editBtn").on("click", function() {
         var formData = new FormData();
-        formData.append("nif", $("#nif").val());
-        formData.append("nombre", $("#nombre").val());
-        formData.append("direccion", $("#direccion").val());
-        formData.append("cp", $("#cp").val());
-        formData.append("localidad", $("#localidad").val());
-        formData.append("telefono", $("#telefono").val() != ""?$("#telefono").val():"");
-        formData.append("email", $("#email").val() != ""?$("#email").val():"");
+        var data = [
+            ["nombre",$("#nombre").val()],
+            ["direccion",$("#direccion").val()],
+            ["cp",$("#cp").val()],
+            ["localidad",$("#localidad").val()],
+            ["telefono",$("#telefono").val() != ""?$("#telefono").val():null],
+            ["email",$("#email").val() != ""?$("#email").val():null]
+        ]
+        formData.append("table", "clientes");
+        formData.append("where", JSON.stringify(["nif",$("#nif").val()]));
+        formData.append("data", JSON.stringify(data));
+        // formData.append("nif", $("#nif").val());
+        // formData.append("nombre", $("#nombre").val());
+        // formData.append("direccion", $("#direccion").val());
+        // formData.append("cp", $("#cp").val());
+        // formData.append("localidad", $("#localidad").val());
+        // formData.append("telefono", $("#telefono").val() != ""?$("#telefono").val():"");
+        // formData.append("email", $("#email").val() != ""?$("#email").val():"");
         for (var pair of formData.entries()) {
             console.log(pair[0]+ ', ' + pair[1]); 
         }
         $.ajax({
-            url: "scripts/php/update_client.php", // this is the target
+            url: "scripts/php/update_db.php", // this is the target
             type: 'post', // method
             dataType: 'text',
             cache: false,

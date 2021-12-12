@@ -1,11 +1,5 @@
-const currencyOptions = {
-    style: 'currency',
-    currency: 'EUR',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-}
-const dateOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
 var dTable;
+
 $(document).ready(function() {
     dTable = $('#dTable').DataTable({
         language: {
@@ -64,27 +58,27 @@ $(document).ready(function() {
             {
                 targets: 4,
                 render: function(data, type, full, meta){
-                return new Intl.NumberFormat("es-ES", currencyOptions).format(data);
+                    return FormatCurrency(data);
                 }
             },
             {
                 targets: 1,
                 render: function(data, type, full, meta){
-                return new Date(data).toLocaleDateString('es-ES', dateOptions);
+                    return FormatDate(data);;
                 }
             },
         ],
         processing:true,     
  
         ajax:{
-            url: './scripts/php/select_bills.php',
+            url: './scripts/php/get_data_for_table.php',
             type: 'POST',
-            data: {action:'listEvent'},
+            data: {sql: "select numero, fecha, nif, nombre, total from facturas"},
             dataType: 'json'
             },
  
         columns: [
-            { "data": "id" },
+            { "data": "numero" },
             { "data": "fecha" },
             { "data": "nif" },
             { "data": "nombre" },                       
@@ -126,9 +120,9 @@ $(document).ready(function() {
         processing:true,     
  
         ajax:{
-            url: './scripts/php/select_clients.php',
+            url: './scripts/php/get_data_for_table.php',
             type: 'POST',
-            data: {action:'listEvent'},
+            data: {sql: "select nif, nombre, direccion, cp, localidad from clientes"},
             dataType: 'json'
             },
  
@@ -137,7 +131,7 @@ $(document).ready(function() {
             { "data": "nombre" },
             { "data": "direccion" },
             { "data": "cp" },                       
-            { "data": "ciudad" }
+            { "data": "localidad" }
             ],
         lengthChange: false,
         info: true,

@@ -1,25 +1,7 @@
 <?php
-    require "scripts/php/connection.php";
-    $userData = [];
-
-    if ($_GET["page"]=="edit-client") {
-        $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASSWD, $DB_NAME);
-        if ($conn->connect_error) {
-            echo "Se ha producido un error.";
-            exit();
-        } else {
-            $sql = "select * from clientes where nif='".$_GET["id"]."'";
-            if ($rows = $conn->query($sql)->fetch_assoc()) {
-                $userData["nif"] = $rows["nif"];
-                $userData["nombre"] = $rows["nombre"];
-                $userData["direccion"] = $rows["direccion"];
-                $userData["cp"] = $rows["cp"];
-                $userData["localidad"] = $rows["localidad"];
-                $userData["telefono"] = $rows["telefono"];
-                $userData["email"] = $rows["email"];
-            }
-        }
-        $conn->close();
+    if (isset($_GET["id"])) {
+        require_once "scripts/php/db_functions.php";
+        $userData = SelectFromDb("select * from clientes where nif='".$_GET["id"]."'")[0];
     }
 ?>
 <h1><?=$_GET["page"] == "edit-client"?"Editar":"Nuevo"?> cliente</h1>

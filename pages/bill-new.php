@@ -1,25 +1,26 @@
 <?php
-    error_reporting(0);
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
     $action = $_GET["page"];
     $numerofactura = "";
     $viewBillData = [];
     $rectifyBills = array();
 
+    require_once "classes/php/Database.php";
+
+    $conn = new DatabaseConnection();
     $fmt = new NumberFormatter('es_ES.UTF8', NumberFormatter::CURRENCY);
     
     echo "<script>var action = '".$action."'</script>";
 
-    require "scripts/php/connection.php";  
+    // require "scripts/php/connection.php";  
 
     if ($action == "new-bill") {
-        $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASSWD, $DB_NAME);
-        if ($conn->connect_error) {
-            echo "Se ha producido un error.";
-            exit();
-        } else {
+        if ($conn->Connect()) {
             $sql = "select * from controlfactura where nombreserie='FIVA'";
             
-            if ($rows = $conn->query($sql)->fetch_assoc()) {
+            if ($rows = $conn->Select($sql)[0]) {
                 if ($rows["anoultimafactura"] < date("y")) 
                     $numerofactura .= date("y");
                 else $numerofactura .= $rows["anoultimafactura"];
@@ -28,18 +29,12 @@
                 $numerofactura .= str_pad($rows["numeroultimafactura"]+1, 5, "0", STR_PAD_LEFT);
             }
         }
-        $conn->close();
-    }
-
-    if ($action == "edit-budget") {
-        $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASSWD, $DB_NAME);
-        if ($conn->connect_error) {
-            echo "Se ha producido un error.";
-            exit();
-        } else {
+        $conn->Close();
+    } else if ($action == "edit-budget") {
+        if ($conn->Connect()) {
             $sql = "select * from presupuestos where numero='".$_GET["numero"]."'";
             
-            if ($rows = $conn->query($sql)->fetch_assoc()) {
+            if ($rows = $conn->Select($sql)[0]) {
                 $viewBillData["numero"] = $rows["numero"];
                 $viewBillData["nif"] = $rows["nif"];
                 $viewBillData["fecha"] = date("Y-m-d", strtotime($rows["fecha"]));
@@ -56,18 +51,12 @@
                 $viewBillData["localidad"] = $rows["localidad"];
             }
         }
-        $conn->close();
-    }
-
-    if ($action == "new-budget") {
-        $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASSWD, $DB_NAME);
-        if ($conn->connect_error) {
-            echo "Se ha producido un error.";
-            exit();
-        } else {
+        $conn->Close();
+    } else if ($action == "new-budget") {
+        if ($conn->Connect()) {
             $sql = "select * from controlfactura where nombreserie='PR'";
             
-            if ($rows = $conn->query($sql)->fetch_assoc()) {
+            if ($rows = $conn->Select($sql)[0]) {
                 if ($rows["anoultimafactura"] < date("y")) 
                     $numerofactura .= date("y");
                 else $numerofactura .= $rows["anoultimafactura"];
@@ -76,19 +65,12 @@
                 $numerofactura .= str_pad($rows["numeroultimafactura"]+1, 5, "0", STR_PAD_LEFT);
             }
         }
-        $conn->close();
-    }
-
-    
-    if ($action == "rectify-bill") {
-        $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASSWD, $DB_NAME);
-        if ($conn->connect_error) {
-            echo "Se ha producido un error.";
-            exit();
-        } else {
+        $conn->Close();
+    } else if ($action == "rectify-bill") {
+        if ($conn->Connect()) {
             $sql = "select * from controlfactura where nombreserie='RFIVA'";
             
-            if ($rows = $conn->query($sql)->fetch_assoc()) {
+            if ($rows = $conn->Select($sql)[0]) {
                 if ($rows["anoultimafactura"] < date("y")) 
                     $numerofactura .= date("y");
                 else $numerofactura .= $rows["anoultimafactura"];
@@ -97,18 +79,12 @@
                 $numerofactura .= str_pad($rows["numeroultimafactura"]+1, 5, "0", STR_PAD_LEFT);
             }
         }
-        $conn->close();
-    }
-
-    if (str_contains($_GET["id"], "RFIVA")) {
-        $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASSWD, $DB_NAME);
-        if ($conn->connect_error) {
-            echo "Se ha producido un error.";
-            exit();
-        } else {
-            $sql = "select * from facturasrec where numero='".$_GET["id"]."'";
+        $conn->Close();
+    } else if (str_contains($_GET["numero"], "RFIVA")) {
+        if ($conn->Connect()) {
+            $sql = "select * from facturasrec where numero='".$_GET["numero"]."'";
             
-            if ($rows = $conn->query($sql)->fetch_assoc()) {
+            if ($rows = $conn->Select($sql)[0]) {
                 $viewBillData["numero"] = $rows["numero"];
                 $viewBillData["facturaref"] = $rows["facturaref"];
                 $viewBillData["nif"] = $rows["nif"];
@@ -125,18 +101,11 @@
                 $viewBillData["localidad"] = $rows["localidad"];
             }
         }
-        $conn->close();
-    }
-
-    if (str_contains($_GET["id"], "FIVA")) {
-        $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASSWD, $DB_NAME);
-        if ($conn->connect_error) {
-            echo "Se ha producido un error.";
-            exit();
-        } else {
-            $sql = "select * from facturas where numero='".$_GET["id"]."'";
-            
-            if ($rows = $conn->query($sql)->fetch_assoc()) {
+        // $conn->Close();
+    } else if (str_contains($_GET["numero"], "FIVA")) {
+        if ($conn->Connect()) {
+            $sql = "select * from facturas where numero='".$_GET["numero"]."'";
+            if ($rows = $conn->Select($sql)[0]) {
                 $viewBillData["numero"] = $rows["numero"];
                 $viewBillData["nif"] = $rows["nif"];
                 $viewBillData["fecha"] = date("Y-m-d", strtotime($rows["fecha"]));
@@ -153,21 +122,20 @@
             }
 
             $sql = "select numero from facturasrec where facturaref='".$viewBillData["numero"]."'";
-            if ($res = $conn->query($sql)) {
-                while ($rows = $res->fetch_assoc()) {
-                    array_push($rectifyBills, $rows["numero"]);
-                }
+            if ($res = $conn->Select($sql)) {
+                foreach ($res as $ref)
+                    array_push($rectifyBills, $ref);      
             }
         }
-        $conn->close();
+        $conn->Close();
     }
 ?>
 <?php
     if ($action == "new-bill") echo "<h1>Nueva factura</h1>";
-    if ($action == "view-bill" && !isset($_GET["id"])) echo "<h1>Ver factura</h1>";
     if ($action == "new-budget") echo "<h1>Nuevo presupuesto</h1>";
     if ($action == "edit-budget") echo "<h1>Editar presupuesto</h1>";
-    if (str_contains($_GET["id"], "RFIVA")) echo "<h1>Ver factura rectificativa</h1>";
+    if (str_contains($_GET["numero"], "RFIVA")) echo "<h1>Ver factura rectificativa</h1>";
+    else if (str_contains($_GET["numero"], "FIVA")) echo "<h1>Ver factura</h1>";
     if ($action == "rectify-bill") echo "<h1>Nueva factura rectificativa</h1>";
 ?>
 <div class="content">
@@ -186,10 +154,10 @@
                 <input disabled id="numero" type="text" class="form-control" value=<?=$viewBillData["numero"]?>>
                 <?php endif; ?>
             </div>
-            <?php if($action == "rectify-bill" || str_contains($_GET["id"], "RFIVA")): ?>
+            <?php if($action == "rectify-bill" || str_contains($_GET["numero"], "RFIVA")): ?>
             <div class="input-group mb-3" colspan="4">
                 <span class="input-group-text">Factura:</span>
-                <input disabled id="bill-reference" type="text" class="form-control" value="<?=str_contains($_GET["id"], "RFIVA")?$viewBillData["facturaref"]:""?>">
+                <input disabled id="bill-reference" type="text" class="form-control" value="<?=str_contains($_GET["numero"], "RFIVA")?$viewBillData["facturaref"]:""?>">
                 <?php if($action == "rectify-bill"): ?>
                 <button class="input-group-text my-button" id="nif-letter" data-bs-toggle="modal" data-bs-target="#billSearchModal"><i class="bi bi-search no-margin"></i></button>
                 <?php endif; ?>
@@ -235,7 +203,7 @@
             <?php if (sizeof($rectifyBills) > 0): ?>
             <p>Las siguiente facturas rectificativas modifican a esta:</p>
             <ul style="list-style-type: none; padding-left: 0">
-                <?php foreach ($rectifyBills as $bill): ?>
+                <?php foreach ($rectifyBills[0] as $bill): ?>
                     <li><a href="?page=view-bill&id=<?=$bill?>"><?=$bill?></a></li>
                 <?php endforeach; ?>
             </ul>
