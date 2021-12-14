@@ -1,4 +1,5 @@
 <?php
+    error_reporting(0);
     header("Cache-Control: no-store, no-cache, private, must-revalidate, max-age=0");
     header("Pragma: no-cache");
     header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // A date in the past
@@ -115,25 +116,5 @@
     <?php endif; ?>
 
     <?php endif; ?>
-    <!-- <script>
-window.addEventListener('popstate', function(event) {
-    // The popstate event is fired each time when the current history entry changes.
-
-    var r = confirm("You pressed a Back button! Are you sure?!");
-
-    if (r == true) {
-        // Call Back button programmatically as per user confirmation.
-        history.back();
-        // Uncomment below line to redirect to the previous page instead.
-        // window.location = document.referrer // Note: IE11 is not supporting this.
-    } else {
-        // Stay on the current page.
-        history.pushState(null, null, window.location.pathname);
-    }
-
-    history.pushState(null, null, window.location.pathname);
-
-}, false);
-    </script> -->
 </body>
 </html>
