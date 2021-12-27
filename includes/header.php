@@ -14,10 +14,14 @@
             <i class="bi bi-receipt-cutoff"></i>Facturas
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="?page=bills"></i>Facturas ordinarias</a></li>
-            <li><a class="dropdown-item" href="?page=rbills"></i>Facturas rectificativas</a></li>
+          <li><h6 class="dropdown-header">Ver facturas</h6></li>
+            <li><a class="dropdown-item" href="?page=bills"><i class="bi bi-receipt"></i>Ordinarias</a></li>
+            <li><a class="dropdown-item" href="?page=rbills"><i class="bi bi-receipt"></i>Rectificativas</a></li>
             <div class="dropdown-divider"></div>
-            <li><a class="dropdown-item" href="?page=archived-bills"></i>Facturas archivadas</a></li>
+            <li><h6 class="dropdown-header">Opciones</h6></li>
+            <li><a class="dropdown-item" href="?page=bill-options"><i class="bi bi-cloud-arrow-down"></i>Descargar y archivar</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="?page=archived-bills"><i class="bi bi-box-seam"></i>Archivo</a></li>
           </ul>
         </li>
         <li class="nav-item">
