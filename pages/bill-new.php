@@ -48,6 +48,13 @@
                 $viewBillData["cp"] = $rows["cp"];
                 $viewBillData["localidad"] = $rows["localidad"];
             }
+            echo "
+                <script>
+                    iva_global = ".$viewBillData["iva"].";
+                    imponible_global = ".$viewBillData["imponible"].";
+                    total_global = ".$viewBillData["total"].";
+                </script>
+            ";
         }
         $conn->Close();
     } else if ($action == "new-budget") {

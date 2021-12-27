@@ -11,17 +11,17 @@ var regexpPNegative = /^(\-?[0-9]*)+\.?\d{1,2}$/;
 var editingRowIdN = 0;
 var tiene_iva = 1;
 
-var total_global = 0;
-var iva_global = 0;
-var imponible_global = 0;
+var total_global;
+var iva_global;
+var imponible_global;
 
 var conceptsArr = [];
 
-var iva_concepto= 0;
-var cantidad = 0;
-var precioUnitario_concepto = 0;
-var total_concepto = 0;
-var descripcion = "";
+var iva_concepto;
+var cantidad;
+var precioUnitario_concepto;
+var total_concepto;
+var descripcion;
 
 function addToTable(concept, index) {
     dTable.row.add( [
@@ -32,8 +32,6 @@ function addToTable(concept, index) {
         new Intl.NumberFormat("es-ES", options).format(concept.total)
     ] ).node().id = "concept"+index;
     dTable.draw();
-    // console.log("new concept added: array "+objectIndex)
-    // console.log(conceptsArr);
 }
 
 function reloadConcepts() {
@@ -167,7 +165,7 @@ $(document).ready(function() {
             cantidad = $(this).find(".cantidad").html();
             descripcion = $(this).find(".descripcion").html();
             precio = $(this).find(".precio").html();
-            iva = $(this).find(".iva").html();
+            iva = $(this).find(".iva").html() == "--" ? 0 : $(this).find(".iva").html();
             total = $(this).find(".total").html();
             conceptsArr.push(new BillConcept(cantidad, descripcion, parseFloat(precio), parseFloat(iva), parseFloat(total)));
         });
@@ -579,16 +577,24 @@ $(document).ready(function() {
         }
 
         if (action == "edit-budget") {
+            var iva = $("#presupuesto-iva option:selected").val();
+            // console.log("iva: "+iva);
+            // console.log("total: "+total_global);
+            // console.log("imponible: "+imponible_global);
+            // console.log("iva: "+iva_global);
+            // console.log("conceptos: "+JSON.stringify(conceptsArr));
             var data = [
                 ["fecha", new Date($("#fecha").val()).toISOString().slice(0,19).replace('T',' ')], 
                 ["conceptos", JSON.stringify(conceptsArr)], 
                 ["observaciones", $("#observaciones").val()],
                 ["formapago", $("#forma-pago option:selected").val()],
-                ["tieneiva", $("#presupuesto-iva option:selected").val()],
+                ["tieneiva", iva == "si" ? "si" : "no"],
                 ["total", total_global], 
                 ["iva", iva_global],
                 ["imponible", imponible_global]
             ];
+
+            console.log(data);
 
             $.ajax({
                 url: "scripts/php/update_db.php",
@@ -622,4 +628,9 @@ $(document).ready(function() {
     $("#PrintBtn").on("click", function() {
         window.location.href = "scripts/factura/factura.php?numero="+$("#numero").val();
     });
+
+    // console.log(conceptsArr);
+    // console.log("iva: "+iva_global);
+    // console.log("imponible: "+imponible_global);
+    // console.log("total: "+total_global);
 })
