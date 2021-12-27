@@ -64,14 +64,9 @@
             } else {
                 $sql .= $data[0][0]." = '".$data[0][1]."'";
             }
-
+            
             if (!is_null($where)) {
-                $sql .= " where ";
-                if (sizeof($where) == 4 && $where[1] == "between") {
-                    $sql .=  $where[0]." between '".$where[1]."' and '".$where[2]."'"; 
-                } else {
-                    $sql .= $where[0]." = '".$where[1]."'";
-                }  
+                $sql .= " where ".$where[0]." = '".$where[1]."'";
             }
 
             if ($this->conn->query($sql) === TRUE) return true;
