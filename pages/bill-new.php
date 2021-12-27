@@ -199,10 +199,10 @@
             </div>
             <?php endif; ?> 
             <?php if (sizeof($rectifyBills) > 0): ?>
-            <p>Las siguiente facturas rectificativas modifican a esta:</p>
+            <p>Las siguientes facturas rectificativas modifican a esta:</p>
             <ul style="list-style-type: none; padding-left: 0">
                 <?php foreach ($rectifyBills[0] as $bill): ?>
-                    <li><a href="?page=view-bill&id=<?=$bill?>"><?=$bill?></a></li>
+                    <li><a href="?page=view-bill&numero=<?=$bill?>"><?=$bill?></a></li>
                 <?php endforeach; ?>
             </ul>
             <?php endif; ?>
