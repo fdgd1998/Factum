@@ -111,6 +111,10 @@
     <script src="./scripts/js/bill.js"></script>
     <?php endif; ?>
 
+    <?php if ($_GET["page"] == "bill-options"): ?>
+    <script src="./scripts/js/bill-options.js"></script>
+    <?php endif; ?>
+
     <?php if ($_GET["page"] == "budgets"): ?>
     <script src="./scripts/js/manage-budgets.js"></script>
     <script src="./scripts/js/datatables-events-budgets.js"></script>
