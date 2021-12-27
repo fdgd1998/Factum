@@ -57,7 +57,7 @@
                         include "./pages/bills-manage.php";
                         break;
                     case "bill-options":
-                        include "./pages/bill-option.php";
+                        include "./pages/bill-options.php";
                         break;
                     case "budgets":
                         include "./pages/budgets-manage.php";
