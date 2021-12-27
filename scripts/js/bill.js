@@ -622,7 +622,7 @@ $(document).ready(function() {
 
     $("#SavePrintBtn").on("click", function() {
         Save("print");
-        window.location.href = "scripts/factura/factura.php?numero="+$("#numero").val();
+        window.location.href = "scripts/factura/factura.php?action=display&numero="+$("#numero").val();
     });
 
     $("#PrintBtn").on("click", function() {

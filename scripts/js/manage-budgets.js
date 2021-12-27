@@ -8,7 +8,7 @@ $(document).ready(function() {
     });
 
     $("#PrintBtn").on("click", function() {
-        window.location.href = "scripts/factura/factura.php?numero="+dTable.row(".selected").data().numero;
+        window.location.href = "scripts/factura/factura.php?action=display&numero="+dTable.row(".selected").data().numero;
     });
 
     $("#deleteBudgetBtn").on("click", function() {
