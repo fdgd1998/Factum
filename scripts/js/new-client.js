@@ -58,6 +58,7 @@ function userExists() {
             } else {
                 $("#nif").removeClass("is-invalid");
                 $("#nif").addClass("is-valid");
+                validateID();
             }
         },
         error: function(response) { // if the http response code is other than 200
@@ -91,7 +92,11 @@ $(document).ready(function() {
             $(this).addClass("is-invalid");
             $(this).removeClass("is-valid");
         }
-        EnableCreateBtn();
+        if ($("#nif").prop("disabled")) {
+            EnableEditBtn();
+        } else {
+            EnableCreateBtn();
+        }
     })
 
     $("#email").on("keyup", function() {
