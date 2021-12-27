@@ -318,7 +318,7 @@
         <?php if ($action == "view-bill"): ?>
         <textarea disabled class="form-control" id="observaciones" rows="3"><?=$viewBillData["observaciones"]?></textarea>
         <?php else: ?>
-        <textarea class="form-control" id="observaciones" rows="3">No se admiten devoluciones (consultar condiciones).</textarea>
+        <textarea class="form-control" id="observaciones" rows="3">No se realizan devoluciones del dinero pagado (consultar condiciones).</textarea>
         <?php endif; ?>
     </div>
 
