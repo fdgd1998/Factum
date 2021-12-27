@@ -34,7 +34,7 @@ error_reporting(E_ALL);
                 $datosFactura["numero"] = $rows["numero"];
                 $datosFactura["facturaref"] = $rows["facturaref"];
                 $datosFactura["formapago"] = $rows["formapago"];
-                $datosFactura["fecha"] = date("Y-m-d", strtotime($rows["fecha"]));
+                $datosFactura["fecha"] = date("d/m/Y", strtotime($rows["fecha"]));
                 $datosFactura["conceptos"] = json_decode($rows["conceptos"], true);
                 $datosFactura["observaciones"] = $rows["observaciones"];
                 $datosFactura["imponible"] = $fmt->formatCurrency($rows["imponible"], "EUR");
@@ -44,7 +44,7 @@ error_reporting(E_ALL);
             } elseif (str_contains($_GET["numero"], "PR")) {
                 $datosFactura["numero"] = $rows["numero"];
                 $datosFactura["tieneiva"] = $rows["tieneiva"];
-                $datosFactura["fecha"] = date("Y-m-d", strtotime($rows["fecha"]));
+                $datosFactura["fecha"] = date("d/m/Y", strtotime($rows["fecha"]));
                 $datosFactura["conceptos"] = json_decode($rows["conceptos"], true);
                 $datosFactura["formapago"] = $rows["formapago"];
                 $datosFactura["observaciones"] = $rows["observaciones"];
@@ -54,7 +54,7 @@ error_reporting(E_ALL);
             } else {
                 $datosFactura["numero"] = $rows["numero"];
                 $datosFactura["formapago"] = $rows["formapago"];
-                $datosFactura["fecha"] = date("Y-m-d", strtotime($rows["fecha"]));
+                $datosFactura["fecha"] = date("d/m/Y", strtotime($rows["fecha"]));
                 $datosFactura["conceptos"] = json_decode($rows["conceptos"], true);
                 $datosFactura["observaciones"] = $rows["observaciones"];
                 $datosFactura["imponible"] = $fmt->formatCurrency($rows["imponible"], "EUR");
@@ -121,7 +121,7 @@ error_reporting(E_ALL);
                             <?php if (isset($datosFactura["facturaref"])): ?>
                             <label><?=$datosFactura["facturaref"]?></label><br>
                             <?php endif; ?>
-                            <label>08/12/2021</label><br>
+                            <label><?=$datosFactura["fecha"]?></label><br>
                             <?php if (isset($datosFactura["tieneiva"])): ?>
                             <label><?=$datosFactura["tieneiva"]=="si"?"Sí":"No"?></label><br>
                             <?php endif; ?>
