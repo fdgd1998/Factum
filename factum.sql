@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-12-2021 a las 02:07:35
+-- Tiempo de generación: 28-12-2021 a las 18:34:53
 -- Versión del servidor: 10.4.22-MariaDB
 -- Versión de PHP: 8.0.13
 
@@ -56,9 +56,9 @@ CREATE TABLE `controlfactura` (
 --
 
 INSERT INTO `controlfactura` (`nombreserie`, `anoultimafactura`, `numeroultimafactura`) VALUES
-('FIVA', 21, 0),
-('PR', 21, 0),
-('RFIVA', 21, 0);
+('FIVA', 21, 12),
+('PR', 21, 16),
+('RFIVA', 21, 11);
 
 -- --------------------------------------------------------
 
@@ -103,6 +103,53 @@ CREATE TABLE `facturasrec` (
   `direccion` varchar(100) NOT NULL,
   `cp` int(5) NOT NULL,
   `localidad` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `facturasrec_archivo`
+--
+
+CREATE TABLE `facturasrec_archivo` (
+  `numero` varchar(15) NOT NULL,
+  `facturaref` varchar(15) NOT NULL,
+  `nif` varchar(9) NOT NULL,
+  `fecha` date NOT NULL,
+  `formapago` varchar(20) NOT NULL,
+  `conceptos` longtext NOT NULL,
+  `observaciones` text NOT NULL,
+  `total` float NOT NULL,
+  `iva` float NOT NULL,
+  `imponible` float NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `direccion` varchar(100) NOT NULL,
+  `cp` int(5) NOT NULL,
+  `localidad` varchar(100) NOT NULL,
+  `grupo` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `facturas_archivo`
+--
+
+CREATE TABLE `facturas_archivo` (
+  `numero` varchar(15) NOT NULL,
+  `nif` varchar(9) DEFAULT NULL,
+  `fecha` date DEFAULT NULL,
+  `formapago` varchar(20) DEFAULT NULL,
+  `conceptos` longtext DEFAULT NULL,
+  `observaciones` text DEFAULT NULL,
+  `total` float NOT NULL,
+  `imponible` float NOT NULL,
+  `iva` float NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `direccion` varchar(100) NOT NULL,
+  `cp` int(5) NOT NULL,
+  `localidad` varchar(100) NOT NULL,
+  `grupo` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -160,21 +207,26 @@ ALTER TABLE `facturasrec`
   ADD KEY `nif` (`nif`);
 
 --
+-- Indices de la tabla `facturasrec_archivo`
+--
+ALTER TABLE `facturasrec_archivo`
+  ADD PRIMARY KEY (`numero`),
+  ADD KEY `facturaref` (`facturaref`),
+  ADD KEY `nif` (`nif`);
+
+--
+-- Indices de la tabla `facturas_archivo`
+--
+ALTER TABLE `facturas_archivo`
+  ADD PRIMARY KEY (`numero`),
+  ADD KEY `facturas_ibfk_1` (`nif`);
+
+--
 -- Indices de la tabla `presupuestos`
 --
 ALTER TABLE `presupuestos`
   ADD PRIMARY KEY (`numero`),
   ADD KEY `presupuestos_ibfk_1` (`nif`);
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `facturasrec`
---
-ALTER TABLE `facturasrec`
-  ADD CONSTRAINT `facturasrec_ibfk_1` FOREIGN KEY (`facturaref`) REFERENCES `facturas` (`numero`) ON DELETE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
