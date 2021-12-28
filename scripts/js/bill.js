@@ -362,7 +362,10 @@ $(document).ready(function() {
     $("#cancelBtn").on("click", function(){
         console.log("FIVA: "+$("#numero").val().includes("FIVA"));
         console.log("RFIVA: "+$("#numero").val().includes("RFIVA"));
-        if (action == "new-budget" || action == "edit-budget")
+        
+        if (typeof archivo !== "undefined")
+            window.location.href = "?page=archive";
+        else if (action == "new-budget" || action == "edit-budget")
             window.location.href = "?page=budgets";
         else if (action == "view-bill" && $("#numero").val().includes("RFIVA"))
             window.location.href = "?page=rbills";
@@ -626,9 +629,9 @@ $(document).ready(function() {
     });
 
     $("#PrintBtn").on("click", function() {
-        window.location.href = "scripts/factura/factura.php?numero="+$("#numero").val();
+        if ((typeof archivo !== "undefined") && archivo) window.location.href = "scripts/factura/factura.php?action=display&numero="+$("#numero").val()+"&archivo=si";
+        else window.location.href = "scripts/factura/factura.php?action=display&numero="+$("#numero").val();
     });
-
     // console.log(conceptsArr);
     // console.log("iva: "+iva_global);
     // console.log("imponible: "+imponible_global);

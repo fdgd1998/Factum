@@ -13,21 +13,31 @@
     
     if ($_GET["action"] == "display") {
         $pdf = new Pdf($options);
-        $pdf->AddPage("http://localhost/scripts/factura/template.php?numero=".$_GET["numero"]);
-        if (!$pdf->send($_GET["numero"].".pdf", false, array('Content-Length' => false))) {
+
+        if ($_GET["archivo"] == "si") $pdf->AddPage("http://localhost/scripts/factura/template.php?numero=".$_GET["numero"]."&archivo=si");
+        else $pdf->AddPage("http://localhost/scripts/factura/template.php?numero=".$_GET["numero"]);
+
+        if (!$pdf->send(null, false, array('Content-Length' => false))) {
             echo $pdf->getError();
         }
     } else if ($_GET["action"] == "download") {
         require_once "../../classes/php/Database.php";
         $conn = new DatabaseConnection();
         $conn->Connect();
-        $sql1 = "select * from facturas where fecha between '".$_GET["i"]."' and '".$_GET["f"]."'";
-        $sql2 = "select * from facturasrec where fecha between '".$_GET["i"]."' and '".$_GET["f"]."'";
-        $facturas = $conn->Select($sql1);
-        $facturasrec = $conn->Select($sql2);
-        echo var_dump($facturas);
-        echo var_dump($facturasrec);
         
+        $facturas = $conn->Select("select * from facturas where fecha between '".$_GET["i"]."' and '".$_GET["f"]."'");
+        $facturasrec = $conn->Select("select * from facturasrec where fecha between '".$_GET["i"]."' and '".$_GET["f"]."'");
+
+        // Enter the name of directory 
+        $pathdir = dirname(__DIR__, 2)."\\temp\\";
+    
+        $files = glob($pathdir.'*'); // get all file names
+        foreach($files as $file){ // iterate files
+            if(is_file($file)) {
+                unlink($file); // delete file
+            }
+        }
+
         if ($facturas) {
             foreach($facturas as $factura) {
                 $pdf = new Pdf($options);
@@ -42,12 +52,53 @@
             foreach($facturasrec as $factura) {
                 $pdf = new Pdf($options);
                 $pdf->AddPage("http://localhost/scripts/factura/template.php?numero=".$factura["numero"]);
-                if (!$pdf->saveAs(dirname(__DIR__, 2)."//temp/".$factura["numero"].".pdf")) {
+                if (!$pdf->saveAs($pathdir.$factura["numero"].".pdf")) {
                     echo $pdf->getError();
                 }
             }
         }
-        
+
+        // Enter the name to creating zipped directory 
+        $zipcreated = "facturas.zip";
+
+        // Create new zip class 
+        $zip = new ZipArchive; 
+
+        $total_bills = 0;
+
+        if($zip -> open($pathdir.$zipcreated, ZipArchive::CREATE ) === TRUE) { 
+            // Store the path into the variable 
+            $dir = opendir($pathdir); 
+            while($file = readdir($dir)) { 
+                
+                if(is_file($pathdir.$file)) {
+                    $total_bills++;
+                    $zip -> addFile($pathdir.$file, $file); 
+                } 
+            } 
+            $zip ->close(); 
+        }
+
+        if ($total_bills == 0) {
+            echo "<script>
+                alert('No hay facturas para descargar en el rango seleccionado.');
+                window.location.href = 'http://localhost?page=bill-options';
+            </script>";
+            exit();
+        }
+
+        // or however you get the path
+        $yourfile = $pathdir."facturas.zip";
+
+        $file_name = basename($yourfile);
+
+        header("Content-Type: application/zip");
+        header("Content-Disposition: attachment; filename=$file_name");
+        header("Content-Length: " . filesize($yourfile));
+
+        ob_end_clean();
+        readfile($yourfile);
+        exit;
     }
     
 ?>

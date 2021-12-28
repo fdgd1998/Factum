@@ -18,9 +18,9 @@ error_reporting(E_ALL);
 
     if ($conn->Connect()) {
         $sql = "select * from ";
-        if (str_contains($_GET["numero"], "RFIVA")) $sql .= " facturasrec ";
+        if (str_contains($_GET["numero"], "RFIVA")) $sql .= isset($_GET["archivo"]) ? "facturasrec_archivo" : " facturasrec ";
         elseif (str_contains($_GET["numero"], "PR")) $sql .= " presupuestos ";
-        else $sql .= " facturas ";
+        else $sql .= isset($_GET["archivo"]) ? "facturas_archivo" : " facturas ";
         $sql .= " where numero='".$_GET["numero"]."'";
         
         if ($rows = $conn->Select($sql)[0]) {

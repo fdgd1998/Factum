@@ -11,7 +11,8 @@ function EnableViewBtn(enable) {
 $(document).ready(function() {
     $("#PrintBtn").on("click", function() {
         numeroFactura = dTable.row(".selected").data().numero;
-        window.location.href = "scripts/factura/factura.php?action=display&numero="+numeroFactura;
+        if (action == "archive") window.location.href = "scripts/factura/factura.php?action=display&numero="+numeroFactura+"&archivo=si";
+        else window.location.href = "scripts/factura/factura.php?action=display&numero="+numeroFactura;
     });
 
     $("#ViewBtn").on("click", function() {

@@ -4,6 +4,7 @@
     $numerofactura = "";
     $viewBillData = [];
     $rectifyBills = array();
+    $archived = false;
 
     require_once "classes/php/Database.php";
 
@@ -104,6 +105,27 @@
                 $viewBillData["direccion"] = $rows["direccion"];
                 $viewBillData["cp"] = $rows["cp"];
                 $viewBillData["localidad"] = $rows["localidad"];
+            } else {
+                $archived = true;
+                echo "<script>archivo = true</script>";
+                $sql = "select * from facturasrec_archivo where numero='".$_GET["numero"]."'";
+            
+                if ($rows = $conn->Select($sql)[0]) {
+                    $viewBillData["numero"] = $rows["numero"];
+                    $viewBillData["facturaref"] = $rows["facturaref"];
+                    $viewBillData["nif"] = $rows["nif"];
+                    $viewBillData["fecha"] = date("Y-m-d", strtotime($rows["fecha"]));
+                    $viewBillData["formapago"] = $rows["formapago"];
+                    $viewBillData["conceptos"] = json_decode($rows["conceptos"], true);
+                    $viewBillData["observaciones"] = $rows["observaciones"];
+                    $viewBillData["total"] = $rows["total"];
+                    $viewBillData["iva"] = $rows["iva"];
+                    $viewBillData["imponible"] = $rows["imponible"];
+                    $viewBillData["nombre"] = $rows["nombre"];
+                    $viewBillData["direccion"] = $rows["direccion"];
+                    $viewBillData["cp"] = $rows["cp"];
+                    $viewBillData["localidad"] = $rows["localidad"];
+                }
             }
         }
         // $conn->Close();
@@ -124,9 +146,30 @@
                 $viewBillData["direccion"] = $rows["direccion"];
                 $viewBillData["cp"] = $rows["cp"];
                 $viewBillData["localidad"] = $rows["localidad"];
+            } else {
+                $archived = true;
+                echo "<script>archivo = true</script>";
+                $sql = "select * from facturas_archivo where numero='".$_GET["numero"]."'";
+                if ($rows = $conn->Select($sql)[0]) {
+                    $viewBillData["numero"] = $rows["numero"];
+                    $viewBillData["nif"] = $rows["nif"];
+                    $viewBillData["fecha"] = date("Y-m-d", strtotime($rows["fecha"]));
+                    $viewBillData["formapago"] = $rows["formapago"];
+                    $viewBillData["conceptos"] = json_decode($rows["conceptos"], true);
+                    $viewBillData["observaciones"] = $rows["observaciones"];
+                    $viewBillData["total"] = $rows["total"];
+                    $viewBillData["iva"] = $rows["iva"];
+                    $viewBillData["imponible"] = $rows["imponible"];
+                    $viewBillData["nombre"] = $rows["nombre"];
+                    $viewBillData["direccion"] = $rows["direccion"];
+                    $viewBillData["cp"] = $rows["cp"];
+                    $viewBillData["localidad"] = $rows["localidad"];
+                }
             }
 
-            $sql = "select numero from facturasrec where facturaref='".$viewBillData["numero"]."'";
+            if ($archived) $sql = "select numero from facturasrec_archivo where facturaref='".$viewBillData["numero"]."'";
+            else $sql = "select numero from facturasrec where facturaref='".$viewBillData["numero"]."'";
+
             if ($res = $conn->Select($sql)) {
                 foreach ($res as $ref)
                     array_push($rectifyBills, $ref);      
@@ -139,15 +182,16 @@
     if ($action == "new-bill") echo "<h1>Nueva factura</h1>";
     if ($action == "new-budget") echo "<h1>Nuevo presupuesto</h1>";
     if ($action == "edit-budget") echo "<h1>Editar presupuesto</h1>";
-    if (str_contains($_GET["numero"], "RFIVA")) echo "<h1>Ver factura rectificativa</h1>";
-    else if (str_contains($_GET["numero"], "FIVA")) echo "<h1>Ver factura</h1>";
+    if (str_contains($_GET["numero"], "RFIVA")) echo "<h1>Ver factura rectificativa </h1>";
+    else if (str_contains($_GET["numero"], "FIVA")) echo "<h1>Ver factura </h1>";
     if ($action == "rectify-bill") echo "<h1>Nueva factura rectificativa</h1>";
 ?>
+
 <div class="content">
     <div class="row">
         <div class="col-12 col-md-5 col-lg-4">
             <?php
-                if ($action == "new-bill" || $action == "view-bill" || $action == "rectify-bill") echo "<p>Datos de la factura</p>";
+                if ($action == "new-bill" || $action == "view-bill" || $action == "rectify-bill") echo "<p>Datos de la factura ".($archived?"<span style='color: black' class='badge bg-warning'>Archivo</span>":"")."</p>";
                 if ($action == "new-budget" || $action == "edit-budget") echo "<p>Datos del presupuesto</p>";
             ?>
             <div class="input-group mb-3">
@@ -212,6 +256,9 @@
                     <li><a href="?page=view-bill&numero=<?=$bill?>"><?=$bill?></a></li>
                 <?php endforeach; ?>
             </ul>
+            <?php endif; ?>
+            <?php if (str_contains($viewBillData["numero"], "RFIVA")): ?>
+            <p>Ver factura original: <a href="?page=view-bill&numero=<?=$viewBillData["facturaref"]?>"><?=$viewBillData["facturaref"]?></a></p>
             <?php endif; ?>
         </div>
         <div class="col-12 col-md-7 col-lg-8">
@@ -332,7 +379,7 @@
     <?php if ($action == "view-bill"): ?>
     <div class="my-button-group mt-4 mb-5 float-end">
         <button id="cancelBtn" class="btn my-button-2"><i class="bi bi-x-square"></i>Cancelar</button>
-        <button id="SavePrintBtn" class="btn my-button-4"><i class="bi bi-printer"></i>imprimir</button>
+        <button id="PrintBtn" class="btn my-button-4"><i class="bi bi-printer"></i>imprimir</button>
     </div>
     <?php endif; ?>
 
