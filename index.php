@@ -62,6 +62,9 @@
                     case "budgets":
                         include "./pages/budgets-manage.php";
                         break;
+                    case "archive":
+                        include "./pages/bills-manage.php";
+                        break;
                 }
             } else {
                 include "./pages/clients-manage.php";
@@ -96,6 +99,13 @@
     <?php if ($_GET["page"] == "rbills"): ?>
     <script src="./scripts/js/manage-bills.js"></script>
     <script src="./scripts/js/datatables-events-rbills.js"></script>
+    <script src="./scripts/js/dTable-events.js"></script>
+    <script src="./scripts/js/dTable-render-functions.js"></script>
+    <?php endif; ?>
+
+    <?php if ($_GET["page"] == "archive"): ?>
+    <script src="./scripts/js/manage-bills.js"></script>
+    <script src="./scripts/js/datatables-events-archive.js"></script>
     <script src="./scripts/js/dTable-events.js"></script>
     <script src="./scripts/js/dTable-render-functions.js"></script>
     <?php endif; ?>

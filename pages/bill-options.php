@@ -6,11 +6,11 @@
         <div class="col-12 col-sm-7 col-md-6 col-lg-4 col-xl-3">
             <div class="input-group mb-3">
                 <span class="input-group-text">Desde:</span>
-                <input id="fecha" type="date" class="form-control">
+                <input id="fecha-i" type="date" class="form-control">
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text">Hasta:</span>
-                <input id="fecha" type="date" class="form-control">
+                <input id="fecha-f" type="date" class="form-control">
             </div>
         </div>
     </div>
