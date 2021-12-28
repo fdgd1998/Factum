@@ -21,7 +21,7 @@
             <li><h6 class="dropdown-header">Opciones</h6></li>
             <li><a class="dropdown-item" href="?page=bill-options"><i class="bi bi-cloud-arrow-down"></i>Descargar y archivar</a></li>
             <div class="dropdown-divider"></div>
-            <li><a class="dropdown-item" href="?page=archived-bills"><i class="bi bi-box-seam"></i>Archivo</a></li>
+            <li><a class="dropdown-item" href="?page=archive"><i class="bi bi-box-seam"></i>Archivo</a></li>
           </ul>
         </li>
         <li class="nav-item">
