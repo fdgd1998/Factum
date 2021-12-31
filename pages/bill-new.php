@@ -11,21 +11,23 @@
     $conn = new DatabaseConnection();
     $fmt = new NumberFormatter('es_ES.UTF8', NumberFormatter::CURRENCY);
     
-    echo "<script>var action = '".$action."'</script>";
-
-    // require "scripts/php/connection.php";  
+    echo "<script>var action = '".$action."'</script>"; 
 
     if ($action == "new-bill") {
         if ($conn->Connect()) {
             $sql = "select * from controlfactura where nombreserie='FIVA'";
             
             if ($rows = $conn->Select($sql)[0]) {
-                if ($rows["anoultimafactura"] < date("y")) 
+                if ($rows["anoultimafactura"] < date("y")) {
                     $numerofactura .= date("y");
-                else $numerofactura .= $rows["anoultimafactura"];
+                    $numerofactura .= $rows["nombreserie"];
+                    $numerofactura .= str_pad(1, 5, "0", STR_PAD_LEFT);
+                } else {
+                    $numerofactura .= $rows["anoultimafactura"];
+                    $numerofactura .= $rows["nombreserie"];
+                    $numerofactura .= str_pad($rows["numeroultimafactura"]+1, 5, "0", STR_PAD_LEFT);
+                }
                 
-                $numerofactura .= $rows["nombreserie"];
-                $numerofactura .= str_pad($rows["numeroultimafactura"]+1, 5, "0", STR_PAD_LEFT);
             }
         }
         $conn->Close();
@@ -63,12 +65,16 @@
             $sql = "select * from controlfactura where nombreserie='PR'";
             
             if ($rows = $conn->Select($sql)[0]) {
-                if ($rows["anoultimafactura"] < date("y")) 
+                if ($rows["anoultimafactura"] < date("y")) {
                     $numerofactura .= date("y");
-                else $numerofactura .= $rows["anoultimafactura"];
+                    $numerofactura .= $rows["nombreserie"];
+                    $numerofactura .= str_pad(1, 5, "0", STR_PAD_LEFT);
+                } else {
+                    $numerofactura .= $rows["anoultimafactura"];
+                    $numerofactura .= $rows["nombreserie"];
+                    $numerofactura .= str_pad($rows["numeroultimafactura"]+1, 5, "0", STR_PAD_LEFT);
+                }
                 
-                $numerofactura .= $rows["nombreserie"];
-                $numerofactura .= str_pad($rows["numeroultimafactura"]+1, 5, "0", STR_PAD_LEFT);
             }
         }
         $conn->Close();
@@ -77,12 +83,16 @@
             $sql = "select * from controlfactura where nombreserie='RFIVA'";
             
             if ($rows = $conn->Select($sql)[0]) {
-                if ($rows["anoultimafactura"] < date("y")) 
+                if ($rows["anoultimafactura"] < date("y")) {
                     $numerofactura .= date("y");
-                else $numerofactura .= $rows["anoultimafactura"];
+                    $numerofactura .= $rows["nombreserie"];
+                    $numerofactura .= str_pad(1, 5, "0", STR_PAD_LEFT);
+                } else {
+                    $numerofactura .= $rows["anoultimafactura"];
+                    $numerofactura .= $rows["nombreserie"];
+                    $numerofactura .= str_pad($rows["numeroultimafactura"]+1, 5, "0", STR_PAD_LEFT);
+                }
                 
-                $numerofactura .= $rows["nombreserie"];
-                $numerofactura .= str_pad($rows["numeroultimafactura"]+1, 5, "0", STR_PAD_LEFT);
             }
         }
         $conn->Close();
@@ -128,7 +138,7 @@
                 }
             }
         }
-        // $conn->Close();
+        $conn->Close();
     } else if (str_contains($_GET["numero"], "FIVA")) {
         if ($conn->Connect()) {
             $sql = "select * from facturas where numero='".$_GET["numero"]."'";
