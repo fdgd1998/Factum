@@ -15,6 +15,7 @@
             break;
         case "archive":
             echo "<h1>Archivo</h1>";
+            echo "<p>Aquí puedes ver e imprimir todas las facturas archivadas.<p>";
             break;
     }
 
