@@ -59,7 +59,6 @@
                 for ($i = 0; $i < sizeof($data)-1; $i++) {
                     $sql .= $data[$i][0]." = '".$data[$i][1]."',"; 
                 }
-    
                 $sql .= $data[sizeof($data)-1][0]." = '".$data[sizeof($data)-1][1]."'";
             } else {
                 $sql .= $data[0][0]." = '".$data[0][1]."'";

@@ -39,7 +39,7 @@
                 $viewBillData["numero"] = $rows["numero"];
                 $viewBillData["nif"] = $rows["nif"];
                 $viewBillData["fecha"] = date("Y-m-d", strtotime($rows["fecha"]));
-                $viewBillData["conceptos"] = json_decode($rows["conceptos"], true);
+                $viewBillData["conceptos"] = json_decode(preg_replace('/[\xE1\xE9\xED\xF3\xFA\xC1\xC9\xCD\xD3\xDA\xF1\xD1\xFC\xDC\x0D\x0A]/',' ',$rows["conceptos"]), true);
                 $viewBillData["observaciones"] = $rows["observaciones"];
                 $viewBillData["total"] = $rows["total"];
                 $viewBillData["formapago"] = $rows["formapago"];
@@ -104,7 +104,7 @@
                 $viewBillData["numero"] = $rows["numero"];
                 $viewBillData["nif"] = $rows["nif"];
                 $viewBillData["fecha"] = date("Y-m-d", strtotime($rows["fecha"]));
-                $viewBillData["conceptos"] = json_decode($rows["conceptos"], true);
+                $viewBillData["conceptos"] = json_decode(preg_replace('/[\xE1\xE9\xED\xF3\xFA\xC1\xC9\xCD\xD3\xDA\xF1\xD1\xFC\xDC\x0D\x0A]/',' ',$rows["conceptos"]), true);
                 $viewBillData["observaciones"] = $rows["observaciones"];
                 $viewBillData["total"] = $rows["total"];
                 $viewBillData["formapago"] = $rows["formapago"];
@@ -408,14 +408,14 @@
         <?php endif; ?>
     </div>
 
-    <?php if ($action == "new-bill" || $action == "edit-budget" || $action == "new-budget" || $action == "rectify-bill"): ?>
+    <?php if ($action == "new-bill" ||  $action == "edit-bill" || $action == "new-budget" || $action == "rectify-bill" || $action == "edit-budget"): ?>
     <div class="my-button-group mt-4 mb-5 float-end">
         <button id="cancelBtn" class="btn my-button-2"><i class="bi bi-x-square"></i>Cancelar</button>
-        <button <?=$action=="edit-budget"?"":"disabled"?> id="SaveBtn" class="btn my-button-3"><i class="bi bi-save"></i>Guardar</button>
-        <button <?=$action=="edit-budget"?"":"disabled"?> id="<?=($action=="view-bill" || $action == "view-bill")?"PrintBtn":"SavePrintBtn"?>" class="btn my-button-4"><i class="bi bi-printer"></i>Guardar e imprimir</button>
+        <button <?=($action=="edit-budget"||$action=="edit-bill")?"":"disabled"?> id="SaveBtn" class="btn my-button-3"><i class="bi bi-save"></i>Guardar</button>
+        <button <?=($action=="edit-budget"||$action=="edit-bill")?"":"disabled"?> id="<?=($action=="view-bill" || $action == "view-bill")?"PrintBtn":"SavePrintBtn"?>" class="btn my-button-4"><i class="bi bi-printer"></i>Guardar e imprimir</button>
     </div>
     <?php endif; ?>
-    <?php if ($action == "view-bill" || $action == "view-bill"): ?>
+    <?php if ($action == "view-bill"): ?>
     <div class="my-button-group mt-4 mb-5 float-end">
         <button id="cancelBtn" class="btn my-button-2"><i class="bi bi-x-square"></i>Cancelar</button>
         <button id="PrintBtn" class="btn my-button-4"><i class="bi bi-printer"></i>Imprimir</button>

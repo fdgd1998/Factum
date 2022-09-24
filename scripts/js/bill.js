@@ -133,7 +133,7 @@ function UpdatePrice(action) {
         precioUnitario_concepto = parseFloat($("#precio-unitario").val());
         cantidad = parseInt($("#cantidad").val());
 
-        if (tiene_iva == 1) iva_concepto = paraseFloat(precioUnitario_concepto)*0.21;
+        if (tiene_iva == 1) iva_concepto = parseFloat(precioUnitario_concepto)*0.21;
         else iva_concepto = 0;
 
         total_concepto = (parseFloat(iva_concepto) + parseFloat(precioUnitario_concepto))*cantidad;
@@ -393,7 +393,7 @@ $(document).ready(function() {
             window.location.href = "?page=budgets";
         else if ((action == "view-bill" && $("#numero").val().includes("RFIVA")) || action == "rectify-bill")
             window.location.href = "?page=rbills";
-        else if ((action == "view-bill" && $("#numero").val().includes("FIVA")) || action == "new-bill")
+        else if ((action == "view-bill" && $("#numero").val().includes("FIVA")) || action == "new-bill" || action == "edit-bill")
             window.location.href = "?page=bills";
     })
 
@@ -402,6 +402,74 @@ $(document).ready(function() {
     })
 
     function Save(save) {
+        if (action == "edit-bill") {
+           
+            var data = [
+                ["numero", $("#numero").val()],
+                ["nif", $("#nif").val()],
+                ["fecha",new Date($("#fecha").val()).toISOString().slice(0,19).replace('T',' ')],
+                ["formapago",$("#forma-pago").find(":selected").val()],
+                ["conceptos",JSON.stringify(conceptsArr)],
+                ["observaciones", $("#observaciones").val()],
+                ["total",total_global],
+                ["iva", iva_global],
+                ["imponible", imponible_global],
+                ["nombre", $("#nombre").val()],
+                ["direccion",$("#direccion").val()],
+                ["cp",$("#cp").val()],
+                ["localidad",$("#localidad").val()]
+            ]
+
+            $.ajax({
+                url: "scripts/php/update_db.php",
+                type: 'post',
+                dataType: 'text',
+                data: {table: "facturas", data: JSON.stringify(data), where: JSON.stringify(["numero", $("#numero").val()])},
+                success: function(response) { 
+                    console.log(response);
+                    alert(response);
+                    if (save == "saveOnly") {
+                        window.location.href = "?page=bills";
+                    }
+                },
+                error: function(response) {
+                    alert(response);
+                }
+            });
+
+            // sql1 = "insert into facturas (";
+            // for (i = 0; i < columns.length-1; i++) {
+            //     sql1 += columns[i]+",";
+            // }
+            // sql1 += columns[columns.length-1]+") values (";
+            // for (i = 0; i < values.length-1; i++) {
+            //     sql1 += "'"+values[i]+"',";
+            // }
+            // sql1 += "'"+values[values.length-1]+"')";
+
+            // sql2 = "update controlfactura set anoultimafactura = ";
+            // sql2 += new Date().getFullYear().toString().substr(-2);
+            // sql2 += " , numeroultimafactura = ";
+            // sql2 += $("#numero").val().substr(6);
+            // sql2 += " where nombreserie = 'FIVA'";
+
+            // $.ajax({
+            //     url: "scripts/php/transaction_db.php", 
+            //     type: 'post', 
+            //     dataType: 'text',
+            //     data: {sql: JSON.stringify([sql1, sql2])}, 
+
+            //     success: function(response) { 
+            //         alert(response);
+            //         if (save == "saveOnly") {
+            //             window.location.href = "?page=bills";
+            //         }
+            //     },
+            //     error: function(response) { 
+            //         alert(response);
+            //     }
+            // });
+        }
         if (action == "new-bill") {
             var columns = [
                 "numero", 
