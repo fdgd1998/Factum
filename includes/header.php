@@ -16,7 +16,7 @@
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
           <li><h6 class="dropdown-header">Ver facturas</h6></li>
             <li><a class="dropdown-item" href="?page=bills"><i class="bi bi-receipt"></i>Ordinarias</a></li>
-            <li><a class="dropdown-item" href="?page=rbills"><i class="bi bi-receipt"></i>Rectificativas</a></li>
+            <!-- <li><a class="dropdown-item" href="?page=rbills"><i class="bi bi-receipt"></i>Rectificativas</a></li> -->
             <div class="dropdown-divider"></div>
             <li><h6 class="dropdown-header">Opciones</h6></li>
             <li><a class="dropdown-item" href="?page=bill-options"><i class="bi bi-cloud-arrow-down"></i>Descargar y archivar</a></li>

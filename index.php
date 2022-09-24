@@ -50,6 +50,9 @@
                     case "edit-budget":
                         include "./pages/bill-new.php";
                         break;
+                    case "edit-bill":
+                        include "./pages/bill-new.php";
+                        break;
                     case "bills":
                         include "./pages/bills-manage.php";
                         break;
@@ -110,7 +113,7 @@
     <script src="./scripts/js/dTable-render-functions.js"></script>
     <?php endif; ?>
 
-    <?php if ($_GET["page"] == "new-bill" || $_GET["page"] == "new-bill" || $_GET["page"] == "new-budget" || $_GET["page"] == "edit-budget" || $_GET["page"] == "rectify-bill"): ?>
+    <?php if ($_GET["page"] == "new-bill" || $_GET["page"] == "edit-bill" || $_GET["page"] == "new-budget" || $_GET["page"] == "edit-budget" || $_GET["page"] == "rectify-bill"): ?>
     <script src="./scripts/js/datatables-events-bill-new.js"></script>
     <script src="./scripts/js/dTable-render-functions.js"></script>
     <script src="./classes/js/BillConcept.js"></script>

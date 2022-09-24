@@ -22,6 +22,7 @@ var cantidad;
 var precioUnitario_concepto;
 var total_concepto;
 var descripcion;
+var descripcion_edit;
 
 function addToTable(concept, index) {
     dTable.row.add( [
@@ -36,7 +37,9 @@ function addToTable(concept, index) {
 
 function reloadConcepts() {
     dTable.clear().draw();
+    
     $.each(conceptsArr, function (index, value) {
+        console.log(value.iva + ", " +index);
         addToTable(value, index)
     })
 }
@@ -73,6 +76,7 @@ function CleanModalAndData() {
     $("#cantidad").val("");
     $("#precio-unitario").val("");
     $("#descripcion").val("");
+    $("#descripcion-edit").val("");
     $("#concepto-iva").html("--");
     $("#concepto-total").html("--");
     $("#conceptCreateBtn").attr("disabled", "disabled");
@@ -80,6 +84,8 @@ function CleanModalAndData() {
     cantidad = 0;
     precioUnitario_concepto = 0;
     total_concepto = 0;
+    descripcion = "";
+    descripcion_edit = "";
 }
 
 function UpdateConceptsIva() {
@@ -126,18 +132,23 @@ function UpdatePrice(action) {
     if (action == "new") {
         precioUnitario_concepto = parseFloat($("#precio-unitario").val());
         cantidad = parseInt($("#cantidad").val());
-        if (tiene_iva == 1) iva_concepto = precioUnitario_concepto*0.21;
-        total_concepto = (iva_concepto + precioUnitario_concepto)*cantidad;
+
+        if (tiene_iva == 1) iva_concepto = paraseFloat(precioUnitario_concepto)*0.21;
+        else iva_concepto = 0;
+
+        total_concepto = (parseFloat(iva_concepto) + parseFloat(precioUnitario_concepto))*cantidad;
+
         if (tiene_iva == 1) $("#concepto-iva").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto*cantidad));
+        else $("#concepto-iva").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto*cantidad));
         $("#concepto-total").html(new Intl.NumberFormat("es-ES", options).format(total_concepto));
     } else if (action == "edit") {
         precioUnitario_concepto = parseFloat($("#precio-unitario-edit").val());
         cantidad = parseInt($("#cantidad-edit").val());
 
-        if (tiene_iva == 1) iva_concepto = precioUnitario_concepto*0.21;
+        if (tiene_iva == 1) iva_concepto = parseFloat(precioUnitario_concepto)*0.21;
         else iva_concepto = 0;
         
-        total_concepto = (iva_concepto + precioUnitario_concepto)*cantidad;
+        total_concepto = (parseFloat(iva_concepto) + parseFloat(precioUnitario_concepto))*cantidad;
         if (tiene_iva == 1) $("#concepto-iva-edit").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto*cantidad));
         $("#concepto-total-edit").html(new Intl.NumberFormat("es-ES", options).format(total_concepto));
     }
@@ -160,14 +171,17 @@ function enableSaveBtn() {
 }
 
 $(document).ready(function() {
-    if (action == "edit-budget") {
+    if (action == "edit-budget" || action == "edit-bill") {
         $("#dTable tbody tr").each(function(){
             cantidad = $(this).find(".cantidad").html();
             descripcion = $(this).find(".descripcion").html();
-            precio = $(this).find(".precio").html();
-            iva = $(this).find(".iva").html() == "--" ? 0 : $(this).find(".iva").html();
-            total = $(this).find(".total").html();
-            conceptsArr.push(new BillConcept(cantidad, descripcion, parseFloat(precio), parseFloat(iva), parseFloat(total)));
+            precio = $(this).find(".precio").html().slice(0, -7).replace(',','.');
+            console.log(precio);
+            iva = $(this).find(".iva").html() == "--" ? 0.00 : $(this).find(".iva").html().slice(0, -7).replace(',','.');
+            console.log("iva: "+parseFloat(iva));
+            total = $(this).find(".total").html().slice(0, -7).replace(',','.');
+            conceptsArr.push(new BillConcept(parseInt(cantidad), descripcion, parseFloat(precio), parseFloat(iva), parseFloat(total)));
+            console.log(conceptsArr);
         });
     }
     $("#cantidad, #precio-unitario").on("change, keyup", function() {
@@ -231,9 +245,15 @@ $(document).ready(function() {
         EnableNewConceptBtn();
     })
 
+    $("#descripcion-edit").on("keyup", function() {
+        //descripcion_edit = $(this).val();
+        EnableEditConceptBtn();
+    })
+
     $("#conceptCreateBtn").on("click", function() {
         var concept = new BillConcept(cantidad, descripcion, precioUnitario_concepto, iva_concepto);
         conceptsArr.push(concept);
+        console.log(conceptsArr);
         addToTable(concept, conceptsArr.indexOf(concept));
         updateTotalPrices();
         $("#newConceptModal").modal("hide");
@@ -242,10 +262,13 @@ $(document).ready(function() {
     })
 
     $("#conceptEditBtn").on("click", function() {
+        console.log("editing row: "+editingRowIdN);
         conceptsArr[editingRowIdN].cantidad = cantidad;
         conceptsArr[editingRowIdN].precio = precioUnitario_concepto;
-        conceptsArr[editingRowIdN].iva = tiene_iva == 1 ? iva_concepto:0;
-        conceptsArr[editingRowIdN].total = tiene_iva == 1 ? cantidad*(iva_concepto+precioUnitario_concepto):cantidad*precioUnitario_concepto;
+        conceptsArr[editingRowIdN].descripcion = $("#descripcion-edit").val();
+        conceptsArr[editingRowIdN].iva = (tiene_iva == 1 ? iva_concepto:0);
+        conceptsArr[editingRowIdN].total = (tiene_iva == 1 ? cantidad*(iva_concepto+precioUnitario_concepto):cantidad*precioUnitario_concepto);
+        console.log(conceptsArr);
         reloadConcepts();
         updateTotalPrices();
         $("#editConceptModal").modal("hide");
@@ -275,6 +298,7 @@ $(document).ready(function() {
         var selectedRow = $("#dTable tbody").find("tr.selected");
         editingRowIdN = selectedRow.attr("id").substring(7);
         console.log(editingRowIdN);
+        console.log("tiene iva: "+tiene_iva);
         var editingConcept = conceptsArr[editingRowIdN];
 
         cantidad = editingConcept.cantidad;
@@ -362,14 +386,14 @@ $(document).ready(function() {
     $("#cancelBtn").on("click", function(){
         console.log("FIVA: "+$("#numero").val().includes("FIVA"));
         console.log("RFIVA: "+$("#numero").val().includes("RFIVA"));
-        
+        console.log(action);
         if (typeof archivo !== "undefined")
             window.location.href = "?page=archive";
         else if (action == "new-budget" || action == "edit-budget")
             window.location.href = "?page=budgets";
-        else if (action == "view-bill" && $("#numero").val().includes("RFIVA"))
+        else if ((action == "view-bill" && $("#numero").val().includes("RFIVA")) || action == "rectify-bill")
             window.location.href = "?page=rbills";
-        else if (action == "view-bill" && $("#numero").val().includes("FIVA"))
+        else if ((action == "view-bill" && $("#numero").val().includes("FIVA")) || action == "new-bill")
             window.location.href = "?page=bills";
     })
 

@@ -8,6 +8,11 @@ function EnableViewBtn(enable) {
     else $("#ViewBtn").attr("disabled","disabled");
 }
 
+function EnableEditBtn(enable) {
+    if (enable) $("#EditBtn").removeAttr("disabled");
+    else $("#EditBtn").attr("disabled","disabled");
+}
+
 $(document).ready(function() {
     $("#PrintBtn").on("click", function() {
         numeroFactura = dTable.row(".selected").data().numero;
@@ -27,6 +32,7 @@ $(document).ready(function() {
         } else {
             EnableViewBtn(true);
             EnablePrintBtn(true);
+            EnableEditBtn(true);
             if ($(this).hasClass('selected')) {
                 $(this).removeClass('selected');
                 
@@ -40,6 +46,7 @@ $(document).ready(function() {
             if ($("#dTable tr.selected").length == 0) {
                 EnableViewBtn(true);
                 EnablePrintBtn(true);
+                EnableEditBtn(true);
             }
         }
     });

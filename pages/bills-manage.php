@@ -37,6 +37,7 @@
     <?php endif; ?>
     
     <button disabled id="ViewBtn" class="btn my-button-3"><i class="bi bi-eye"></i>Ver</button>
+    <button disabled id="EditBtn" class="btn my-button-3"><i class="bi bi-pencil-square"></i>Editar</button>
     <button disabled id="PrintBtn" class="btn my-button-4"><i class="bi bi-printer"></i>Imprimir</button>
 </div>
 
