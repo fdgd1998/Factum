@@ -412,7 +412,7 @@
     <div class="my-button-group mt-4 mb-5 float-end">
         <button id="cancelBtn" class="btn my-button-2"><i class="bi bi-x-square"></i>Cancelar</button>
         <button <?=($action=="edit-budget"||$action=="edit-bill")?"":"disabled"?> id="SaveBtn" class="btn my-button-3"><i class="bi bi-save"></i>Guardar</button>
-        <button <?=($action=="edit-budget"||$action=="edit-bill")?"":"disabled"?> id="<?=($action=="view-bill" || $action == "view-bill")?"PrintBtn":"SavePrintBtn"?>" class="btn my-button-4"><i class="bi bi-printer"></i>Guardar e imprimir</button>
+        <!-- <button <?=($action=="edit-budget"||$action=="edit-bill")?"":"disabled"?> id="<?=($action=="view-bill" || $action == "view-bill")?"PrintBtn":"SavePrintBtn"?>" class="btn my-button-4"><i class="bi bi-printer"></i>Guardar e imprimir</button> -->
     </div>
     <?php endif; ?>
     <?php if ($action == "view-bill"): ?>

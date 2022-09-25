@@ -70,4 +70,27 @@ $(document).ready(function() {
             style: 'single'
         }
     });
+
+    $('#dTable tbody').on('click', 'tr', function () {
+        if ($(this).children("td").hasClass("dataTables_empty")) {
+            $(this).removeClass("selected");
+        } else {
+            $("#ViewBtn").removeAttr("disabled");
+            $("#PrintBtn").removeAttr("disabled");
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+                
+            }
+            else {
+                $("#dTable tr.selected").removeClass('selected');
+                $(this).addClass('selected');
+                console.log("seleccionado");
+            }
+
+            if ($("#dTable tr.selected").length == 0) {
+                $("#ViewBtn").attr("disabled", "disabled");
+                $("#PrintBtn").attr("disabled", "disabled");
+            }
+        }
+    });
 })

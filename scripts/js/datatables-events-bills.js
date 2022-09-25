@@ -6,7 +6,7 @@ $(document).ready(function() {
             "decimal":        "",
             "emptyTable":     "No existen datos",
             "info":           "Mostrando _START_ a _END_ (_TOTAL_ entradas totales)",
-            "infoEmpty":      "Mostrando 0 de 0 de 0 entradas",
+            "infoEmpty":      "No hay datos.",
             "infoFiltered":   "(filtrando desde _MAX_ entradas totales)",
             "infoPostFix":    "",
             "thousands":      ",",
@@ -64,28 +64,29 @@ $(document).ready(function() {
             style: 'single'
         }
     });
-
-    // $('#dTable tbody').on('click', 'tr', function () {
-    //     if ($(this).children("td").hasClass("dataTables_empty")) {
-    //         $(this).removeClass("selected");
-    //     } else {
-    //         $("#EditBtn").removeAttr("disabled");
-    //         $("#DeleteBtn").removeAttr("disabled");
-    //         $("#PrintBtn").removeAttr("disabled");
-    //         if ($(this).hasClass('selected')) {
-    //             $(this).removeClass('selected');
+    $('#dTable tbody').on('click', 'tr', function () {
+        if ($(this).children("td").hasClass("dataTables_empty")) {
+            $(this).removeClass("selected");
+        } else {
+            $("#EditBtn").removeAttr("disabled");
+            $("#DeleteBtn").removeAttr("disabled");
+            $("#PrintBtn").removeAttr("disabled");
+            $("#ViewBtn").removeAttr("disabled");
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
                 
-    //         }
-    //         else {
-    //             $("#dTable tr.selected").removeClass('selected');
-    //             $(this).addClass('selected');
-    //         }
+            }
+            else {
+                $("#dTable tr.selected").removeClass('selected');
+                $(this).addClass('selected');
+            }
 
-    //         if ($("#dTable tr.selected").length == 0) {
-    //             $("#EditBtn").attr("disabled", "disabled");
-    //             $("#DeleteBtn").attr("disabled", "disabled");
-    //             $("#PrintBtn").attr("disabled", "disabled");
-    //         }
-    //     }
-    // });
+            if ($("#dTable tr.selected").length == 0) {
+                $("#EditBtn").attr("disabled", "disabled");
+                $("#DeleteBtn").attr("disabled", "disabled");
+                $("#PrintBtn").attr("disabled", "disabled");
+                $("#ViewBtn").attr("disabled", "disabled");
+            }
+        }
+    });
 })

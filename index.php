@@ -94,26 +94,28 @@
 
     <?php if ($_GET["page"] == "bills"): ?>
     <script src="./scripts/js/manage-bills.js"></script>
+    <script src="./scripts/js/button-events.js"></script>
     <script src="./scripts/js/datatables-events-bills.js"></script>
-    <script src="./scripts/js/dTable-events.js"></script>
     <script src="./scripts/js/dTable-render-functions.js"></script>
     <?php endif; ?>
 
     <?php if ($_GET["page"] == "rbills"): ?>
     <script src="./scripts/js/manage-bills.js"></script>
+    <script src="./scripts/js/button-events.js"></script>
     <script src="./scripts/js/datatables-events-rbills.js"></script>
-    <script src="./scripts/js/dTable-events.js"></script>
     <script src="./scripts/js/dTable-render-functions.js"></script>
     <?php endif; ?>
 
     <?php if ($_GET["page"] == "archive"): ?>
     <script src="./scripts/js/manage-bills.js"></script>
+    <script src="./scripts/js/button-events.js"></script>
     <script src="./scripts/js/datatables-events-archive.js"></script>
-    <script src="./scripts/js/dTable-events.js"></script>
     <script src="./scripts/js/dTable-render-functions.js"></script>
     <?php endif; ?>
 
     <?php if ($_GET["page"] == "new-bill" || $_GET["page"] == "edit-bill" || $_GET["page"] == "new-budget" || $_GET["page"] == "edit-budget" || $_GET["page"] == "rectify-bill"): ?>
+    <script src="./includes/js/window-events.js"></script>
+    <script src="./scripts/js/button-events.js"></script>
     <script src="./scripts/js/datatables-events-bill-new.js"></script>
     <script src="./scripts/js/dTable-render-functions.js"></script>
     <script src="./classes/js/BillConcept.js"></script>
@@ -130,6 +132,7 @@
 
     <?php if ($_GET["page"] == "budgets"): ?>
     <script src="./scripts/js/manage-budgets.js"></script>
+    <script src="./scripts/js/button-events.js"></script>
     <script src="./scripts/js/datatables-events-budgets.js"></script>
     <script src="./scripts/js/dTable-render-functions.js"></script>
 

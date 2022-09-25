@@ -36,8 +36,10 @@
     <span class="button-spacing"></span>
     <?php endif; ?>
     
-    <button disabled id="ViewBtn" class="btn my-button-3"><i class="bi bi-eye"></i>Ver</button>
+    <button disabled id="ViewBtn" class="btn my-button-5"><i class="bi bi-eye"></i>Ver</button>
+    <?php if($_GET["page"] != "archive"): ?>
     <button disabled id="EditBtn" class="btn my-button-3"><i class="bi bi-pencil-square"></i>Editar</button>
+    <?php endif; ?>
     <button disabled id="PrintBtn" class="btn my-button-4"><i class="bi bi-printer"></i>Imprimir</button>
 </div>
 

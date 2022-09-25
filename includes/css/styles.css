@@ -15,6 +15,8 @@
     --button-3-hover-bg-color: #98e6a9;
     --button-4-main-color: #c2d6d6;
     --button-4-hover-bg-color: #e0ebeb;
+    --button-5-main-color: rgb(250, 233, 0);
+    --button-5-hover-bg-color: rgb(255, 253, 122);
     --row-selected-color: #ffe6cc;
 }
 @font-face {
@@ -215,6 +217,30 @@ h1.title {
 
 .my-button-4:not([disabled]):active:hover {
     background-color: var(--button-4-hover-bg-color) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.my-button-5 {
+    color: var(--button-text-color);
+    background-color: var(--button-5-main-color) !important;
+    border: 1px solid var(--button-5-main-color) !important;
+}
+
+.my-button-5:not([disabled]):hover {
+    background-color: var(--button-5-hover-bg-color) !important;
+    border: 1px solid var(--button-5-hover-bg-color) !important;
+    color: var(--button-hover-text-color) !important;
+}
+
+.my-button-5:not([disabled]):active:focus {
+    background-color: var(--button-5-hover-bg-color) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.my-button-5:not([disabled]):active:hover {
+    background-color: var(--button-5-hover-bg-color) !important;
     outline: none !important;
     box-shadow: none !important;
 }
