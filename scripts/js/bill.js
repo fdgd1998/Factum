@@ -24,6 +24,8 @@ var total_concepto;
 var descripcion;
 var descripcion_edit;
 
+var reload = true;
+
 function addToTable(concept, index) {
     dTable.row.add( [
         concept.cantidad,
@@ -62,9 +64,9 @@ function updateTotalPrices () {
     imponible_global = 0;
 
     conceptsArr.forEach(concept => {
-        total_global = total_global + concept.total;
-        if (tiene_iva == 1) iva_global = iva_global + concept.iva*concept.cantidad;
-        imponible_global = imponible_global + concept.precio*concept.cantidad;
+        total_global = parseFloat((total_global + concept.total).toFixed(2));
+        if (tiene_iva == 1) iva_global = parseFloat((iva_global + concept.iva*concept.cantidad).toFixed(2));
+        imponible_global += parseFloat((concept.precio*concept.cantidad).toFixed(2));
     })
 
     $("#base-imponible").html(new Intl.NumberFormat("es-ES", options).format(imponible_global));
@@ -91,13 +93,13 @@ function CleanModalAndData() {
 function UpdateConceptsIva() {
     if (tiene_iva == 1) {
         conceptsArr.forEach(concept => {
-            concept.iva = concept.precio*0.21;
-            concept.total = concept.cantidad*(concept.precio + concept.iva)
+            concept.iva = parseFloat((concept.precio*0.21).toFixed(2));
+            concept.total = parseFloat((concept.cantidad*(concept.precio + concept.iva)).toFixed(2));
         })
     } else {
         conceptsArr.forEach(concept => {
             concept.iva = 0;
-            concept.total = concept.cantidad*concept.precio;
+            concept.total = parseFloat((concept.cantidad*concept.precio).toFixed(2));
         })
         $("#concepto-iva-edit").html("--");
         $("#concepto-iva").html("--");
@@ -133,10 +135,10 @@ function UpdatePrice(action) {
         precioUnitario_concepto = parseFloat($("#precio-unitario").val());
         cantidad = parseInt($("#cantidad").val());
 
-        if (tiene_iva == 1) iva_concepto = parseFloat(precioUnitario_concepto)*0.21;
+        if (tiene_iva == 1) iva_concepto = parseFloat((parseFloat(precioUnitario_concepto)*0.21).toFixed(2));
         else iva_concepto = 0;
 
-        total_concepto = (parseFloat(iva_concepto) + parseFloat(precioUnitario_concepto))*cantidad;
+        total_concepto = parseFloat(((parseFloat(iva_concepto) + parseFloat(precioUnitario_concepto))*cantidad).toFixed(2));
 
         if (tiene_iva == 1) $("#concepto-iva").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto*cantidad));
         else $("#concepto-iva").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto*cantidad));
@@ -145,10 +147,10 @@ function UpdatePrice(action) {
         precioUnitario_concepto = parseFloat($("#precio-unitario-edit").val());
         cantidad = parseInt($("#cantidad-edit").val());
 
-        if (tiene_iva == 1) iva_concepto = parseFloat(precioUnitario_concepto)*0.21;
+        if (tiene_iva == 1) iva_concepto = parseFloat((parseFloat(precioUnitario_concepto)*0.21).toFixed(2));
         else iva_concepto = 0;
         
-        total_concepto = (parseFloat(iva_concepto) + parseFloat(precioUnitario_concepto))*cantidad;
+        total_concepto = parseFloat(((parseFloat(iva_concepto) + parseFloat(precioUnitario_concepto))*cantidad).toFixed(2));
         if (tiene_iva == 1) $("#concepto-iva-edit").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto*cantidad));
         $("#concepto-total-edit").html(new Intl.NumberFormat("es-ES", options).format(total_concepto));
     }
@@ -267,7 +269,7 @@ $(document).ready(function() {
         conceptsArr[editingRowIdN].precio = precioUnitario_concepto;
         conceptsArr[editingRowIdN].descripcion = $("#descripcion-edit").val();
         conceptsArr[editingRowIdN].iva = (tiene_iva == 1 ? iva_concepto:0);
-        conceptsArr[editingRowIdN].total = (tiene_iva == 1 ? cantidad*(iva_concepto+precioUnitario_concepto):cantidad*precioUnitario_concepto);
+        conceptsArr[editingRowIdN].total = (tiene_iva == 1 ? parseFloat((cantidad*(iva_concepto+precioUnitario_concepto)).toFixed(2)):parseFloat((cantidad*precioUnitario_concepto).toFixed(2)));
         console.log(conceptsArr);
         reloadConcepts();
         updateTotalPrices();
@@ -346,6 +348,9 @@ $(document).ready(function() {
         $("#clientSearchModal").find("tbody tr.selected").removeClass("selected");
         $("#selectClientBtn").attr("disabled","disabled");
         $("#clientSearchModal").modal("hide");
+        $("#observaciones").removeAttr("disabled");
+        $("#NewBtn").removeAttr("disabled");
+        $("#continue-alert").remove();
         enableSaveBtn();
     });
 
@@ -426,6 +431,7 @@ $(document).ready(function() {
                 dataType: 'text',
                 data: {table: "facturas", data: JSON.stringify(data), where: JSON.stringify(["numero", $("#numero").val()])},
                 success: function(response) { 
+                    reload = false;
                     console.log(response);
                     alert(response);
                     if (save == "saveOnly") {
@@ -524,6 +530,7 @@ $(document).ready(function() {
                 data: {sql: JSON.stringify([sql1, sql2])}, 
 
                 success: function(response) { 
+                    reload = false;
                     alert(response);
                     if (save == "saveOnly") {
                         window.location.href = "?page=bills";
@@ -591,6 +598,7 @@ $(document).ready(function() {
                 dataType: 'text',
                 data: {sql: JSON.stringify([sql1, sql2])}, 
                 success: function(response) {
+                    reload = false;
                     console.log(response);
                     alert(response);
                     if (save == "saveOnly") {
@@ -659,6 +667,7 @@ $(document).ready(function() {
                 dataType: 'text',
                 data: {sql: JSON.stringify([sql1, sql2])}, 
                 success: function(response) {
+                    reload = false;
                     console.log(response);
                     alert(response);
                     if (save == "saveOnly") {
@@ -697,6 +706,7 @@ $(document).ready(function() {
                 dataType: 'text',
                 data: {table: "presupuestos", data: JSON.stringify(data), where: JSON.stringify(["numero", $("#numero").val()])},
                 success: function(response) { 
+                    reload = false;
                     console.log(response);
                     alert(response);
                     if (save == "saveOnly") {
@@ -711,6 +721,7 @@ $(document).ready(function() {
     }
 
     $("#SaveBtn").on("click", function(){
+        //reload = true;
         console.log("Saving...");
         Save("saveOnly");
     });
@@ -721,6 +732,7 @@ $(document).ready(function() {
     });
 
     $("#PrintBtn").on("click", function() {
+        reload = false;
         if ((typeof archivo !== "undefined") && archivo) window.location.href = "scripts/factura/factura.php?action=display&numero="+$("#numero").val()+"&archivo=si";
         else window.location.href = "scripts/factura/factura.php?action=display&numero="+$("#numero").val();
     });

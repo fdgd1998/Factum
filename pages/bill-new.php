@@ -344,68 +344,75 @@
         </div>  
     </div>
     <hr>
-    <?php if ($action != "view-bill"): ?>
-    <div class="my-btn-group">
-        <button id="NewBtn" class="btn my-button" data-bs-toggle="modal" data-bs-target="#newConceptModal"><i class="bi bi-plus-circle"></i>Nuevo</button>
-        <button disabled id="EditBtn" class="btn my-button-3" data-bs-toggle="modal" data-bs-target="#editConceptModal"><i class="bi bi-pencil"></i>Editar</button>
-        <button disabled id="DeleteBtn" class="btn my-button-2"><i class="bi bi-x-circle"></i>Borrar</button>
-    </div>
-    <?php endif; ?>
-    <div class="table-responsive mt-1">
-        <table id="dTable" class="table table-bordered">
-            <thead>
-                <tr>
-                    <th width="5%">Cantidad</th>
-                    <th width="55%">Descripción</th>
-                    <th width="15%">Precio unitario</th>
-                    <th width="10%">IVA unitario</th>
-                    <th width="10%">Importe</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if ($action == "view-bill" || $action=="edit-bill" || $action == "edit-budget"):?>
-                    <?php $i=0; foreach($viewBillData["conceptos"] as $concepto):?>
-                    <tr id="concept<?=$i?>">
-                        <td class="cantidad"><?=$concepto["cantidad"]?></td>
-                        <td class="descripcion"><?=$concepto["descripcion"]?></td>
-                        <td class="precio"><?=$fmt->formatCurrency($concepto["precio"], "EUR")?></td>
-                        <td class="iva"><?=$viewBillData["tieneiva"]=="no"?"--":$fmt->formatCurrency($concepto["iva"], "EUR")?></td>
-                        <td class="total"><?=$fmt->formatCurrency($concepto["total"], "EUR")?></td>
+    <div id="bill-content">
+        <?php if ($action != "view-bill"): ?>
+        <?php if ($action == "new-bill" || $action == "new-budget") : ?>
+        <div id="continue-alert" class="alert alert-warning" role="alert">
+            Para continuar, selecciona un cliente primero.
+        </div>
+        <?php endif; ?>
+        <div class="my-btn-group">
+            <button <?=($action=="new-bill"||$action=="new-budget")?"disabled":""?> id="NewBtn" class="btn my-button" data-bs-toggle="modal" data-bs-target="#newConceptModal"><i class="bi bi-plus-circle"></i>Nuevo</button>
+            <button disabled id="EditBtn" class="btn my-button-3" data-bs-toggle="modal" data-bs-target="#editConceptModal"><i class="bi bi-pencil"></i>Editar</button>
+            <button disabled id="DeleteBtn" class="btn my-button-2"><i class="bi bi-x-circle"></i>Borrar</button>
+        </div>
+        <?php endif; ?>
+        <div class="table-responsive mt-1">
+            <table id="dTable" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th width="5%">Cantidad</th>
+                        <th width="55%">Descripción</th>
+                        <th width="15%">Precio unitario</th>
+                        <th width="10%">IVA unitario</th>
+                        <th width="10%">Importe</th>
                     </tr>
-                    <?php $i++; ?>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </tbody>
-        </table>
-    </div>
-    <div class="w-100 text-end mt-2">
-        <div class="row">
-            <div class="col-10">
-                <p>Base imponible: </p>
-                <p>IVA (21%): </p>
-                <strong><p>Total a pagar: </p></strong>
-            </div>
-            <div class="col-2">
-                <?php if($action == "view-bill" || $action=="edit-bill" || $action == "edit-budget"): ?>
-                <p id="base-imponible"><?=$fmt->formatCurrency($viewBillData["imponible"], "EUR")?></p>
-                <p id="total-iva"><?=$viewBillData["tieneiva"]=="no"?"--":$fmt->formatCurrency($viewBillData["iva"], "EUR")?></p>
-                <strong><p id="total-factura"><?=$fmt->formatCurrency($viewBillData["total"], "EUR")?></p></strong>
-                <?php else: ?>
-                <p id="base-imponible">--</p>
-                <p id="total-iva">--</p>
-                <strong><p id="total-factura">--</p></strong>
-                <?php endif; ?>
+                </thead>
+                <tbody>
+                    <?php if ($action == "view-bill" || $action=="edit-bill" || $action == "edit-budget"):?>
+                        <?php $i=0; foreach($viewBillData["conceptos"] as $concepto):?>
+                        <tr id="concept<?=$i?>">
+                            <td class="cantidad"><?=$concepto["cantidad"]?></td>
+                            <td class="descripcion"><?=$concepto["descripcion"]?></td>
+                            <td class="precio"><?=$fmt->formatCurrency($concepto["precio"], "EUR")?></td>
+                            <td class="iva"><?=$viewBillData["tieneiva"]=="no"?"--":$fmt->formatCurrency($concepto["iva"], "EUR")?></td>
+                            <td class="total"><?=$fmt->formatCurrency($concepto["total"], "EUR")?></td>
+                        </tr>
+                        <?php $i++; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+        <div class="w-100 text-end mt-2">
+            <div class="row">
+                <div class="col-10">
+                    <p>Base imponible: </p>
+                    <p>IVA (21%): </p>
+                    <strong><p>Total a pagar: </p></strong>
+                </div>
+                <div class="col-2">
+                    <?php if($action == "view-bill" || $action=="edit-bill" || $action == "edit-budget"): ?>
+                    <p id="base-imponible"><?=$fmt->formatCurrency($viewBillData["imponible"], "EUR")?></p>
+                    <p id="total-iva"><?=$viewBillData["tieneiva"]=="no"?"--":$fmt->formatCurrency($viewBillData["iva"], "EUR")?></p>
+                    <strong><p id="total-factura"><?=$fmt->formatCurrency($viewBillData["total"], "EUR")?></p></strong>
+                    <?php else: ?>
+                    <p id="base-imponible">--</p>
+                    <p id="total-iva">--</p>
+                    <strong><p id="total-factura">--</p></strong>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
-    </div>
-    <hr>
-    <div class="mb-3">
-        <label for="observaciones" class="form-label">Observaciones</label>
-        <?php if ($action == "view-bill" || $action == "edit-bill"): ?>
-        <textarea <?= ($action == "edit-bill" ? "" : "disabled")?> class="form-control" id="observaciones" rows="3"><?=$viewBillData["observaciones"]?></textarea>
-        <?php else : ?>
-        <textarea class="form-control" id="observaciones" rows="3">No se realizan devoluciones del dinero pagado (consultar condiciones).</textarea>
-        <?php endif; ?>
+        <hr>
+        <div class="mb-3">
+            <label for="observaciones" class="form-label">Observaciones</label>
+            <?php if ($action == "view-bill" || $action == "edit-bill" || $action == "edit-budget"): ?>
+            <textarea <?=($action=="view-bill")?"disabled":""?> class="form-control" id="observaciones" rows="3"><?=$viewBillData["observaciones"]?></textarea>
+            <?php else : ?>
+            <textarea <?=($action=="new-budget"||$action=="new-bill")?"disabled":""?> class="form-control" id="observaciones" rows="3">No se realizan devoluciones del dinero pagado (consultar condiciones).</textarea>
+            <?php endif; ?>
+        </div>
     </div>
 
     <?php if ($action == "new-bill" ||  $action == "edit-bill" || $action == "new-budget" || $action == "rectify-bill" || $action == "edit-budget"): ?>
@@ -527,6 +534,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
+        <p>Si el cliente que buscas no existe, <a href="?page=new-client">regístralo primero</a> y vuelve más tarde a esta página.</p>
         <table id="dTableClients" class="table table-striped table-bordered" style="width:100%">
             <thead>
                 <tr>
