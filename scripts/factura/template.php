@@ -77,7 +77,7 @@ error_reporting(E_ALL);
 <body>
     <table width="100%">
         <tr>
-            <td width="68%">
+            <td width="55%">
                 <h1 class="company">ViGal Artesana</h1>
             </td>
             <td>
@@ -97,7 +97,7 @@ error_reporting(E_ALL);
     <?php endif; ?>
     <table width="100.9%" style="margin-left: -5px !important">
         <tr>
-            <td width="60%">   
+            <td width="54%">   
                 <table width="100%">
                     <tr>
                         <td width="35%">
@@ -135,15 +135,15 @@ error_reporting(E_ALL);
                         </td>
                     </tr>
                 </table>
-                </td>
-                <td style="border: 1px solid black; padding: 10px">
-                    <label>DATOS DEL CLIENTE</label><br>
-                    <div style="height: 5px"></div>
-                    <label>NIF: <?=$datosCliente["nif"]?></label><br>
-                    <label><?=$datosCliente["nombre"]?></label><br>
-                    <label><?=$datosCliente["direccion"]?></label><br>
-                    <label><?=$datosCliente["cp"]?> <?=$datosCliente["localidad"]?></label>
-                </td>
+            </td>
+            <td style="border: 1px solid black; padding: 10px">
+                <label>DATOS DEL CLIENTE</label><br>
+                <div style="height: 5px"></div>
+                <label>NIF: <?=$datosCliente["nif"]?></label><br>
+                <label><?=$datosCliente["nombre"]?></label><br>
+                <label><?=$datosCliente["direccion"]?></label><br>
+                <label><?=$datosCliente["cp"]?> <?=$datosCliente["localidad"]?></label>
+            </td>
         </tr>
     </table>
     <table id="conceptos">
