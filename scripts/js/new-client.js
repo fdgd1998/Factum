@@ -4,7 +4,7 @@ function isIDValid (isValid, type) {
         $("#nif").addClass("is-valid");
         $("#nif").removeClass("is-invalid");
     } else {
-        $("#nif-feedback").html("Introduce un "+(type=="nif"?"NIF":"CIF")+" válido.");
+        // $("#nif-feedback").html("Introduce un "+(type=="nif"?"NIF":"CIF")+" válido.");
         $("#nif").addClass("is-invalid");
         $("#nif").removeClass("is-valid");
     }
@@ -36,11 +36,16 @@ function EnableEditBtn () {
 }
 
 function validateID() {
-    if ($("#nif").siblings("select").find(":selected").val() == "nif") {
-        isIDValid(isValidNif($("#nif").val()), "nif");
-    } else {
-        isIDValid(isValidCif($("#nif").val()), "cif");
-    }
+    isIDValid(ValidateSpanishID($("#nif").val())["valid"]);
+    console.log(ValidateSpanishID($("#nif").val())["valid"]);
+    // if ($("#nif").siblings("select").find(":selected").val() == "nif") {
+    //     isIDValid(isValidNif($("#nif").val()));
+    // } else if ($("#nif").siblings("select").find(":selected").val() == "cif") {
+    //     isIDValid(isValidCif($("#nif").val()));
+    // } else if ($("#nif").siblings("select").find(":selected").val() == "nie") {
+    //     console.log("NIE selected")
+    //     isIDValid(isValidNie($("#nif").val()));
+    // }
 }
 
 function userExists() {
@@ -68,19 +73,16 @@ function userExists() {
 }
 
 $(document).ready(function() {
-    $("#id-select").on("change",function(){
-        validateID();
-        if ($("#nif").val().length == 9) {
-            userExists();
-            EnableCreateBtn();
-        }
-    })
+    // $("#nif").on("change",function(){
+    //     validateID();
+    //     userExists();
+    //     EnableCreateBtn();
+    // })
     $("#nif").on("keyup", function() {
         validateID();
-        if ($(this).val().length == 9) {
-            userExists();
-            EnableCreateBtn();
-        }
+        userExists();
+        EnableCreateBtn();
+        
     })
 
     $("#nombre, #direccion, #localidad").on("keyup", function() {

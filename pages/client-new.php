@@ -10,17 +10,14 @@
     <div class="row">
         <div class="col-12 col-sm-7 col-md-6 col-lg-4 col-xl-4">
             <div class="input-group mb-3">
-                <select <?=$_GET["page"]=="new-client"?"":"disabled"?> id="id-select" class="input-group-text" id="numero_identificacion">
-                    <option selected value="nif">NIF</option>
-                    <option value="cif">CIF</option>
-                </select>
+                <input disabled type="text" class="form-control" value="NIF/CIF/NIE">
                 <?php if ($_GET["page"]=="edit-client"):?>
-                <input disabled id="nif" type="text" class="form-control" value="<?=$userData["nif"]?>">
+                <input disabled type="text" class="form-control" value="<?=$userData["nif"]?>">
                 <?php else: ?>
                 <input id="nif" type="text" class="form-control">
                 <?php endif; ?>
                 <div id="nif-feedback" class="invalid-feedback">
-                    Introduce un NIF correcto.
+                    Introduce un CIF/NIF/NIE correcto.
                 </div>
             </div>
         </div>
