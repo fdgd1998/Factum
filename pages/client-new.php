@@ -108,7 +108,7 @@
         </div>
     </div>
     <div class="mt-4">
-        <button id="cancelBtn" type="button" class="btn my-button-2"><i class="bi bi-x-square"></i>Cancelar</button>
-        <button <?=$_GET["page"]=="edit-client"?"":"disabled"?> id="<?=$_GET["page"]=="edit-client"?"editBtn":"createBtn"?>" type="button" class="btn my-button-3"><i class="bi bi-save"></i>Guardar</button>
+        <button id="cancelBtn" type="button" class="btn my-button-2"><i class="bi bi-x-circle"></i>Cancelar</button>
+        <button <?=$_GET["page"]=="edit-client"?"":"disabled"?> id="<?=$_GET["page"]=="edit-client"?"editBtn":"createBtn"?>" type="button" class="btn my-button-3"><i class="bi bi-person-add"></i>Guardar</button>
     </div>
 </div>

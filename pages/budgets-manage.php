@@ -1,10 +1,11 @@
 <h1 class="title">Presupuestos</h1>
 <div class="my-btn-group">
-    <button id="NewBtn" class="btn my-button"><i class="bi bi-plus-square"></i>Nuevo presupuesto</button>
+    <button id="NewBtn" class="btn my-button"><i class="bi bi-plus-circle"></i>Nuevo presupuesto</button>
     <span class="button-spacing"></span>
-    <button disabled id="EditBtn" class="btn my-button-3"><i class="bi bi-pencil-square"></i>Editar</button>
+    <button disabled id="EditBtn" class="btn my-button-3"><i class="bi bi-pencil"></i>Editar</button>
     <button disabled id="DeleteBtn" class="btn my-button-2" data-bs-toggle="modal" data-bs-target="#deleteBudgetModal"><i class="bi bi-trash"></i>Borrar</button>
     <button disabled id="PrintBtn" class="btn my-button-4"><i class="bi bi-printer"></i>Imprimir</button>
+    <button disabled id="ToBillBtn" class="btn my-button-5"><i class="bi bi-arrow-left-right"></i>Convertir a factura</button>
 </div>
 <table id="dTable" class="table table-striped table-bordered" style="width:100%">
     <thead>

@@ -32,13 +32,13 @@
 ?>
 <div class="my-btn-group">
     <?php if($_GET["page"] != "archive"): ?>
-    <button id="<?=$_GET["page"] == "bills" ? "NewBtn":"NewRecBtn"?>" class="btn my-button"><i class="bi bi-plus-square"></i>Nueva factura</button>
+    <button id="<?=$_GET["page"] == "bills" ? "NewBtn":"NewRecBtn"?>" class="btn my-button"><i class="bi bi-plus-circle"></i>Nueva factura</button>
     <span class="button-spacing"></span>
     <?php endif; ?>
     
     <button disabled id="ViewBtn" class="btn my-button-5"><i class="bi bi-eye"></i>Ver</button>
     <?php if($_GET["page"] != "archive"): ?>
-    <button disabled id="EditBtn" class="btn my-button-3"><i class="bi bi-pencil-square"></i>Editar</button>
+    <button disabled id="EditBtn" class="btn my-button-3"><i class="bi bi-pencil"></i>Editar</button>
     <?php endif; ?>
     <button disabled id="PrintBtn" class="btn my-button-4"><i class="bi bi-printer"></i>Imprimir</button>
 </div>

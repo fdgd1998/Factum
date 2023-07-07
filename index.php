@@ -38,6 +38,9 @@
                     case "new-bill":
                         include "./pages/bill-new.php";
                         break;
+                    case "new-bill-from-budget":
+                        include "./pages/bill-new.php";
+                        break;
                     case "rectify-bill":
                         include "./pages/bill-new.php";
                         break;
@@ -113,7 +116,7 @@
     <script src="./scripts/js/dTable-render-functions.js"></script>
     <?php endif; ?>
 
-    <?php if ($_GET["page"] == "new-bill" || $_GET["page"] == "edit-bill" || $_GET["page"] == "new-budget" || $_GET["page"] == "edit-budget" || $_GET["page"] == "rectify-bill"): ?>
+    <?php if ($_GET["page"] == "new-bill" || $_GET["page"] == "edit-bill" || $_GET["page"] == "new-bill-from-budget" || $_GET["page"] == "new-budget" || $_GET["page"] == "edit-budget" || $_GET["page"] == "rectify-bill"): ?>
     <script src="./scripts/js/button-events.js"></script>
     <script src="./scripts/js/datatables-events-bill-new.js"></script>
     <script src="./scripts/js/dTable-render-functions.js"></script>

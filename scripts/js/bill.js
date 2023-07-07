@@ -173,7 +173,7 @@ function enableSaveBtn() {
 }
 
 $(document).ready(function() {
-    if (action == "edit-budget" || action == "edit-bill") {
+    if (action == "edit-budget" || action == "edit-bill" || action == "new-bill-from-budget") {
         $("#dTable tbody tr").each(function(){
             cantidad = $(this).find(".cantidad").html();
             descripcion = $(this).find(".descripcion").html();
@@ -302,6 +302,7 @@ $(document).ready(function() {
         console.log(editingRowIdN);
         console.log("tiene iva: "+tiene_iva);
         var editingConcept = conceptsArr[editingRowIdN];
+        console.log(editingConcept);
 
         cantidad = editingConcept.cantidad;
         precioUnitario_concepto = editingConcept.precio;
@@ -398,7 +399,7 @@ $(document).ready(function() {
             window.location.href = "?page=budgets";
         else if ((action == "view-bill" && $("#numero").val().includes("RFIVA")) || action == "rectify-bill")
             window.location.href = "?page=rbills";
-        else if ((action == "view-bill" && $("#numero").val().includes("FIVA")) || action == "new-bill" || action == "edit-bill")
+        else if ((action == "view-bill" && $("#numero").val().includes("FIVA")) || action == "new-bill" || action == "edit-bill" || action == "new-bill-from-budget")
             window.location.href = "?page=bills";
     })
 
@@ -476,7 +477,7 @@ $(document).ready(function() {
             //     }
             // });
         }
-        if (action == "new-bill") {
+        if (action == "new-bill" || action == "new-bill-from-budget") {
             var columns = [
                 "numero", 
                 "nif", 

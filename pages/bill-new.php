@@ -124,6 +124,52 @@
             ";
         }
         $conn->Close();
+    } else if ($action == "new-bill-from-budget") {
+        if ($conn->Connect()) {
+            $sql = "select * from presupuestos where numero='".$_GET["numero"]."'";
+            
+            if ($rows = $conn->Select($sql)[0]) {
+                $viewBillData["numero"] = $rows["numero"];
+                $viewBillData["nif"] = $rows["nif"];
+                $viewBillData["fecha"] = date("Y-m-d", strtotime($rows["fecha"]));
+                $viewBillData["conceptos"] = json_decode(preg_replace('/[\xE1\xE9\xED\xF3\xFA\xC1\xC9\xCD\xD3\xDA\xF1\xD1\xFC\xDC\x0D\x0A]/',' ',$rows["conceptos"]), true);
+                $viewBillData["observaciones"] = $rows["observaciones"];
+                $viewBillData["total"] = $rows["total"];
+                $viewBillData["formapago"] = $rows["formapago"];
+                $viewBillData["iva"] = $rows["iva"];
+                $viewBillData["tieneiva"] = $rows["tieneiva"];
+                $viewBillData["imponible"] = $rows["imponible"];
+                $viewBillData["nombre"] = $rows["nombre"];
+                $viewBillData["direccion"] = $rows["direccion"];
+                $viewBillData["cp"] = $rows["cp"];
+                $viewBillData["localidad"] = $rows["localidad"];
+            }
+            echo "
+                <script>
+                    iva_global = ".$viewBillData["iva"].";
+                    imponible_global = ".$viewBillData["imponible"].";
+                    total_global = ".$viewBillData["total"].";
+                </script>
+            ";
+
+            if ($conn->Connect()) {
+                $sql = "select * from controlfactura where nombreserie='FIVA'";
+                
+                if ($rows = $conn->Select($sql)[0]) {
+                    if ($rows["anoultimafactura"] < date("y")) {
+                        $numerofactura .= date("y");
+                        $numerofactura .= $rows["nombreserie"];
+                        $numerofactura .= str_pad(1, 5, "0", STR_PAD_LEFT);
+                    } else {
+                        $numerofactura .= $rows["anoultimafactura"];
+                        $numerofactura .= $rows["nombreserie"];
+                        $numerofactura .= str_pad($rows["numeroultimafactura"]+1, 5, "0", STR_PAD_LEFT);
+                    }
+                    
+                }
+            }
+        }
+        $conn->Close();
     } else if (str_contains($_GET["numero"], "RFIVA")) {
         if ($conn->Connect()) {
             $sql = "select * from facturasrec where numero='".$_GET["numero"]."'";
@@ -218,6 +264,7 @@
 ?>
 <?php
     if ($action == "new-bill") echo "<h1>Nueva factura</h1>";
+    if ($action == "new-bill-from-budget") echo "<h1>Nueva factura desde presupuesto ".$viewBillData["numero"]."</h1>";
     if ($action == "new-budget") echo "<h1>Nuevo presupuesto</h1>";
     if ($action == "edit-budget") echo "<h1>Editar presupuesto</h1>";
     if ($action == "edit-bill") echo "<h1>Editar factura</h1>";
@@ -230,12 +277,12 @@
     <div class="row">
         <div class="col-12 col-md-5 col-lg-4">
             <?php
-                if ($action == "new-bill" || $action == "view-bill" || $action=="edit-bill" || $action == "rectify-bill") echo "<p>Datos de la factura ".($archived?"<span style='color: black' class='badge bg-warning'>Archivo</span>":"")."</p>";
+                if ($action == "new-bill" || $action == "new-bill-from-budget" || $action == "view-bill" || $action=="edit-bill" || $action == "rectify-bill") echo "<p>Datos de la factura ".($archived?"<span style='color: black' class='badge bg-warning'>Archivo</span>":"")."</p>";
                 if ($action == "new-budget" || $action == "edit-budget") echo "<p>Datos del presupuesto</p>";
             ?>
             <div class="input-group mb-3">
                 <span class="input-group-text">Número:</span>
-                <?php if($action=="new-bill" || $action == "new-budget" || $action == "rectify-bill"):?>
+                <?php if($action=="new-bill" || $action=="new-bill-from-budget" || $action == "new-budget" || $action == "rectify-bill"):?>
                 <input disabled id="numero" type="text" class="form-control" value=<?=$numerofactura?>>
                 <?php endif; ?>
                 <?php if($action=="view-bill" || $action=="edit-bill" || $action=="edit-budget"):?>
@@ -306,13 +353,13 @@
                 <div class="col-12 col-lg-4">
                     <div class="input-group mb-3">
                         <span class="input-group-text">NIF:</span>
-                        <input disabled id="nif" type="text" class="form-control" value="<?=($action=="view-bill" || $action=="edit-bill" || $action=="edit-budget")?$viewBillData["nif"]:""?>">
+                        <input disabled id="nif" type="text" class="form-control" value="<?=($action=="view-bill" || $action=="edit-bill" || $action=="new-bill-from-budget" || $action=="edit-budget")?$viewBillData["nif"]:""?>">
                     </div>
                 </div>
                 <div class="col-12 col-lg-8">
                     <div class="input-group mb-3" colspan="4">
                         <span class="input-group-text">Nombre:</span>     
-                        <input disabled id="nombre" type="text" class="form-control" value="<?=($action=="view-bill" || $action=="edit-bill" || $action=="edit-budget")?$viewBillData["nombre"]:""?>">
+                        <input disabled id="nombre" type="text" class="form-control" value="<?=($action=="view-bill" || $action=="edit-bill" || $action=="new-bill-from-budget" || $action=="edit-budget")?$viewBillData["nombre"]:""?>">
                         <?php if ($action == "new-bill" || $action == "new-budget"): ?>
                         <button class="input-group-text my-button" data-bs-toggle="modal" data-bs-target="#clientSearchModal"><i class="bi bi-search no-margin"></i></button>
                         <?php endif; ?>
@@ -323,7 +370,7 @@
                 <div class="col">
                     <div class="input-group mb-3">
                         <span class="input-group-text">Dirección:</span>
-                        <input disabled id="direccion" type="text" class="form-control" value="<?=($action=="view-bill" || $action=="edit-bill" || $action=="edit-budget")?$viewBillData["direccion"]:""?>">
+                        <input disabled id="direccion" type="text" class="form-control" value="<?=($action=="view-bill" || $action=="edit-bill" || $action=="new-bill-from-budget" || $action=="edit-budget")?$viewBillData["direccion"]:""?>">
                     </div>
                 </div>
             </div>
@@ -331,13 +378,13 @@
                 <div class="col-12 col-lg-3 col-xl-3">
                     <div class="input-group mb-3">
                         <span class="input-group-text">CP:</span>
-                        <input disabled id="cp" type="text" class="form-control" value="<?=($action=="view-bill" || $action=="edit-bill" || $action=="edit-budget")?$viewBillData["cp"]:""?>">
+                        <input disabled id="cp" type="text" class="form-control" value="<?=($action=="view-bill" || $action=="edit-bill" || $action=="new-bill-from-budget" || $action=="edit-budget")?$viewBillData["cp"]:""?>">
                     </div>
                 </div>
                 <div class="col-12 col-lg-6 col-xl-5">
                     <div class="input-group mb-3">
                         <span class="input-group-text">Ciudad:</span>
-                        <input disabled id="localidad" type="text" class="form-control" value="<?=($action=="view-bill" || $action=="edit-bill" || $action=="edit-budget")?$viewBillData["localidad"]:""?>">
+                        <input disabled id="localidad" type="text" class="form-control" value="<?=($action=="view-bill" || $action=="edit-bill" || $action=="new-bill-from-budget" || $action=="edit-budget")?$viewBillData["localidad"]:""?>">
                     </div>
                 </div>
             </div>
@@ -369,13 +416,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if ($action == "view-bill" || $action=="edit-bill" || $action == "edit-budget"):?>
+                    <?php if ($action == "view-bill" || $action=="edit-bill" || $action=="new-bill-from-budget" || $action == "edit-budget"):?>
                         <?php $i=0; foreach($viewBillData["conceptos"] as $concepto):?>
                         <tr id="concept<?=$i?>">
                             <td class="cantidad"><?=$concepto["cantidad"]?></td>
                             <td class="descripcion"><?=$concepto["descripcion"]?></td>
                             <td class="precio"><?=$fmt->formatCurrency($concepto["precio"], "EUR")?></td>
+                            <?php if ($action=="new-bill-from-budget"): ?>
+                            <td class="iva"><?=$fmt->formatCurrency($viewBillData["tieneiva"]=="si" ? $concepto["iva"] : $concepto["precio"]*0.21, "EUR")?></td>
+                            <?php $viewBillData["iva"] = $concepto["cantidad"] * ($concepto["precio"]*1.21)?>
+                            <?php else: ?>
                             <td class="iva"><?=$viewBillData["tieneiva"]=="no"?"--":$fmt->formatCurrency($concepto["iva"], "EUR")?></td>
+                            <?php endif; ?>
                             <td class="total"><?=$fmt->formatCurrency($concepto["total"], "EUR")?></td>
                         </tr>
                         <?php $i++; ?>
@@ -392,9 +444,13 @@
                     <strong><p>Total a pagar: </p></strong>
                 </div>
                 <div class="col-2">
-                    <?php if($action == "view-bill" || $action=="edit-bill" || $action == "edit-budget"): ?>
+                    <?php if($action == "view-bill" || $action=="edit-bill" || $action=="new-bill-from-budget" || $action == "edit-budget"): ?>
                     <p id="base-imponible"><?=$fmt->formatCurrency($viewBillData["imponible"], "EUR")?></p>
+                    <?php if ($action == "new-bill-from-budget"):?>
+                    <p id="total-iva"><?=$fmt->formatCurrency($viewBillData["iva"], "EUR")?></p>
+                    <?php else: ?>
                     <p id="total-iva"><?=$viewBillData["tieneiva"]=="no"?"--":$fmt->formatCurrency($viewBillData["iva"], "EUR")?></p>
+                    <?php endif; ?>
                     <strong><p id="total-factura"><?=$fmt->formatCurrency($viewBillData["total"], "EUR")?></p></strong>
                     <?php else: ?>
                     <p id="base-imponible">--</p>
@@ -407,7 +463,7 @@
         <hr>
         <div class="mb-3">
             <label for="observaciones" class="form-label">Observaciones</label>
-            <?php if ($action == "view-bill" || $action == "edit-bill" || $action == "edit-budget"): ?>
+            <?php if ($action == "view-bill" || $action == "edit-bill"  || $action=="new-bill-from-budget" || $action == "edit-budget"): ?>
             <textarea <?=($action=="view-bill")?"disabled":""?> class="form-control" id="observaciones" rows="3"><?=$viewBillData["observaciones"]?></textarea>
             <?php else : ?>
             <textarea <?=($action=="new-budget"||$action=="new-bill")?"disabled":""?> class="form-control" id="observaciones" rows="3">No se realizan devoluciones del dinero pagado (consultar condiciones).</textarea>
@@ -415,16 +471,16 @@
         </div>
     </div>
 
-    <?php if ($action == "new-bill" ||  $action == "edit-bill" || $action == "new-budget" || $action == "rectify-bill" || $action == "edit-budget"): ?>
+    <?php if ($action == "new-bill" ||  $action == "edit-bill" || $action == "new-budget"  || $action=="new-bill-from-budget" || $action == "rectify-bill" || $action == "edit-budget"): ?>
     <div class="my-button-group mt-4 mb-5 float-end">
-        <button id="cancelBtn" class="btn my-button-2"><i class="bi bi-x-square"></i>Cancelar</button>
-        <button <?=($action=="edit-budget"||$action=="edit-bill")?"":"disabled"?> id="SaveBtn" class="btn my-button-3"><i class="bi bi-save"></i>Guardar</button>
+        <button id="cancelBtn" class="btn my-button-2"><i class="bi bi-x-circle"></i>Cancelar</button>
+        <button <?=($action=="edit-budget"||$action=="edit-bill")?"":"disabled"?> id="SaveBtn" class="btn my-button-3"><i class="bi bi-check-circle"></i>Guardar</button>
         <!-- <button <?=($action=="edit-budget"||$action=="edit-bill")?"":"disabled"?> id="<?=($action=="view-bill" || $action == "view-bill")?"PrintBtn":"SavePrintBtn"?>" class="btn my-button-4"><i class="bi bi-printer"></i>Guardar e imprimir</button> -->
     </div>
     <?php endif; ?>
     <?php if ($action == "view-bill"): ?>
     <div class="my-button-group mt-4 mb-5 float-end">
-        <button id="cancelBtn" class="btn my-button-2"><i class="bi bi-x-square"></i>Cancelar</button>
+        <button id="cancelBtn" class="btn my-button-2"><i class="bi bi-x-circle"></i>Cancelar</button>
         <button id="PrintBtn" class="btn my-button-4"><i class="bi bi-printer"></i>Imprimir</button>
     </div>
     <?php endif; ?>
@@ -471,8 +527,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn my-button-2" data-bs-dismiss="modal">Cerrar</button>
-        <button disabled id="conceptCreateBtn" type="button" class="btn my-button-3">Añadir</button>
+        <button type="button" class="btn my-button-2" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i>Cerrar</button>
+        <button disabled id="conceptCreateBtn" type="button" class="btn my-button-3"><i class="bi bi-plus-circle"></i>Añadir</button>
       </div>
     </div>
   </div>
@@ -517,8 +573,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn my-button-2" data-bs-dismiss="modal">Cerrar</button>
-        <button disabled id="conceptEditBtn" type="button" class="btn my-button-3">Editar</button>
+        <button type="button" class="btn my-button-2" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i>Cerrar</button>
+        <button disabled id="conceptEditBtn" type="button" class="btn my-button-3"><i class="bi bi-pencil"></i>Editar</button>
       </div>
     </div>
   </div>
@@ -550,8 +606,8 @@
         </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn my-button-2" data-bs-dismiss="modal">Cerrar</button>
-        <button disabled id="selectClientBtn" type="button" class="btn my-button-3">Seleccionar</button>
+        <button type="button" class="btn my-button-2" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i>Cerrar</button>
+        <button disabled id="selectClientBtn" type="button" class="btn my-button-3"><i class="bi bi-check-circle"></i>Seleccionar</button>
       </div>
     </div>
   </div>
@@ -583,8 +639,8 @@
         </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn my-button-2" data-bs-dismiss="modal">Cerrar</button>
-        <button disabled id="selectBillBtn" type="button" class="btn my-button-3">Seleccionar</button>
+        <button type="button" class="btn my-button-2" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i>Cerrar</button>
+        <button disabled id="selectBillBtn" type="button" class="btn my-button-3"><i class="bi bi-check-circle"></i>Seleccionar</button>
       </div>
     </div>
   </div>

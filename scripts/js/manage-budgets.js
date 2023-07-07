@@ -11,6 +11,10 @@ $(document).ready(function() {
         window.location.href = "scripts/factura/factura.php?action=display&numero="+dTable.row(".selected").data().numero;
     });
 
+    $("#ToBillBtn").on("click", function() {
+        window.location.href = "?page=new-bill-from-budget&numero="+dTable.row(".selected").data().numero;
+    });
+
     $("#deleteBudgetBtn").on("click", function() {
         $.ajax({
             url: "scripts/php/delete_from_db.php", // this is the target

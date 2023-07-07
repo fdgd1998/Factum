@@ -72,6 +72,7 @@ $(document).ready(function() {
             $("#EditBtn").removeAttr("disabled");
             $("#DeleteBtn").removeAttr("disabled");
             $("#PrintBtn").removeAttr("disabled");
+            $("#ToBillBtn").removeAttr("disabled");
             if ($(this).hasClass('selected')) {
                 $(this).removeClass('selected');
                 
@@ -85,6 +86,7 @@ $(document).ready(function() {
                 $("#EditBtn").attr("disabled", "disabled");
                 $("#DeleteBtn").attr("disabled", "disabled");
                 $("#PrintBtn").attr("disabled", "disabled");
+                $("#ToBillBtn").attr("disabled", "disabled");
             }
         }
     });
