@@ -6,7 +6,7 @@
     $rectifyBills = array();
     $archived = false;
 
-    require_once $_SERVER["DOCUMENT_ROOT"]."/classes/php/Database.php";
+    require_once "./classes/php/Database.php";
 
     $conn = new DatabaseConnection();
     $fmt = new NumberFormatter('es_ES.UTF8', NumberFormatter::CURRENCY);
