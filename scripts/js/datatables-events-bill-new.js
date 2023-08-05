@@ -22,6 +22,7 @@ $(document).ready(function() {
                 "previous":   "Anterior"
             }
         },
+        responsive:true,
         lengthChange: true,
         info: false,
         searching: false,
@@ -34,6 +35,7 @@ $(document).ready(function() {
     });
     
     dTableBills = $('#dTableBills').DataTable({
+        responsive:true,
         language: {
             "decimal":        "",
             "emptyTable":     "No existen datos",
@@ -97,6 +99,7 @@ $(document).ready(function() {
     });
     
     dTableClients = $('#dTableClients').DataTable({
+        responsive:true,
         language: {
             "decimal":        "",
             "emptyTable":     "No existen datos",

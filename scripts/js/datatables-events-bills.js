@@ -22,6 +22,7 @@ $(document).ready(function() {
                 "previous":   "<"
             }
         },
+        responsive:true,
         processing:true,     
         ajax:{
             url: './scripts/php/get_data_for_table.php',

@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="./includes/css/styles.css">
     <link rel="stylesheet" href="./includes/css/datatables.min.css">
     <link rel="stylesheet" href="./includes/css/select.bootstrap5.min.css">
+    <link rel="stylesheet" href="./includes/css/responsive.bootstrap5.min.css">
 </head>
 <body>
     <?php
@@ -82,6 +83,7 @@
     <script src="./includes/js/bootstrap.min.js"></script>
     <script src="./includes/js/datatables.min.js"></script>
     <script src="./includes/js/select.bootstrap5.min.js"></script>
+    <script src="./includes/js/dataTables.responsive.min.js"></script>
 
     <?php if (isset($_GET["page"])): ?>
 
