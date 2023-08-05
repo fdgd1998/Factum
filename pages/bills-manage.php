@@ -8,13 +8,13 @@
 <?php
     switch ($_GET["page"]) {
         case "bills":
-            echo "<h1>Facturas ordinarias</h1>";
+            echo "<h2>Facturas ordinarias</h2>";
             break;
         case "rbills":
-            echo "<h1>Facturas rectificativas</h1>";
+            echo "<h2>Facturas rectificativas</h2>";
             break;
         case "archive":
-            echo "<h1>Archivo</h1>";
+            echo "<h2>Archivo</h2>";
             echo "<p>Aquí puedes ver e imprimir todas las facturas archivadas.<p>";
             break;
     }

@@ -1,5 +1,5 @@
 <div class="content">
-    <h1>Descargar y archivar facturas</h1>
+    <h2>Descargar y archivar facturas</h2>
     <br><p>Desde esta página podrás descargar todas las facturas dentro de un rango de fechas dado en un fichero zip, o bien archivarlas.</p><br>
     <p>Selecciona un rango:</p>
     <div class="row">

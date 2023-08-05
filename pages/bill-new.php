@@ -263,14 +263,14 @@
     }
 ?>
 <?php
-    if ($action == "new-bill") echo "<h1>Nueva factura</h1>";
-    if ($action == "new-bill-from-budget") echo "<h1>Nueva factura desde presupuesto ".$viewBillData["numero"]."</h1>";
-    if ($action == "new-budget") echo "<h1>Nuevo presupuesto</h1>";
-    if ($action == "edit-budget") echo "<h1>Editar presupuesto</h1>";
-    if ($action == "edit-bill") echo "<h1>Editar factura</h1>";
-    if (str_contains($_GET["numero"], "RFIVA")) echo "<h1>Ver factura rectificativa </h1>";
-    else if (str_contains($_GET["numero"], "FIVA") && $action != "edit-bill") echo "<h1>Ver factura </h1>";
-    if ($action == "rectify-bill") echo "<h1>Nueva factura rectificativa</h1>";
+    if ($action == "new-bill") echo "<h2>Nueva factura</h2>";
+    if ($action == "new-bill-from-budget") echo "<h2>Nueva factura desde presupuesto ".$viewBillData["numero"]."</h2>";
+    if ($action == "new-budget") echo "<h2>Nuevo presupuesto</h2>";
+    if ($action == "edit-budget") echo "<h2>Editar presupuesto</h2>";
+    if ($action == "edit-bill") echo "<h2>Editar factura</h2>";
+    if (str_contains($_GET["numero"], "RFIVA")) echo "<h2>Ver factura rectificativa </h2>";
+    else if (str_contains($_GET["numero"], "FIVA") && $action != "edit-bill") echo "<h2>Ver factura </h2>";
+    if ($action == "rectify-bill") echo "<h2>Nueva factura rectificativa</h2>";
 ?>
 
 <div class="content">
@@ -312,8 +312,8 @@
             <div class="input-group mb-3">
                 <label class="input-group-text" for="presupuesto-iva">Presupuesto con IVA: </label>
                 <select class="form-select" id="presupuesto-iva">
-                    <option <?=isset($viewBillData["tieneiva"])?($viewBillData["tieneiva"]=="si"?"selected":""):"selected"?> value="si">Sí</option>
-                    <option <?=isset($viewBillData["tieneiva"])?($viewBillData["tieneiva"]=="no"?"selected":""):""?> value="no">No</option>
+                    <option <?=isset($viewBillData["tieneiva"])?($viewBillData["tieneiva"]=="si"?"selected":""):""?> value="si">Sí</option>
+                    <option <?=isset($viewBillData["tieneiva"])?($viewBillData["tieneiva"]=="no"?"selected":""):"selected"?> value="no">No</option>
                 </select>
             </div>
             <?php endif; ?>
@@ -354,15 +354,16 @@
                     <div class="input-group mb-3">
                         <span class="input-group-text">NIF:</span>
                         <input disabled id="nif" type="text" class="form-control" value="<?=($action=="view-bill" || $action=="edit-bill" || $action=="new-bill-from-budget" || $action=="edit-budget")?$viewBillData["nif"]:""?>">
+                        <?php if ($action == "new-bill" || $action == "new-budget"): ?>
+                        <button class="input-group-text my-button" data-bs-toggle="modal" data-bs-target="#clientSearchModal"><i class="bi bi-search no-margin"></i></button>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <div class="col-12 col-lg-8">
                     <div class="input-group mb-3" colspan="4">
                         <span class="input-group-text">Nombre:</span>     
                         <input disabled id="nombre" type="text" class="form-control" value="<?=($action=="view-bill" || $action=="edit-bill" || $action=="new-bill-from-budget" || $action=="edit-budget")?$viewBillData["nombre"]:""?>">
-                        <?php if ($action == "new-bill" || $action == "new-budget"): ?>
-                        <button class="input-group-text my-button" data-bs-toggle="modal" data-bs-target="#clientSearchModal"><i class="bi bi-search no-margin"></i></button>
-                        <?php endif; ?>
+                        
                     </div>
                 </div>
             </div>
@@ -395,7 +396,7 @@
         <?php if ($action != "view-bill"): ?>
         <?php if ($action == "new-bill" || $action == "new-budget") : ?>
         <div id="continue-alert" class="alert alert-warning" role="alert">
-            Para continuar, selecciona un cliente primero.
+            Para continuar, selecciona un cliente.
         </div>
         <?php endif; ?>
         <div class="my-btn-group">
@@ -424,12 +425,13 @@
                             <td class="precio"><?=$fmt->formatCurrency($concepto["precio"], "EUR")?></td>
                             <?php if ($action=="new-bill-from-budget"): ?>
                             <td class="iva"><?=$fmt->formatCurrency($viewBillData["tieneiva"]=="si" ? $concepto["iva"] : $concepto["precio"]*0.21, "EUR")?></td>
-                            <?php $viewBillData["iva"] = $concepto["cantidad"] * ($concepto["precio"]*1.21)?>
+                            <td class="total"><?=$fmt->formatCurrency($viewBillData["tieneiva"]=="si" ? $concepto["total"] : $concepto["cantidad"]*$concepto["precio"] + $concepto["cantidad"]*$concepto["precio"]*0.21, "EUR")?></td>
+                            <?php $viewBillData["iva"] += $concepto["cantidad"] * ($concepto["precio"]*0.21)?>
                             <?php else: ?>
                             <td class="iva"><?=$viewBillData["tieneiva"]=="no"?"--":$fmt->formatCurrency($concepto["iva"], "EUR")?></td>
-                            <?php endif; ?>
                             <td class="total"><?=$fmt->formatCurrency($concepto["total"], "EUR")?></td>
-                        </tr>
+                            <?php endif; ?>
+                            </tr>
                         <?php $i++; ?>
                         <?php endforeach; ?>
                     <?php endif; ?>
@@ -475,7 +477,6 @@
     <div class="my-button-group mt-4 mb-5 float-end">
         <button id="cancelBtn" class="btn my-button-2"><i class="bi bi-x-circle"></i>Cancelar</button>
         <button <?=($action=="edit-budget"||$action=="edit-bill")?"":"disabled"?> id="SaveBtn" class="btn my-button-3"><i class="bi bi-check-circle"></i>Guardar</button>
-        <!-- <button <?=($action=="edit-budget"||$action=="edit-bill")?"":"disabled"?> id="<?=($action=="view-bill" || $action == "view-bill")?"PrintBtn":"SavePrintBtn"?>" class="btn my-button-4"><i class="bi bi-printer"></i>Guardar e imprimir</button> -->
     </div>
     <?php endif; ?>
     <?php if ($action == "view-bill"): ?>

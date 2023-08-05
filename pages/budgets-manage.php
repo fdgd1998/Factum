@@ -1,4 +1,4 @@
-<h1 class="title">Presupuestos</h1>
+<h2º class="title">Presupuestos</h2>
 <div class="my-btn-group">
     <button id="NewBtn" class="btn my-button"><i class="bi bi-plus-circle"></i>Nuevo presupuesto</button>
     <span class="button-spacing"></span>

@@ -125,6 +125,11 @@
     <script src="./includes/js/window-events.js"></script>
     <?php endif; ?>
 
+    <?php if ($_GET["page"] == "new-bill-from-budget"): ?>
+        <script>tiene_iva = 1;</script>
+        <script>console.log("tiene iva: "+tiene_iva);</script>
+    <?php endif; ?>
+
     <?php if ($_GET["page"] == "view-bill"): ?>
     <script src="./scripts/js/bill.js"></script>
     <?php endif; ?>

@@ -4,7 +4,7 @@
         $userData = SelectFromDb("select * from clientes where nif='".$_GET["id"]."'")[0];
     }
 ?>
-<h1><?=$_GET["page"] == "edit-client"?"Editar":"Nuevo"?> cliente</h1>
+<h2><?=$_GET["page"] == "edit-client"?"Editar":"Nuevo"?> cliente</h2>
 <div class="content">
     <p>Datos personales</p>
     <div class="row">

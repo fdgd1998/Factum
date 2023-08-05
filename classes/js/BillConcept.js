@@ -5,6 +5,6 @@ class BillConcept {
         this.precio = precio;
         this.iva = iva;
         this.total = cantidad*(precio + iva);
-        // console.log(this);
+        console.log(this);
     }
 }

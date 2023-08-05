@@ -34,8 +34,8 @@ li.nav-item {
 }
 
 nav.navbar {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    /* padding-top: 20px; */
+    /* padding-bottom: 20px; */
     background-color: var(--nav-bg-color) !important;
 }
 

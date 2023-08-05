@@ -9,7 +9,7 @@ var regexpPPositive = /^([0-9]*)+\.?\d{1,2}$/;
 var regexpPNegative = /^(\-?[0-9]*)+\.?\d{1,2}$/;
 
 var editingRowIdN = 0;
-var tiene_iva = 1;
+var tiene_iva = 0;
 
 var total_global;
 var iva_global;
@@ -27,14 +27,35 @@ var descripcion_edit;
 var reload = true;
 
 function addToTable(concept, index) {
+    iva = 0;
+    if (tiene_iva == 1) {
+        iva = concept.iva;
+    } else {
+        iva = concept.precio * concept.cantidad * 0.21
+    }
     dTable.row.add( [
         concept.cantidad,
         concept.descripcion,
         new Intl.NumberFormat("es-ES", options).format(concept.precio),
-        tiene_iva == 1 ? new Intl.NumberFormat("es-ES", options).format(concept.iva):"--",
+        new Intl.NumberFormat("es-ES", options).format(tiene_iva == 0 ? concept.cantidad*concept.precio*0.21 : iva),
         new Intl.NumberFormat("es-ES", options).format(concept.total)
     ] ).node().id = "concept"+index;
+  
+    
     dTable.draw();
+    var rowNode = $("#concept"+index);
+    $( rowNode ).find('td').eq(0).addClass('cantidad');;
+    $( rowNode ).find('td').eq(1).addClass('descripcion');
+    $( rowNode ).find('td').eq(2).addClass('precio');
+    $( rowNode ).find('td').eq(3).addClass('iva');
+    $( rowNode ).find('td').eq(4).addClass('total');
+
+    if (tiene_iva == 0) {
+        $( ".iva" ).each(function( index ) {
+            $(this).html("--");
+        });
+    }
+    
 }
 
 function reloadConcepts() {
@@ -42,7 +63,7 @@ function reloadConcepts() {
     
     $.each(conceptsArr, function (index, value) {
         console.log(value.iva + ", " +index);
-        addToTable(value, index)
+        addToTable(value, index);
     })
 }
 
@@ -64,13 +85,25 @@ function updateTotalPrices () {
     imponible_global = 0;
 
     conceptsArr.forEach(concept => {
-        total_global = parseFloat((total_global + concept.total).toFixed(2));
-        if (tiene_iva == 1) iva_global = parseFloat((iva_global + concept.iva*concept.cantidad).toFixed(2));
-        imponible_global += parseFloat((concept.precio*concept.cantidad).toFixed(2));
+        if (tiene_iva == 1) {
+            iva_global = parseFloat((iva_global + concept.iva*concept.cantidad).toFixed(2));
+            total_global += parseFloat((concept.total).toFixed(2));
+            imponible_global += parseFloat((concept.precio*concept.cantidad).toFixed(2));
+            console.log("iva_global:"+iva_global)
+            console.log("imponible_global: "+imponible_global)
+        } else {
+            iva_global = 0;
+            total_global += parseFloat((concept.total).toFixed(2));
+            imponible_global += parseFloat((concept.precio*concept.cantidad).toFixed(2));
+        }
     })
 
     $("#base-imponible").html(new Intl.NumberFormat("es-ES", options).format(imponible_global));
-    $("#total-iva").html(tiene_iva == 1 ? new Intl.NumberFormat("es-ES", options).format(iva_global):"--");
+    if (tiene_iva == 0) {
+        $("#total-iva").html("--");
+    } else {
+        $("#total-iva").html(new Intl.NumberFormat("es-ES", options).format(iva_global));
+    }
     $("#total-factura").html(new Intl.NumberFormat("es-ES", options).format(total_global));
 }
 
@@ -101,11 +134,11 @@ function UpdateConceptsIva() {
             concept.iva = 0;
             concept.total = parseFloat((concept.cantidad*concept.precio).toFixed(2));
         })
+        
         $("#concepto-iva-edit").html("--");
         $("#concepto-iva").html("--");
     }
     reloadConcepts();
-    // UpdatePrice("new");
     updateTotalPrices();
 
     $("#EditBtn").attr("disabled","disabled");
@@ -141,17 +174,27 @@ function UpdatePrice(action) {
         total_concepto = parseFloat(((parseFloat(iva_concepto) + parseFloat(precioUnitario_concepto))*cantidad).toFixed(2));
 
         if (tiene_iva == 1) $("#concepto-iva").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto*cantidad));
-        else $("#concepto-iva").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto*cantidad));
+        else $("#concepto-iva").html("--");
         $("#concepto-total").html(new Intl.NumberFormat("es-ES", options).format(total_concepto));
     } else if (action == "edit") {
         precioUnitario_concepto = parseFloat($("#precio-unitario-edit").val());
         cantidad = parseInt($("#cantidad-edit").val());
 
-        if (tiene_iva == 1) iva_concepto = parseFloat((parseFloat(precioUnitario_concepto)*0.21).toFixed(2));
-        else iva_concepto = 0;
-        
+        // if (tiene_iva == 1) {
+        //     iva_concepto = parseFloat((parseFloat(precioUnitario_concepto)*0.21).toFixed(2));
+        // } else {
+        //     iva_concepto = 0;
+        // }
+
+        iva_concepto = parseFloat((parseFloat(precioUnitario_concepto)*0.21).toFixed(2));
         total_concepto = parseFloat(((parseFloat(iva_concepto) + parseFloat(precioUnitario_concepto))*cantidad).toFixed(2));
-        if (tiene_iva == 1) $("#concepto-iva-edit").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto*cantidad));
+
+        // if (tiene_iva == 1) {
+        //     $("#concepto-iva-edit").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto*cantidad));
+        // } else {
+        //     $("#concepto-iva-edit").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto*cantidad));
+        // }
+        $("#concepto-iva-edit").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto*cantidad));
         $("#concepto-total-edit").html(new Intl.NumberFormat("es-ES", options).format(total_concepto));
     }
 }
@@ -185,6 +228,7 @@ $(document).ready(function() {
             conceptsArr.push(new BillConcept(parseInt(cantidad), descripcion, parseFloat(precio), parseFloat(iva), parseFloat(total)));
             console.log(conceptsArr);
         });
+        updateTotalPrices();
     }
     $("#cantidad, #precio-unitario").on("change, keyup", function() {
         if ($(this).attr("id") == "cantidad") {
@@ -268,8 +312,8 @@ $(document).ready(function() {
         conceptsArr[editingRowIdN].cantidad = cantidad;
         conceptsArr[editingRowIdN].precio = precioUnitario_concepto;
         conceptsArr[editingRowIdN].descripcion = $("#descripcion-edit").val();
-        conceptsArr[editingRowIdN].iva = (tiene_iva == 1 ? iva_concepto:0);
-        conceptsArr[editingRowIdN].total = (tiene_iva == 1 ? parseFloat((cantidad*(iva_concepto+precioUnitario_concepto)).toFixed(2)):parseFloat((cantidad*precioUnitario_concepto).toFixed(2)));
+        conceptsArr[editingRowIdN].iva = (tiene_iva == 1 ? iva_concepto : precio*0.21);
+        conceptsArr[editingRowIdN].total = parseFloat((cantidad*(iva_concepto+precioUnitario_concepto)).toFixed(2));
         console.log(conceptsArr);
         reloadConcepts();
         updateTotalPrices();
@@ -327,9 +371,10 @@ $(document).ready(function() {
                 UpdateConceptsIva();
                 break;
             case "no":
-                tiene_iva = 2;
+                tiene_iva = 0;
                 console.log("tiene_iva: "+tiene_iva);
                 UpdateConceptsIva();
+                $("#total-iva").html("--");
                 break;
         }
     })
@@ -695,7 +740,7 @@ $(document).ready(function() {
                 ["formapago", $("#forma-pago option:selected").val()],
                 ["tieneiva", iva == "si" ? "si" : "no"],
                 ["total", total_global], 
-                ["iva", iva_global],
+                ["iva", iva == "si" ? iva_global : 0],
                 ["imponible", imponible_global]
             ];
 
@@ -729,6 +774,7 @@ $(document).ready(function() {
 
     $("#SavePrintBtn").on("click", function() {
         Save("print");
+        console.log($("#numero").val())
         window.location.href = "scripts/factura/factura.php?action=display&numero="+$("#numero").val();
     });
 

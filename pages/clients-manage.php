@@ -1,4 +1,4 @@
-<h1 class="title">Clientes</h1>
+<h2 class="title">Clientes</h2>
 <div class="my-btn-group">
     <button id="NewBtn" class="btn my-button"><i class="bi bi-person-add"></i>Nuevo cliente</button>
     <span class="button-spacing"></span>
