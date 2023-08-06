@@ -1,5 +1,5 @@
 <?php
-    // error_reporting(0);
+    error_reporting(0);
     session_start();
     require_once $_SERVER["DOCUMENT_ROOT"]."/classes/php/Database.php";
 

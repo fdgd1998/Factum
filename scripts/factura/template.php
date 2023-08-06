@@ -1,7 +1,7 @@
 <?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
     include_once $_SERVER["DOCUMENT_ROOT"]."/scripts/factura/datos_empresa.php";
     require_once $_SERVER["DOCUMENT_ROOT"]."/classes/php/Database.php";
 
