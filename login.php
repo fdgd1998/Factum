@@ -25,7 +25,6 @@
         $stmt->bind_param("s", $user_form);
         $stmt->execute();
         $result = $stmt->get_result()->fetch_assoc(); // get the mysqli result
-        var_dump($result);
         
         // Si los datos coinciden, inicializo la sesión
         if (isset($result["id"])) {
