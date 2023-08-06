@@ -1,10 +1,12 @@
 <?php
+    require_once $_SERVER["DOCUMENT_ROOT"]."/scripts/php/check_url_direct_access.php";
+    checkUrlDirectAcces(realpath(__FILE__), realpath($_SERVER['SCRIPT_FILENAME']));
     class DatabaseConnection {
         private $user = "root";
         private $pass = "";
         private $name = "factum";
         private $host = "localhost";
-        private $conn;
+        public $conn;
         private $numRows;
 
         function __construct()

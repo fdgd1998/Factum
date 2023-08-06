@@ -1,5 +1,10 @@
 <?php
-    require_once "phpwkhtmltopdf/Command.php";
+    session_start();
+    if (!isset($_SESSION["loggedin"])) {
+        header("Location: login.php");
+        exit();
+    }
+    require_once $_SERVER["DOCUMENT_ROOT"]."/scripts/factura/phpwkhtmltopdf/Command.php";
     require_once "phpwkhtmltopdf/Pdf.php"; 
 
     $options = array(
@@ -14,7 +19,7 @@
     if ($_GET["action"] == "display") {
         $pdf = new Pdf($options);
 
-        if ($_GET["archivo"] == "si") $pdf->AddPage("http://localhost/scripts/factura/template.php?numero=".$_GET["numero"]."&archivo=si");
+        if (isset($_GET["archivo"]) && $_GET["archivo"] == "si") $pdf->AddPage("http://localhost/scripts/factura/template.php?numero=".$_GET["numero"]."&archivo=si");
         else $pdf->AddPage("http://localhost/scripts/factura/template.php?numero=".$_GET["numero"]);
 
         if (!$pdf->send(null, false, array('Content-Length' => false))) {

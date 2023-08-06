@@ -1,0 +1,16 @@
+.login-clean {
+  background: #f1f7fc;
+  padding: 50px 0;
+  margin-top: 15vh;
+}
+
+.login-clean form {
+  max-width: 350px;
+  width: 90%;
+  margin: auto;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 4px;
+  color: #505e6c;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+}

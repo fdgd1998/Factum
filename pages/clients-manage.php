@@ -1,3 +1,7 @@
+<?php
+    require_once $_SERVER["DOCUMENT_ROOT"]."/scripts/php/check_url_direct_access.php";
+    checkUrlDirectAcces(realpath(__FILE__), realpath($_SERVER['SCRIPT_FILENAME']));
+?>
 <h2 class="title">Clientes</h2>
 <div class="my-btn-group">
     <button id="NewBtn" class="btn my-button"><i class="bi bi-person-add"></i>Nuevo cliente</button>

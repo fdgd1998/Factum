@@ -1,9 +1,16 @@
 <?php
     error_reporting(0);
+    session_start();
     header("Cache-Control: no-store, no-cache, private, must-revalidate, max-age=0");
     header("Pragma: no-cache");
     header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // A date in the past
     header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+
+    if (!isset($_SESSION["loggedin"])) {
+        header("Location: login.php");
+        exit();
+    }
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -11,7 +18,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Factum - ViGal Artesana</title>
+    <title>Factum - ViGal Boutique</title>
     <link rel="stylesheet" href="./includes/css/bootstrap.min.css">
     <link rel="stylesheet" href="./includes/css/bootstrap-icons.css">
     <link rel="stylesheet" href="./includes/css/styles.css">
@@ -21,60 +28,60 @@
 </head>
 <body>
     <?php
-        include "includes/header.php";
+        include $_SERVER["DOCUMENT_ROOT"]."/includes/header.php";
     ?>
     <div id="main" class="container">
         <?php
             if (isset($_GET["page"])) {
                 switch ($_GET["page"]) {
                     case "new-client":
-                        include "./pages/client-new.php";
+                        include $_SERVER["DOCUMENT_ROOT"]."/pages/client-new.php";
                         break;
                     case "edit-client":
-                        include "./pages/client-new.php";
+                        include $_SERVER["DOCUMENT_ROOT"]."/pages/client-new.php";
                         break;
                     case "clients":
-                        include "./pages/clients-manage.php";
+                        include $_SERVER["DOCUMENT_ROOT"]."/pages/clients-manage.php";
                         break;
                     case "new-bill":
-                        include "./pages/bill-new.php";
+                        include $_SERVER["DOCUMENT_ROOT"]."/pages/bill-new.php";
                         break;
                     case "new-bill-from-budget":
-                        include "./pages/bill-new.php";
+                        include $_SERVER["DOCUMENT_ROOT"]."/pages/bill-new.php";
                         break;
                     case "rectify-bill":
-                        include "./pages/bill-new.php";
+                        include $_SERVER["DOCUMENT_ROOT"]."/pages/bill-new.php";
                         break;
                     case "view-bill":
-                        include "./pages/bill-new.php";
+                        include $_SERVER["DOCUMENT_ROOT"]."/pages/bill-new.php";
                         break;
                     case "new-budget":
-                        include "./pages/bill-new.php";
+                        include $_SERVER["DOCUMENT_ROOT"]."/pages/bill-new.php";
                         break;
                     case "edit-budget":
-                        include "./pages/bill-new.php";
+                        include $_SERVER["DOCUMENT_ROOT"]."/pages/bill-new.php";
                         break;
                     case "edit-bill":
-                        include "./pages/bill-new.php";
+                        include $_SERVER["DOCUMENT_ROOT"]."/pages/bill-new.php";
                         break;
                     case "bills":
-                        include "./pages/bills-manage.php";
+                        include $_SERVER["DOCUMENT_ROOT"]."/pages/bills-manage.php";
                         break;
                     case "rbills":
-                        include "./pages/bills-manage.php";
+                        include $_SERVER["DOCUMENT_ROOT"]."/pages/bills-manage.php";
                         break;
                     case "bill-options":
-                        include "./pages/bill-options.php";
+                        include $_SERVER["DOCUMENT_ROOT"]."/pages/bill-options.php";
                         break;
                     case "budgets":
-                        include "./pages/budgets-manage.php";
+                        include $_SERVER["DOCUMENT_ROOT"]."/pages/budgets-manage.php";
                         break;
                     case "archive":
-                        include "./pages/bills-manage.php";
+                        include $_SERVER["DOCUMENT_ROOT"]."/pages/bills-manage.php";
                         break;
                 }
             } else {
-                include "./pages/clients-manage.php";
+                include $_SERVER["DOCUMENT_ROOT"]."/pages/clients-manage.php";
                 $_GET["page"] = "clients";
             }
         ?>

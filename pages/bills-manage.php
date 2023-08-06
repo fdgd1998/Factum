@@ -1,3 +1,7 @@
+<?php
+    require_once $_SERVER["DOCUMENT_ROOT"]."/scripts/php/check_url_direct_access.php";
+    checkUrlDirectAcces(realpath(__FILE__), realpath($_SERVER['SCRIPT_FILENAME']));
+?>
 <?php if($_GET["page"] == "archive"): ?>
     <?php if(!isset($_GET["group"]) || $_GET["group"] == "all"): ?>
     <script>seleccion = "select numero, fecha, nif, nombre, total from facturas_archivo union select  numero, fecha, nif, nombre, total from facturasrec_archivo"</script>
@@ -21,7 +25,7 @@
 
     echo "<script>action='".$_GET["page"]."'; console.log('action: '+action)</script>";
 
-    require_once "classes/php/Database.php";
+    require_once $_SERVER["DOCUMENT_ROOT"]."/classes/php/Database.php";
 
     $conn =  new DatabaseConnection();
     $conn->Connect();

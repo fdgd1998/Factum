@@ -24,6 +24,12 @@
     src: url("../fonts/Quicksand-VariableFont_wght.ttf");
 }
 
+@font-face {
+    font-family: "Great Vibes";
+    src: url(../fonts/GreatVibes-Regular.ttf);
+    font-display: swap;
+}
+
 body {
     font-family: "QuickSand";
 }

@@ -1,4 +1,6 @@
 <?php
+    require_once $_SERVER["DOCUMENT_ROOT"]."/scripts/php/check_url_direct_access.php";
+    checkUrlDirectAcces(realpath(__FILE__), realpath($_SERVER['SCRIPT_FILENAME']));
     $nombreEmpresa = "Nombre de la empresa";
     $nifEmpresa = "00000000X";
     $direccionEmpresa = "Calle Falsa, 123. 00000 Ciudad";

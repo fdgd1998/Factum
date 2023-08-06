@@ -1,11 +1,9 @@
 <?php
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-    include_once "datos_empresa.php";
-    // require_once "../php/money_format.php";
-    // require_once "../php/connection.php";
-    require_once "../../classes/php/Database.php";
+    include_once $_SERVER["DOCUMENT_ROOT"]."/scripts/factura/datos_empresa.php";
+    require_once $_SERVER["DOCUMENT_ROOT"]."/classes/php/Database.php";
 
     $conn = new DatabaseConnection();
     $fmt = new NumberFormatter('es_ES.UTF8', NumberFormatter::CURRENCY);

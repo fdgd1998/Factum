@@ -1,6 +1,8 @@
 <?php
+    require_once $_SERVER["DOCUMENT_ROOT"]."/scripts/php/check_url_direct_access.php";
+    checkUrlDirectAcces(realpath(__FILE__), realpath($_SERVER['SCRIPT_FILENAME']));
     if (isset($_GET["id"])) {
-        require_once "scripts/php/db_functions.php";
+        require_once $_SERVER["DOCUMENT_ROOT"]."/scripts/php/db_functions.php";
         $userData = SelectFromDb("select * from clientes where nif='".$_GET["id"]."'")[0];
     }
 ?>

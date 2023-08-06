@@ -1,6 +1,8 @@
 <?php
+    require_once $_SERVER["DOCUMENT_ROOT"]."/scripts/php/check_url_direct_access.php";
+    checkUrlDirectAcces(realpath(__FILE__), realpath($_SERVER['SCRIPT_FILENAME']));
     function GetDataForTable($sql) {
-        require_once "../../classes/php/Database.php";
+        require_once $_SERVER["DOCUMENT_ROOT"]."/classes/php/Database.php";
 
         $output = array();
         $output["draw"] = 0;

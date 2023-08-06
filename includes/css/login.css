@@ -1,0 +1,153 @@
+:root {
+  --navbar-main-color:   #fed7af;
+  --navbar-link-hover-color: #ee4c3d;
+  --footer-main-color: #191919;
+  --body-background-color:  #f0f0f0;
+  --navbar-text-color: black;
+  --title-color: #f06255;
+  --button-main-color: #ffcc99;
+  --button-hover-bg-color:  #fcd7b2;
+  --button-hover-text-color: #252525;
+  --button-text-color: black;
+  --navigation-button-text-color: black;
+  --button-2-main-color: #ff9999;
+  --button-2-hover-bg-color: #ffcccc;
+  --button-3-main-color: #6fdc87;
+  --button-3-hover-bg-color: #98e6a9;
+  --div-bg-color-1: #e6e6e6;
+  --div-bg-color-2: #f2f2f2;
+  --custom-checkbox-bg-selected: #ffcc99;
+  --pagination-main-color: #ffcc99;
+}
+
+@font-face {
+  font-family: "QuickSand";
+  src: url(../webfonts/Quicksand-VariableFont_wght.ttf);
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Great Vibes";
+  src: url(../webfonts/GreatVibes-Regular.ttf);
+  font-display: swap;
+}
+
+.custom-checkbox .custom-control-input:checked~.custom-control-label::before{
+  background-color:var(--custom-checkbox-bg-selected);
+}
+
+.custom-checkbox .custom-control-input:checked~.custom-control-label::after{
+  background-image:url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='grey' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E");
+  border: 1px solid grey !important;
+  border-radius: .25rem !important;
+}
+
+.custom-checkbox .custom-control-input:active:focus~.custom-control-label::after{
+  background-image:url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='grey' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E");
+  border: 1px solid #DEE2E6 !important;
+}
+
+.custom-checkbox .custom-control-input:focus~.custom-control-label::before{
+  border: 1px solid darkgrey !important;
+}
+
+.custom-control-input:focus ~ .custom-control-label::before {
+  box-shadow:none !important;
+}
+
+.custom-checkbox .custom-control-indicator {
+  border-radius: .25rem !important;
+}
+
+.custom-control-input:active ~ .custom-control-label::before {
+  background-color: #fff !important;
+}
+
+.my-button {
+  color: var(--button-text-color);
+  background-color: var(--button-main-color) !important;
+  border: 1px solid var(--button-main-color) !important;
+}
+
+.my-button:not([disabled]):hover {
+  background-color: var(--button-hover-bg-color) !important;
+  border: 1px solid var(--button-hover-bg-color) !important;
+  color: var(--button-hover-text-color) !important;
+}
+
+.my-button:not([disabled]):active:focus {
+  background-color: var(--button-hover-bg-color) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.my-button:not([disabled]):active:hover {
+  background-color: var(--button-hover-bg-color) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.my-button-2 {
+  color: var(--button-text-color);
+  background-color: var(--button-2-main-color) !important;
+  border: 1px solid var(--button-2-main-color) !important;
+}
+
+.my-button-2:not([disabled]):hover {
+  background-color: var(--button-2-hover-bg-color) !important;
+  border: 1px solid var(--button-2-hover-bg-color) !important;
+  color: var(--button-hover-text-color) !important;
+}
+
+.my-button-2:not([disabled]):active:focus {
+  background-color: var(--button-2-hover-bg-color) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.my-button-2:not([disabled]):active:hover {
+  background-color: var(--button-2-hover-bg-color) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.my-button-3 {
+  color: var(--button-text-color);
+  background-color: var(--button-3-main-color) !important;
+  border: 1px solid var(--button-3-main-color) !important;
+}
+
+.my-button-3:not([disabled]):hover {
+  background-color: var(--button-3-hover-bg-color) !important;
+  border: 1px solid var(--button-3-hover-bg-color) !important;
+  color: var(--button-hover-text-color) !important;
+}
+
+.my-button-3:not([disabled]):active:focus {
+  background-color: var(--button-3-hover-bg-color) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.my-button-3:not([disabled]):active:hover {
+  background-color: var(--button-3-hover-bg-color) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.btn:focus,.btn:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+
+
+body {
+  background-color: var(--body-background-color);
+  min-height: 100vh !important;
+  margin: 0;
+  font-family: 'Quicksand';
+  display: flex;
+  flex-direction: column;
+}
+

@@ -1,12 +1,15 @@
 <?php
 
+    require_once $_SERVER["DOCUMENT_ROOT"]."/scripts/php/check_url_direct_access.php";
+    checkUrlDirectAcces(realpath(__FILE__), realpath($_SERVER['SCRIPT_FILENAME']));
+
     $action = $_GET["page"];
     $numerofactura = "";
     $viewBillData = [];
     $rectifyBills = array();
     $archived = false;
 
-    require_once "./classes/php/Database.php";
+    require_once $_SERVER["DOCUMENT_ROOT"]."/classes/php/Database.php";
 
     $conn = new DatabaseConnection();
     $fmt = new NumberFormatter('es_ES.UTF8', NumberFormatter::CURRENCY);
@@ -405,8 +408,8 @@
             <button disabled id="DeleteBtn" class="btn my-button-2"><i class="bi bi-x-circle"></i>Borrar</button>
         </div>
         <?php endif; ?>
-        <div class="table-responsive mt-1">
-            <table id="dTable" class="table table-bordered">
+        <div class="table-responsive mt-1" >
+            <table id="dTable" class="table table-bordered" style="width: 100%">
                 <thead>
                     <tr>
                         <th width="5%">Cantidad</th>

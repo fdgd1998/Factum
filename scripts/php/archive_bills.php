@@ -1,6 +1,7 @@
 <?php
-
-    require_once "../../classes/php/Database.php";
+    require_once $_SERVER["DOCUMENT_ROOT"]."/scripts/php/check_url_direct_access.php";
+    checkUrlDirectAcces(realpath(__FILE__), realpath($_SERVER['SCRIPT_FILENAME']));
+    require_once $_SERVER["DOCUMENT_ROOT"]."/classes/php/Database.php";
 
     $conn = new DatabaseConnection();
     $conn->Connect();
