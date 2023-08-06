@@ -408,7 +408,7 @@
             <button disabled id="DeleteBtn" class="btn my-button-2"><i class="bi bi-x-circle"></i>Borrar</button>
         </div>
         <?php endif; ?>
-        <div class="table-responsive mt-1" >
+        <div class="table-responsive mt-1" style="overflow-x: hidden !important;">
             <table id="dTable" class="table table-bordered" style="width: 100%">
                 <thead>
                     <tr>
