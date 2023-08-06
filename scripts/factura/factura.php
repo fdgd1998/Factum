@@ -4,7 +4,6 @@
         header("Location: login.php");
         exit();
     }
-    $root = (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
     require_once $_SERVER["DOCUMENT_ROOT"]."/scripts/factura/phpwkhtmltopdf/Command.php";
     require_once $_SERVER["DOCUMENT_ROOT"]."/scripts/factura/phpwkhtmltopdf/Pdf.php"; 
 
@@ -20,10 +19,10 @@
     if ($_GET["action"] == "display") {
         $pdf = new Pdf($options);
 
-        if (isset($_GET["archivo"]) && $_GET["archivo"] == "si") $pdf->AddPage($root."/scripts/factura/template.php?numero=".$_GET["numero"]."&archivo=si");
-        else $pdf->AddPage($root."/scripts/factura/template.php?numero=".$_GET["numero"]);
+        if (isset($_GET["archivo"]) && $_GET["archivo"] == "si") $pdf->AddPage("http://localhost/scripts/factura/template.php?numero=".$_GET["numero"]."&archivo=si");
+        else $pdf->AddPage("http://localhost/scripts/factura/template.php?numero=".$_GET["numero"]);
 
-        if (!$pdf->send(null, false, array('Content-Length' => false))) {
+        if (!$pdf->send($_GET["numero"]'.pdf', true)) {
             echo $pdf->getError();
         }
     } else if ($_GET["action"] == "download") {
@@ -47,7 +46,7 @@
         if ($facturas) {
             foreach($facturas as $factura) {
                 $pdf = new Pdf($options);
-                $pdf->AddPage($root."/scripts/factura/template.php?numero=".$factura["numero"]);
+                $pdf->AddPage("http://localhost/scripts/factura/template.php?numero=".$factura["numero"]);
                 if (!$pdf->saveAs(dirname(__DIR__, 2)."//temp/".$factura["numero"].".pdf")) {
                     echo $pdf->getError();
                 }
@@ -57,7 +56,7 @@
         if ($facturasrec) {
             foreach($facturasrec as $factura) {
                 $pdf = new Pdf($options);
-                $pdf->AddPage($root."/scripts/factura/template.php?numero=".$factura["numero"]);
+                $pdf->AddPage("http://localhost/scripts/factura/template.php?numero=".$factura["numero"]);
                 if (!$pdf->saveAs($pathdir.$factura["numero"].".pdf")) {
                     echo $pdf->getError();
                 }
@@ -88,7 +87,7 @@
         if ($total_bills == 0) {
             echo "<script>
                 alert('No hay facturas para descargar en el rango seleccionado.');
-                window.location.href = '".$root."?page=bill-options';
+                window.location.href = 'http://localhost?page=bill-options';
             </script>";
             exit();
         }
