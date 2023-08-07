@@ -12,7 +12,7 @@
     require_once $_SERVER["DOCUMENT_ROOT"]."/classes/php/Database.php";
 
     $conn = new DatabaseConnection();
-    $fmt = new NumberFormatter('es_ES.UTF8', NumberFormatter::CURRENCY);
+    $fmt = new NumberFormatter('es_ES', NumberFormatter::CURRENCY);
     
     echo "<script>var action = '".$action."'</script>"; 
 
@@ -61,6 +61,12 @@
                     total_global = ".$viewBillData["total"].";
                 </script>
             ";
+            if($viewBillData["tieneiva"] == "no") {
+                echo "<script>tiene_iva = 0</script>";
+            } else {
+                echo "<script>tiene_iva = 1</script>";
+            }
+            echo "<script>console.log('tiene iva: '+tiene_iva)</script>";
         }
         $conn->Close();
     } else if ($action == "new-budget") {
@@ -125,6 +131,12 @@
                     total_global = ".$viewBillData["total"].";
                 </script>
             ";
+            if($viewBillData["tieneiva"] == "no") {
+                echo "<script>tiene_iva = 0</script>";
+            } else {
+                echo "<script>tiene_iva = 1</script>";
+            }
+            echo "<script>console.log('tiene iva: '+tiene_iva)</script>";
         }
         $conn->Close();
     } else if ($action == "new-bill-from-budget") {
@@ -443,12 +455,12 @@
         </div>
         <div class="w-100 text-end mt-2">
             <div class="row">
-                <div class="col-10">
+                <div class="col-9">
                     <p>Base imponible: </p>
                     <p>IVA (21%): </p>
                     <strong><p>Total a pagar: </p></strong>
                 </div>
-                <div class="col-2">
+                <div class="col-3">
                     <?php if($action == "view-bill" || $action=="edit-bill" || $action=="new-bill-from-budget" || $action == "edit-budget"): ?>
                     <p id="base-imponible"><?=$fmt->formatCurrency($viewBillData["imponible"], "EUR")?></p>
                     <?php if ($action == "new-bill-from-budget"):?>

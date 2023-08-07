@@ -9,6 +9,7 @@ var regexpPPositive = /^([0-9]*)+\.?\d{1,2}$/;
 var regexpPNegative = /^(\-?[0-9]*)+\.?\d{1,2}$/;
 
 var editingRowIdN = 0;
+
 var tiene_iva = 0;
 
 var total_global;
@@ -41,7 +42,7 @@ function addToTable(concept, index) {
         new Intl.NumberFormat("es-ES", options).format(concept.total)
     ] ).node().id = "concept"+index;
   
-    
+    console.log(new Intl.NumberFormat("es-ES", options).format(concept.precio));
     dTable.draw();
     var rowNode = $("#concept"+index);
     $( rowNode ).find('td').eq(0).addClass('cantidad');;
@@ -98,13 +99,14 @@ function updateTotalPrices () {
         }
     })
 
-    $("#base-imponible").html(new Intl.NumberFormat("es-ES", options).format(imponible_global));
+
+    $("#base-imponible").html(new Intl.NumberFormat("de-DE", options).format(imponible_global));
     if (tiene_iva == 0) {
         $("#total-iva").html("--");
     } else {
-        $("#total-iva").html(new Intl.NumberFormat("es-ES", options).format(iva_global));
+        $("#total-iva").html(new Intl.NumberFormat("de-DE", options).format(iva_global));
     }
-    $("#total-factura").html(new Intl.NumberFormat("es-ES", options).format(total_global));
+    $("#total-factura").html(new Intl.NumberFormat("de-DE", options).format(total_global));
 }
 
 function CleanModalAndData() {
@@ -173,9 +175,9 @@ function UpdatePrice(action) {
 
         total_concepto = parseFloat(((parseFloat(iva_concepto) + parseFloat(precioUnitario_concepto))*cantidad).toFixed(2));
 
-        if (tiene_iva == 1) $("#concepto-iva").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto*cantidad));
+        if (tiene_iva == 1) $("#concepto-iva").html(new Intl.NumberFormat("de-DE", options).format(iva_concepto*cantidad));
         else $("#concepto-iva").html("--");
-        $("#concepto-total").html(new Intl.NumberFormat("es-ES", options).format(total_concepto));
+        $("#concepto-total").html(new Intl.NumberFormat("de-DE", options).format(total_concepto));
     } else if (action == "edit") {
         precioUnitario_concepto = parseFloat($("#precio-unitario-edit").val());
         cantidad = parseInt($("#cantidad-edit").val());
@@ -194,8 +196,8 @@ function UpdatePrice(action) {
         // } else {
         //     $("#concepto-iva-edit").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto*cantidad));
         // }
-        $("#concepto-iva-edit").html(new Intl.NumberFormat("es-ES", options).format(iva_concepto*cantidad));
-        $("#concepto-total-edit").html(new Intl.NumberFormat("es-ES", options).format(total_concepto));
+        $("#concepto-iva-edit").html(new Intl.NumberFormat("de-DE", options).format(iva_concepto*cantidad));
+        $("#concepto-total-edit").html(new Intl.NumberFormat("de-DE", options).format(total_concepto));
     }
 }
 
@@ -215,16 +217,22 @@ function enableSaveBtn() {
     }
 }
 
+
 $(document).ready(function() {
     if (action == "edit-budget" || action == "edit-bill" || action == "new-bill-from-budget") {
         $("#dTable tbody tr").each(function(){
             cantidad = $(this).find(".cantidad").html();
             descripcion = $(this).find(".descripcion").html();
-            precio = $(this).find(".precio").html().slice(0, -7).replace(',','.');
+            precio_eu_format = $(this).find(".precio").html().slice(0, -7).split(",");
+            console.log(precio_eu_format);
+            precio = parseFloat(precio_eu_format[0].replace(".", "")+"."+precio_eu_format[1]);
             console.log(precio);
-            iva = $(this).find(".iva").html() == "--" ? 0.00 : $(this).find(".iva").html().slice(0, -7).replace(',','.');
-            console.log("iva: "+parseFloat(iva));
-            total = $(this).find(".total").html().slice(0, -7).replace(',','.');
+            iva_eu_format = $(this).find(".iva").html().slice(0, -7).split(",");
+            iva = (tiene_iva == 0 ? 0.00 : parseFloat(iva_eu_format[0].replace(".", "")+"."+iva_eu_format[1]));
+            console.log("iva: "+iva);
+            total_eu_format = $(this).find(".total").html().slice(0, -7).split(",");
+            total = total_eu_format[0].replace(".", "")+"."+total_eu_format[1];
+            console.log(total)
             conceptsArr.push(new BillConcept(parseInt(cantidad), descripcion, parseFloat(precio), parseFloat(iva), parseFloat(total)));
             console.log(conceptsArr);
         });
@@ -481,7 +489,7 @@ $(document).ready(function() {
                     console.log(response);
                     alert(response);
                     if (save == "saveOnly") {
-                        window.location.href = "?page=bills";
+                        window.location.href = "?page=bills&state=edit-success";
                     }
                 },
                 error: function(response) {
@@ -579,7 +587,7 @@ $(document).ready(function() {
                     reload = false;
                     alert(response);
                     if (save == "saveOnly") {
-                        window.location.href = "?page=bills";
+                        window.location.href = "?page=bills&state=new-success";
                     }
                 },
                 error: function(response) { 
@@ -717,7 +725,7 @@ $(document).ready(function() {
                     console.log(response);
                     alert(response);
                     if (save == "saveOnly") {
-                        window.location.href = "?page=budgets";
+                        window.location.href = "?page=budgets&state=new-success";
                     }
                 },
                 error: function(response) { 
@@ -756,7 +764,7 @@ $(document).ready(function() {
                     console.log(response);
                     alert(response);
                     if (save == "saveOnly") {
-                        window.location.href = "?page=budgets";
+                        window.location.href = "?page=budgets&state=edit-success";
                     }
                 },
                 error: function(response) {

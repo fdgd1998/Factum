@@ -24,9 +24,21 @@
     <link rel="stylesheet" href="./includes/css/styles.css">
     <link rel="stylesheet" href="./includes/css/datatables.min.css">
     <link rel="stylesheet" href="./includes/css/select.bootstrap5.min.css">
-    <link rel="stylesheet" href="./includes/css/responsive.bootstrap5.min.css">
+    <link rel="stylesheet" href="./includes/css/responsive.bootstrap.min.css">
+    
 </head>
 <body>
+    <script src="./includes/js/jquery-3.6.0.min.js"></script>
+    <script src="./includes/js/bootstrap.min.js"></script>
+    <script src="./includes/js/datatables.min.js"></script>
+    <script src="./includes/js/select.bootstrap5.min.js"></script>
+    <script src="./includes/js/dataTables.responsive.min.js"></script>
+    <script src="./includes/js/banner.js"></script>
+    <?php if ($_GET["page"] == "new-bill" || $_GET["page"] == "edit-bill" || $_GET["page"] == "new-bill-from-budget" || $_GET["page"] == "new-budget" || $_GET["page"] == "edit-budget" || $_GET["page"] == "rectify-bill"): ?>
+    <script src="./scripts/js/bill.js"></script>
+    <script>console.log("tiene iva: "+tiene_iva)</script>
+    <?php endif; ?>
+
     <?php
         include $_SERVER["DOCUMENT_ROOT"]."/includes/header.php";
     ?>
@@ -86,11 +98,7 @@
             }
         ?>
     </div>
-    <script src="./includes/js/jquery-3.6.0.min.js"></script>
-    <script src="./includes/js/bootstrap.min.js"></script>
-    <script src="./includes/js/datatables.min.js"></script>
-    <script src="./includes/js/select.bootstrap5.min.js"></script>
-    <script src="./includes/js/dataTables.responsive.min.js"></script>
+    
 
     <?php if (isset($_GET["page"])): ?>
 
@@ -130,7 +138,6 @@
     <script src="./scripts/js/datatables-events-bill-new.js"></script>
     <script src="./scripts/js/dTable-render-functions.js"></script>
     <script src="./classes/js/BillConcept.js"></script>
-    <script src="./scripts/js/bill.js"></script>
     <script src="./includes/js/window-events.js"></script>
     <?php endif; ?>
 
