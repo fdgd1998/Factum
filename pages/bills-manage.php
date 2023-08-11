@@ -33,7 +33,21 @@
     $groups = $conn->Select("select distinct grupo from facturas_archivo union select distinct grupo from facturasrec_archivo");
     $conn->Close();
 
+    if (isset($_GET["state"])) {
+        echo "<script>var banner_msg = '".$_GET['state']."'</script>";
+    }
+
 ?>
+<div id="banner"></div>
+<script>
+    if (typeof banner_msg !== undefined) {
+        createSuccessBanner("bill_success");
+    }
+</script>
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 <div class="my-btn-group">
     <?php if($_GET["page"] != "archive"): ?>
     <button id="<?=$_GET["page"] == "bills" ? "NewBtn":"NewRecBtn"?>" class="btn my-button"><i class="bi bi-plus-circle"></i>Nueva factura</button>

@@ -276,6 +276,7 @@
         }
         $conn->Close();
     }
+
 ?>
 <?php
     if ($action == "new-bill") echo "<h2>Nueva factura</h2>";
